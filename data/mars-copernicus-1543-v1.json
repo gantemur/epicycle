@@ -144,6 +144,19 @@
       ]
     }
   },
+  "exploratory_policies": {
+    "sn-uniform-exploratory": {
+      "status": "hypothetical extrapolation, not Copernicus's arbitrary-date law or a validated reconstruction",
+      "source_policy": "sn-local-uniform-1473-1523",
+      "source": "C3 p.363 supplies the uniform rate; its continuation outside the guarded 1473–1523 interval is a project experiment",
+      "annual_motion_parameter": "optional_reconstructions.sn-local-uniform-1473-1523.annual_motion",
+      "anchor_parameter": "apogee_1523",
+      "assumptions": [
+        "Continue C3's 0;0,28,10 degree per Egyptian year uniformly without an accuracy claim.",
+        "Hold the 1543 Mars geometry, including eccentric component e1=1460 and small epicycle radius 500, fixed at all evaluated dates."
+      ]
+    }
+  },
   "alternatives_not_used": {
     "ancient_eccentric_component": {
       "sexagesimal": "1500",

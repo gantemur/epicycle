@@ -161,6 +161,28 @@ class CoupledGeometry(unittest.TestCase):
             with self.assertRaises(ValueError):
                 mars.evaluate_mars(end,**kwargs)
 
+    def test_exploratory_2026_is_explicit_and_keeps_1543_geometry(self):
+        anchor = days(1523, 2, 22, 5)
+        in_guard = days(1512, 1, 1, 6)
+        scholarly = mars.evaluate_mars(in_guard, apsis_policy=mars.APSIS_POLICY)
+        exploratory = mars.evaluate_mars(in_guard, apsis_policy=mars.EXPLORATORY_APSIS_POLICY)
+        self.assertEqual(scholarly["mars_apogee"], exploratory["mars_apogee"])
+        self.assertEqual(scholarly["geocentric_tropical_longitude"],
+                         exploratory["geocentric_tropical_longitude"])
+        future = mars.evaluate_mars(days(2026, 10, 11),
+                                    apsis_policy=mars.EXPLORATORY_APSIS_POLICY)
+        annual_rate = mars.definition()["optional_reconstructions"][mars.APSIS_POLICY]["annual_motion"]["value"]
+        expected_apogee = (mars.definition()["parameters"]["apogee_1523"]["value"] +
+                           (days(2026, 10, 11) - anchor) / 365 * annual_rate) % 360
+        self.assertAlmostEqual(future["mars_apogee"], expected_apogee)
+        self.assertEqual(future["mars_geometry"]["eccentric_component"], 1460)
+        self.assertEqual(future["mars_geometry"]["small_epicycle_radius"], 500)
+        self.assertEqual(future["apsis_assignment"]["policy"], mars.EXPLORATORY_APSIS_POLICY)
+        self.assertIn("hypothetical", future["apsis_assignment"]["status"])
+        self.assertTrue(math.isfinite(future["geocentric_tropical_longitude"]))
+        with self.assertRaisesRegex(ValueError, "restricted"):
+            mars.evaluate_mars(days(2026, 10, 11), apsis_policy=mars.APSIS_POLICY)
+
 
 class ConditionalComparison(unittest.TestCase):
     def test_explicit_time_and_frame_boundaries(self):

@@ -1,8 +1,9 @@
 """1543 Mars geometry coupled to the specified 1543 Earth model.
 
 The historical arbitrary-date apsidal law is unavailable. Date evaluation
-requires a caller-supplied apsis with provenance, or an explicit bounded
-Swerdlow–Neugebauer uniform estimate. No default apsidal motion is invented.
+requires a caller-supplied apsis with provenance, the explicit bounded
+Swerdlow–Neugebauer estimate, or its separately selected exploratory
+continuation. No default apsidal motion is invented.
 """
 
 import json
@@ -17,6 +18,7 @@ from .mars import normalize, signed_difference
 
 DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "mars-copernicus-1543-v1.json"
 APSIS_POLICY = "sn-local-uniform-1473-1523"
+EXPLORATORY_APSIS_POLICY = "sn-uniform-exploratory"
 
 
 @lru_cache(maxsize=1)
@@ -125,21 +127,25 @@ def evaluate_mars(days_since_epoch, *, apsis_policy=None,
     """Historical local days from Christ epoch, with explicit apsis assignment.
 
     A supplied apsis is a caller assumption, not a completed secular theory.
-    The optional scholarly estimate is restricted to 1473-02-19 through
-    1523-02-22 05:00 (Julian LMT); the interval is a project guard, not a
-    historically certified accuracy interval. Other dates need explicit data.
+    The scholarly estimate is guarded at 1473–1523 (Julian Frauenburg LMT).
+    The separately selected exploratory policy continues the same angular
+    rate and fixed 1543 geometry outside that guard, without an accuracy claim.
     """
     _finite(days_since_epoch)
     if apsis_policy is not None:
-        if apsis_policy != APSIS_POLICY or apogee_longitude is not None or apogee_provenance is not None:
+        if apsis_policy not in (APSIS_POLICY, EXPLORATORY_APSIS_POLICY) or apogee_longitude is not None or apogee_provenance is not None:
             raise ValueError("choose one recognized apsis policy or a supplied apogee with provenance")
-        policy = definition()["optional_reconstructions"][APSIS_POLICY]
-        start, end = (_local_days(policy[k]) for k in ("domain_start_local_julian", "domain_end_local_julian"))
-        if not start <= days_since_epoch <= end:
+        scholarly = definition()["optional_reconstructions"][APSIS_POLICY]
+        start, end = (_local_days(scholarly[k]) for k in ("domain_start_local_julian", "domain_end_local_julian"))
+        if apsis_policy == APSIS_POLICY and not start <= days_since_epoch <= end:
             raise ValueError("scholarly apsis estimate is restricted to 1473-02-19 through 1523-02-22 05:00 Julian local time")
+        policy = (scholarly if apsis_policy == APSIS_POLICY else
+                  definition()["exploratory_policies"][EXPLORATORY_APSIS_POLICY])
         anchor = definition()["parameters"]["apogee_1523"]
-        apogee = anchor["value"] + (days_since_epoch - _local_days(anchor["epoch_local_julian"])) / 365 * policy["annual_motion"]["value"]
-        assignment = {"policy": APSIS_POLICY, "status": policy["status"],
+        # C3 p.363: rate is degrees per 365-day Egyptian year, anchored at
+        # 1523 February 22 05:00 Frauenburg LMT (C1 V.16; C3 pp.357–358).
+        apogee = anchor["value"] + (days_since_epoch - _local_days(anchor["epoch_local_julian"])) / 365 * scholarly["annual_motion"]["value"]
+        assignment = {"policy": apsis_policy, "status": policy["status"],
                       "source": policy["source"], "assumptions": policy["assumptions"]}
     else:
         if apogee_longitude is None or not isinstance(apogee_provenance, str) or not apogee_provenance.strip():

@@ -1,0 +1,1564 @@
+{
+  "generator": "scripts/generate_copernicus_cross_language.py; Python Phase 3B evaluators; regenerated, not source transcriptions",
+  "earth_argument_cases": [
+    {
+      "arguments": [
+        262,
+        61.28333333333333,
+        165.65,
+        26
+      ],
+      "result": {
+        "model_id": "copernicus-1543-earth-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -177.29661395288542,
+          -323.61537460516536
+        ],
+        "mean_sun": [
+          -165.38654933197282,
+          -277.11644600755477
+        ],
+        "earth": [
+          1226.3444602686855,
+          9625.564241408149
+        ],
+        "earth_from_mean_sun": [
+          1391.7310096006584,
+          9902.680687415703
+        ],
+        "earth_to_sun": [
+          -1226.3444602686855,
+          -9625.564241408149
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 322.7169585686428,
+        "mean_sun_longitude": 262.0,
+        "earth_annual_direction": 82.0,
+        "mean_solar_apogee": 61.28333333333333,
+        "true_solar_apogee": 59.17072077494171,
+        "apsidal_equation": -2.1126125583916178,
+        "theta": 165.65,
+        "mean_solar_anomaly": 200.71666666666667,
+        "true_solar_anomaly": 202.8292792250583,
+        "solar_equation": 0.7393508796515107,
+        "solar_sidereal_longitude": 262.7393508796515,
+        "mean_precession": 26.0,
+        "precession_equation": 0.5602607470170539,
+        "true_precession": 26.560260747017054,
+        "solar_tropical_longitude": 289.2996116266686
+      }
+    },
+    {
+      "arguments": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "result": {
+        "model_id": "copernicus-1543-earth-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -369.0,
+          -0.0
+        ],
+        "mean_sun": [
+          -417.0,
+          -0.0
+        ],
+        "earth": [
+          -10417.0,
+          -0.0
+        ],
+        "earth_from_mean_sun": [
+          -10000.0,
+          0.0
+        ],
+        "earth_to_sun": [
+          10417.0,
+          0.0
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 417.0,
+        "mean_sun_longitude": 0.0,
+        "earth_annual_direction": 180.0,
+        "mean_solar_apogee": 0.0,
+        "true_solar_apogee": 0.0,
+        "apsidal_equation": 0.0,
+        "theta": 0.0,
+        "mean_solar_anomaly": 0.0,
+        "true_solar_anomaly": 0.0,
+        "solar_equation": 0.0,
+        "solar_sidereal_longitude": 0.0,
+        "mean_precession": 0.0,
+        "precession_equation": -0.0,
+        "true_precession": 0.0,
+        "solar_tropical_longitude": 0.0
+      }
+    },
+    {
+      "arguments": [
+        359.9,
+        120.4,
+        270.1,
+        31.5
+      ],
+      "result": {
+        "model_id": "copernicus-1543-earth-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          186.72645896070955,
+          -318.26754393747797
+        ],
+        "mean_sun": [
+          228.1694453898346,
+          -294.05021799435707
+        ],
+        "earth": [
+          -9771.815323743043,
+          -276.5969343353726
+        ],
+        "earth_from_mean_sun": [
+          -9999.984769132878,
+          17.453283658984446
+        ],
+        "earth_to_sun": [
+          9771.815323743043,
+          276.5969343353726
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 372.19192161038853,
+        "mean_sun_longitude": 359.9,
+        "earth_annual_direction": 179.89999999999998,
+        "mean_solar_apogee": 120.4,
+        "true_solar_apogee": 127.80981811263528,
+        "apsidal_equation": 7.409818112635264,
+        "theta": 270.1,
+        "mean_solar_anomaly": 239.49999999999997,
+        "true_solar_anomaly": 232.09018188736468,
+        "solar_equation": 1.7213575483438035,
+        "solar_sidereal_longitude": 1.6213575483437832,
+        "mean_precession": 31.5,
+        "precession_equation": 0.004072426651095745,
+        "true_precession": 31.504072426651096,
+        "solar_tropical_longitude": 33.12542997499488
+      }
+    }
+  ],
+  "earth_date_cases": [
+    {
+      "days": 537697.7000000002,
+      "result": {
+        "model_id": "copernicus-1543-earth-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -118.65818391208205,
+          -349.4012527033733
+        ],
+        "mean_sun": [
+          -118.70562637749546,
+          -301.4012761490824
+        ],
+        "earth": [
+          -6778.24804474968,
+          7158.524646934978
+        ],
+        "earth_from_mean_sun": [
+          -6659.542418372184,
+          7459.92592308406
+        ],
+        "earth_to_sun": [
+          6778.24804474968,
+          -7158.524646934978
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 323.934800535492,
+        "mean_sun_longitude": 311.75557392742485,
+        "earth_annual_direction": 131.75557392742485,
+        "mean_solar_apogee": 71.24228950782175,
+        "true_solar_apogee": 68.5032080146619,
+        "apsidal_equation": -2.7390814931598584,
+        "theta": 161.18565922697877,
+        "mean_solar_anomaly": 240.5132844196031,
+        "true_solar_anomaly": 243.25236591276297,
+        "solar_equation": 1.6814501951987495,
+        "solar_sidereal_longitude": 313.4370241226236,
+        "mean_precession": 26.07608169129461,
+        "precession_equation": 0.7122986472701952,
+        "true_precession": 26.788380338564806,
+        "solar_tropical_longitude": 340.2254044611884,
+        "days_since_epoch": 537697.7000000002
+      }
+    },
+    {
+      "days": 551892.25,
+      "result": {
+        "model_id": "copernicus-1543-earth-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -117.05369832738562,
+          -349.9420404979679
+        ],
+        "mean_sun": [
+          -113.90818304083908,
+          -302.0452166619128
+        ],
+        "earth": [
+          1274.394875408099,
+          9601.11663286379
+        ],
+        "earth_from_mean_sun": [
+          1388.3030584489381,
+          9903.161849525703
+        ],
+        "earth_to_sun": [
+          -1274.394875408099,
+          -9601.11663286379
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 322.8101409063958,
+        "mean_sun_longitude": 262.0198332518339,
+        "earth_annual_direction": 82.01983325183392,
+        "mean_solar_apogee": 71.50519355477338,
+        "true_solar_apogee": 69.33738945126676,
+        "apsidal_equation": -2.167804103506626,
+        "theta": 165.26256840230215,
+        "mean_solar_anomaly": 190.51463969706055,
+        "true_solar_anomaly": 192.68244380056717,
+        "solar_equation": 0.41926395662983396,
+        "solar_sidereal_longitude": 262.43909720846375,
+        "mean_precession": 26.61838467809276,
+        "precession_equation": 0.5740486153171426,
+        "true_precession": 27.192433293409902,
+        "solar_tropical_longitude": 289.63153050187367,
+        "days_since_epoch": 551892.25
+      }
+    },
+    {
+      "days": 555962.2083333335,
+      "result": {
+        "model_id": "copernicus-1543-earth-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -116.5931931477143,
+          -350.09574020776057
+        ],
+        "mean_sun": [
+          -112.53412214216794,
+          -302.2676737344864
+        ],
+        "earth": [
+          -6983.911845690818,
+          6963.003703187326
+        ],
+        "earth_from_mean_sun": [
+          -6871.3777235486505,
+          7265.271376921813
+        ],
+        "earth_to_sun": [
+          6983.911845690818,
+          -6963.003703187326
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 322.53631614310706,
+        "mean_sun_longitude": 313.4039636241505,
+        "earth_annual_direction": 133.4039636241505,
+        "mean_solar_apogee": 71.58057519890848,
+        "true_solar_apogee": 69.57972330529809,
+        "apsidal_equation": -2.0008518936103883,
+        "theta": 166.4315276487983,
+        "mean_solar_anomaly": 241.823388425242,
+        "true_solar_anomaly": 243.8242403188524,
+        "solar_equation": 1.6819297349438784,
+        "solar_sidereal_longitude": 315.08589335909437,
+        "mean_precession": 26.77387749472385,
+        "precession_equation": 0.5321386322824262,
+        "true_precession": 27.306016127006274,
+        "solar_tropical_longitude": 342.39190948610064,
+        "days_since_epoch": 555962.2083333335
+      }
+    },
+    {
+      "days": 556747.0,
+      "result": {
+        "model_id": "copernicus-1543-earth-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -116.50437278127086,
+          -350.1253077440171
+        ],
+        "mean_sun": [
+          -112.26930471795518,
+          -302.3125040351874
+        ],
+        "earth": [
+          -10039.821093549077,
+          -1503.8596234091942
+        ],
+        "earth_from_mean_sun": [
+          -9927.551788831122,
+          -1201.5471193740068
+        ],
+        "earth_to_sun": [
+          10039.821093549077,
+          1503.8596234091942
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 322.4860413690463,
+        "mean_sun_longitude": 6.901031525456347,
+        "earth_annual_direction": 186.90103152545635,
+        "mean_solar_apogee": 71.595110700575,
+        "true_solar_apogee": 69.62659548605319,
+        "apsidal_equation": -1.9685152145218012,
+        "theta": 166.65693277587522,
+        "mean_solar_anomaly": 295.30592082488135,
+        "true_solar_anomaly": 297.27443603940316,
+        "solar_equation": 1.6179374710730485,
+        "solar_sidereal_longitude": 8.518968996529402,
+        "mean_precession": 26.8038604716303,
+        "precession_equation": 0.5239532550051649,
+        "true_precession": 27.327813726635465,
+        "solar_tropical_longitude": 35.846782723164864,
+        "days_since_epoch": 556747.0
+      }
+    }
+  ],
+  "mars_argument_cases": [
+    {
+      "arguments": [
+        262,
+        98.46666666666667,
+        119.66666666666667,
+        61.28333333333333,
+        165.65,
+        26
+      ],
+      "result": {
+        "model_id": "copernicus-1543-mars-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "position_kind": "geometric",
+        "origin": "true Sun for absolute points; Mars eccentricity referred to mean Sun",
+        "length_unit": "Mars principal radius = 10000",
+        "earth_model": {
+          "model_id": "copernicus-1543-earth-longitude",
+          "frame_id": "copernicus-1543-sidereal",
+          "origin": "true Sun",
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -177.29661395288542,
+            -323.61537460516536
+          ],
+          "mean_sun": [
+            -165.38654933197282,
+            -277.11644600755477
+          ],
+          "earth": [
+            1226.3444602686855,
+            9625.564241408149
+          ],
+          "earth_from_mean_sun": [
+            1391.7310096006584,
+            9902.680687415703
+          ],
+          "earth_to_sun": [
+            -1226.3444602686855,
+            -9625.564241408149
+          ],
+          "annual_radius": 10000.0,
+          "eccentric_component": 369.0,
+          "small_eccentric_radius": 48.0,
+          "eccentricity": 322.7169585686428,
+          "mean_sun_longitude": 262.0,
+          "earth_annual_direction": 82.0,
+          "mean_solar_apogee": 61.28333333333333,
+          "true_solar_apogee": 59.17072077494171,
+          "apsidal_equation": -2.1126125583916178,
+          "theta": 165.65,
+          "mean_solar_anomaly": 200.71666666666667,
+          "true_solar_anomaly": 202.8292792250583,
+          "solar_equation": 0.7393508796515107,
+          "solar_sidereal_longitude": 262.7393508796515,
+          "mean_precession": 26.0,
+          "precession_equation": 0.5602607470170539,
+          "true_precession": 26.560260747017054,
+          "solar_tropical_longitude": 289.2996116266686
+        },
+        "earth_to_mars_scale": 0.658,
+        "earth_geometry_in_mars_units": {
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -116.66117198099862,
+            -212.9389164901988
+          ],
+          "mean_sun": [
+            -108.82434946043811,
+            -182.34262147297105
+          ],
+          "earth": [
+            806.9346548567951,
+            6333.621270846562
+          ]
+        },
+        "mars_geometry": {
+          "mean_sun": [
+            -108.82434946043811,
+            -182.34262147297105
+          ],
+          "eccentric_center": [
+            -831.456072973697,
+            1086.280014369641
+          ],
+          "epicycle_center": [
+            -10421.304133230698,
+            3920.854793976805
+          ],
+          "mars": [
+            -9977.396440662498,
+            4150.954686368731
+          ],
+          "principal_radius": 10000.0,
+          "eccentric_component": 1460.0,
+          "small_epicycle_radius": 500.0,
+          "mars_from_mean_sun": [
+            -9868.57209120206,
+            4333.297307841702
+          ],
+          "mean_sun_to_epicycle_center": 11098.804814971027,
+          "mean_sun_to_mars": 10778.041597498144
+        },
+        "earth_to_mars": [
+          -10784.331095519294,
+          -2182.666584477831
+        ],
+        "earth_to_mars_distance": 11002.991892970771,
+        "mean_commutation": 98.46666666666667,
+        "mean_planet_longitude": 163.53333333333333,
+        "mars_apogee": 119.66666666666667,
+        "eccentric_anomaly": 43.86666666666666,
+        "epicycle_offset_direction": 27.399999999999977,
+        "mean_sun_mars_longitude": 156.29368653881977,
+        "equation_of_center": -7.239646794513561,
+        "corrected_commutation": 105.70631346118023,
+        "annual_parallax_equation": 35.147987072637704,
+        "geocentric_sidereal_longitude": 191.44167361145747,
+        "geocentric_tropical_longitude": 218.00193435847453,
+        "true_precession": 26.560260747017054,
+        "apsis_assignment": {
+          "status": "explicit angular argument, no date law"
+        }
+      }
+    },
+    {
+      "arguments": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "result": {
+        "model_id": "copernicus-1543-mars-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "position_kind": "geometric",
+        "origin": "true Sun for absolute points; Mars eccentricity referred to mean Sun",
+        "length_unit": "Mars principal radius = 10000",
+        "earth_model": {
+          "model_id": "copernicus-1543-earth-longitude",
+          "frame_id": "copernicus-1543-sidereal",
+          "origin": "true Sun",
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -369.0,
+            -0.0
+          ],
+          "mean_sun": [
+            -417.0,
+            -0.0
+          ],
+          "earth": [
+            -10417.0,
+            -0.0
+          ],
+          "earth_from_mean_sun": [
+            -10000.0,
+            0.0
+          ],
+          "earth_to_sun": [
+            10417.0,
+            0.0
+          ],
+          "annual_radius": 10000.0,
+          "eccentric_component": 369.0,
+          "small_eccentric_radius": 48.0,
+          "eccentricity": 417.0,
+          "mean_sun_longitude": 0.0,
+          "earth_annual_direction": 180.0,
+          "mean_solar_apogee": 0.0,
+          "true_solar_apogee": 0.0,
+          "apsidal_equation": 0.0,
+          "theta": 0.0,
+          "mean_solar_anomaly": 0.0,
+          "true_solar_anomaly": 0.0,
+          "solar_equation": 0.0,
+          "solar_sidereal_longitude": 0.0,
+          "mean_precession": 0.0,
+          "precession_equation": -0.0,
+          "true_precession": 0.0,
+          "solar_tropical_longitude": 0.0
+        },
+        "earth_to_mars_scale": 0.658,
+        "earth_geometry_in_mars_units": {
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -242.80200000000002,
+            -0.0
+          ],
+          "mean_sun": [
+            -274.386,
+            -0.0
+          ],
+          "earth": [
+            -6854.386,
+            -0.0
+          ]
+        },
+        "mars_geometry": {
+          "mean_sun": [
+            -274.386,
+            -0.0
+          ],
+          "eccentric_center": [
+            1185.614,
+            0.0
+          ],
+          "epicycle_center": [
+            11185.614,
+            0.0
+          ],
+          "mars": [
+            10685.614,
+            0.0
+          ],
+          "principal_radius": 10000.0,
+          "eccentric_component": 1460.0,
+          "small_epicycle_radius": 500.0,
+          "mars_from_mean_sun": [
+            10960.0,
+            0.0
+          ],
+          "mean_sun_to_epicycle_center": 11460.0,
+          "mean_sun_to_mars": 10960.0
+        },
+        "earth_to_mars": [
+          17540.0,
+          0.0
+        ],
+        "earth_to_mars_distance": 17540.0,
+        "mean_commutation": 0.0,
+        "mean_planet_longitude": 0.0,
+        "mars_apogee": 0.0,
+        "eccentric_anomaly": 0.0,
+        "epicycle_offset_direction": 180.0,
+        "mean_sun_mars_longitude": 0.0,
+        "equation_of_center": 0.0,
+        "corrected_commutation": 0.0,
+        "annual_parallax_equation": 0.0,
+        "geocentric_sidereal_longitude": 0.0,
+        "geocentric_tropical_longitude": 0.0,
+        "true_precession": 0.0,
+        "apsis_assignment": {
+          "status": "explicit angular argument, no date law"
+        }
+      }
+    },
+    {
+      "arguments": [
+        339.8,
+        14.2,
+        178.9,
+        110.3,
+        270.1,
+        31.5
+      ],
+      "result": {
+        "model_id": "copernicus-1543-mars-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "position_kind": "geometric",
+        "origin": "true Sun for absolute points; Mars eccentricity referred to mean Sun",
+        "length_unit": "Mars principal radius = 10000",
+        "earth_model": {
+          "model_id": "copernicus-1543-earth-longitude",
+          "frame_id": "copernicus-1543-sidereal",
+          "origin": "true Sun",
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            128.01925543053136,
+            -346.08101687179027
+          ],
+          "mean_sun": [
+            173.06692052299005,
+            -329.5067033198606
+          ],
+          "earth": [
+            -9211.86330707257,
+            3123.4752866654817
+          ],
+          "earth_from_mean_sun": [
+            -9384.93022759556,
+            3452.9819899853424
+          ],
+          "earth_to_sun": [
+            9211.86330707257,
+            -3123.4752866654817
+          ],
+          "annual_radius": 10000.0,
+          "eccentric_component": 369.0,
+          "small_eccentric_radius": 48.0,
+          "eccentricity": 372.19192161038853,
+          "mean_sun_longitude": 339.8,
+          "earth_annual_direction": 159.79999999999995,
+          "mean_solar_apogee": 110.3,
+          "true_solar_apogee": 117.70981811263525,
+          "apsidal_equation": 7.409818112635264,
+          "theta": 270.1,
+          "mean_solar_anomaly": 229.5,
+          "true_solar_anomaly": 222.09018188736476,
+          "solar_equation": 1.4696948475868226,
+          "solar_sidereal_longitude": 341.26969484758683,
+          "mean_precession": 31.5,
+          "precession_equation": 0.004072426651095745,
+          "true_precession": 31.504072426651096,
+          "solar_tropical_longitude": 12.773767274237912
+        },
+        "earth_to_mars_scale": 0.658,
+        "earth_geometry_in_mars_units": {
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            84.23667007328964,
+            -227.721309101638
+          ],
+          "mean_sun": [
+            113.87803370412746,
+            -216.8154107844683
+          ],
+          "earth": [
+            -6061.406056053751,
+            2055.2467386258872
+          ]
+        },
+        "mars_geometry": {
+          "mean_sun": [
+            113.87803370412746,
+            -216.8154107844683
+          ],
+          "eccentric_center": [
+            -1345.852905993473,
+            -188.78714488092166
+          ],
+          "epicycle_center": [
+            6905.282076789481,
+            -5838.457179130295
+          ],
+          "mars": [
+            7095.010156553984,
+            -6301.062038323186
+          ],
+          "principal_radius": 10000.0,
+          "eccentric_component": 1460.0,
+          "small_epicycle_radius": 500.0,
+          "mars_from_mean_sun": [
+            6981.132122849857,
+            -6084.246627538718
+          ],
+          "mean_sun_to_epicycle_center": 8816.236444654061,
+          "mean_sun_to_mars": 9260.359752266777
+        },
+        "earth_to_mars": [
+          13156.416212607735,
+          -8356.308776949074
+        ],
+        "earth_to_mars_distance": 15585.86487606908,
+        "mean_commutation": 14.2,
+        "mean_planet_longitude": 325.6,
+        "mars_apogee": 178.9,
+        "eccentric_anomaly": 146.70000000000002,
+        "epicycle_offset_direction": 292.30000000000007,
+        "mean_sun_mars_longitude": 318.9269633430607,
+        "equation_of_center": -6.673036656939303,
+        "corrected_commutation": 20.873036656939302,
+        "annual_parallax_equation": 8.6513308231726,
+        "geocentric_sidereal_longitude": 327.5782941662333,
+        "geocentric_tropical_longitude": 359.0823665928844,
+        "true_precession": 31.504072426651096,
+        "apsis_assignment": {
+          "status": "explicit angular argument, no date law"
+        }
+      }
+    }
+  ],
+  "mars_date_cases": [
+    {
+      "days": 537697.7000000002,
+      "result": {
+        "model_id": "copernicus-1543-mars-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "position_kind": "geometric",
+        "origin": "true Sun for absolute points; Mars eccentricity referred to mean Sun",
+        "length_unit": "Mars principal radius = 10000",
+        "earth_model": {
+          "model_id": "copernicus-1543-earth-longitude",
+          "frame_id": "copernicus-1543-sidereal",
+          "origin": "true Sun",
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -118.65818391208205,
+            -349.4012527033733
+          ],
+          "mean_sun": [
+            -118.70562637749546,
+            -301.4012761490824
+          ],
+          "earth": [
+            -6778.24804474968,
+            7158.524646934978
+          ],
+          "earth_from_mean_sun": [
+            -6659.542418372184,
+            7459.92592308406
+          ],
+          "earth_to_sun": [
+            6778.24804474968,
+            -7158.524646934978
+          ],
+          "annual_radius": 10000.0,
+          "eccentric_component": 369.0,
+          "small_eccentric_radius": 48.0,
+          "eccentricity": 323.934800535492,
+          "mean_sun_longitude": 311.75557392742485,
+          "earth_annual_direction": 131.75557392742485,
+          "mean_solar_apogee": 71.24228950782175,
+          "true_solar_apogee": 68.5032080146619,
+          "apsidal_equation": -2.7390814931598584,
+          "theta": 161.18565922697877,
+          "mean_solar_anomaly": 240.5132844196031,
+          "true_solar_anomaly": 243.25236591276297,
+          "solar_equation": 1.6814501951987495,
+          "solar_sidereal_longitude": 313.4370241226236,
+          "mean_precession": 26.07608169129461,
+          "precession_equation": 0.7122986472701952,
+          "true_precession": 26.788380338564806,
+          "solar_tropical_longitude": 340.2254044611884,
+          "days_since_epoch": 537697.7000000002
+        },
+        "earth_to_mars_scale": 0.658,
+        "earth_geometry_in_mars_units": {
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -78.07708501415,
+            -229.90602427881964
+          ],
+          "mean_sun": [
+            -78.10830215639201,
+            -198.3220397060962
+          ],
+          "earth": [
+            -4460.087213445289,
+            4710.309217683215
+          ]
+        },
+        "mars_geometry": {
+          "mean_sun": [
+            -78.10830215639201,
+            -198.3220397060962
+          ],
+          "eccentric_center": [
+            -792.0544439622513,
+            1075.2088419770016
+          ],
+          "epicycle_center": [
+            1820.2201951796073,
+            -8577.56387935526
+          ],
+          "mars": [
+            1829.0394448912477,
+            -9077.486094139245
+          ],
+          "principal_radius": 10000.0,
+          "eccentric_component": 1460.0,
+          "small_epicycle_radius": 500.0,
+          "mars_from_mean_sun": [
+            1907.1477470476398,
+            -8879.16405443315
+          ],
+          "mean_sun_to_epicycle_center": 8591.585702949431,
+          "mean_sun_to_mars": 9081.67202857528
+        },
+        "earth_to_mars": [
+          6289.126658336537,
+          -13787.795311822461
+        ],
+        "earth_to_mars_distance": 15154.41894911556,
+        "mean_commutation": 26.61266595282359,
+        "mean_planet_longitude": 285.14290797460126,
+        "mars_apogee": 119.27515196495011,
+        "eccentric_anomaly": 165.86775600965115,
+        "epicycle_offset_direction": 271.01066398425246,
+        "mean_sun_mars_longitude": 282.1223304409614,
+        "equation_of_center": -3.02057753363988,
+        "corrected_commutation": 29.63324348646347,
+        "annual_parallax_equation": 12.397163876495142,
+        "geocentric_sidereal_longitude": 294.5194943174565,
+        "geocentric_tropical_longitude": 321.30787465602134,
+        "true_precession": 26.788380338564806,
+        "days_since_epoch": 537697.7000000002,
+        "apsis_assignment": {
+          "policy": "sn-local-uniform-1473-1523",
+          "status": "scholarly estimate, explicitly not the full 1543 apsidal theory",
+          "source": "C3 p.363 uniform estimate; p.455 applies it at 1473 February 19",
+          "assumptions": [
+            "Uniform mean-Sun apogee despite the historical nonuniform mechanism.",
+            "Hold e1=1460 and small radius=500 throughout this short interval; secular eccentricity evolution unavailable."
+          ]
+        },
+        "historical_applicability": "Modern-observation geometrical lengths, not an all-era variable-eccentricity theory. Direct angular evaluations are mathematical constructions; date evaluation requires an explicit supplied apsis or the limited scholarly policy."
+      }
+    },
+    {
+      "days": 551892.25,
+      "result": {
+        "model_id": "copernicus-1543-mars-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "position_kind": "geometric",
+        "origin": "true Sun for absolute points; Mars eccentricity referred to mean Sun",
+        "length_unit": "Mars principal radius = 10000",
+        "earth_model": {
+          "model_id": "copernicus-1543-earth-longitude",
+          "frame_id": "copernicus-1543-sidereal",
+          "origin": "true Sun",
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -117.05369832738562,
+            -349.9420404979679
+          ],
+          "mean_sun": [
+            -113.90818304083908,
+            -302.0452166619128
+          ],
+          "earth": [
+            1274.394875408099,
+            9601.11663286379
+          ],
+          "earth_from_mean_sun": [
+            1388.3030584489381,
+            9903.161849525703
+          ],
+          "earth_to_sun": [
+            -1274.394875408099,
+            -9601.11663286379
+          ],
+          "annual_radius": 10000.0,
+          "eccentric_component": 369.0,
+          "small_eccentric_radius": 48.0,
+          "eccentricity": 322.8101409063958,
+          "mean_sun_longitude": 262.0198332518339,
+          "earth_annual_direction": 82.01983325183392,
+          "mean_solar_apogee": 71.50519355477338,
+          "true_solar_apogee": 69.33738945126676,
+          "apsidal_equation": -2.167804103506626,
+          "theta": 165.26256840230215,
+          "mean_solar_anomaly": 190.51463969706055,
+          "true_solar_anomaly": 192.68244380056717,
+          "solar_equation": 0.41926395662983396,
+          "solar_sidereal_longitude": 262.43909720846375,
+          "mean_precession": 26.61838467809276,
+          "precession_equation": 0.5740486153171426,
+          "true_precession": 27.192433293409902,
+          "solar_tropical_longitude": 289.63153050187367,
+          "days_since_epoch": 551892.25
+        },
+        "earth_to_mars_scale": 0.658,
+        "earth_geometry_in_mars_units": {
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -77.02133349941974,
+            -230.2618626476629
+          ],
+          "mean_sun": [
+            -74.95158444087211,
+            -198.74575256353862
+          ],
+          "earth": [
+            838.5518280185292,
+            6317.534744424374
+          ]
+        },
+        "mars_geometry": {
+          "mean_sun": [
+            -74.95158444087211,
+            -198.74575256353862
+          ],
+          "eccentric_center": [
+            -795.6507701028705,
+            1070.9757459494747
+          ],
+          "epicycle_center": [
+            -10386.144844286116,
+            3903.364033782914
+          ],
+          "mars": [
+            -9942.693310233772,
+            4134.341818313422
+          ],
+          "principal_radius": 10000.0,
+          "eccentric_component": 1460.0,
+          "small_epicycle_radius": 500.0,
+          "mars_from_mean_sun": [
+            -9867.7417257929,
+            4333.08757087696
+          ],
+          "mean_sun_to_epicycle_center": 11097.20735775976,
+          "mean_sun_to_mars": 10777.196976201309
+        },
+        "earth_to_mars": [
+          -10781.245138252301,
+          -2183.1929261109526
+        ],
+        "earth_to_mars_distance": 11000.071730843842,
+        "mean_commutation": 98.47343688248657,
+        "mean_planet_longitude": 163.54639636934735,
+        "mars_apogee": 119.57942377494504,
+        "eccentric_anomaly": 43.96697259440231,
+        "epicycle_offset_direction": 27.513368963749656,
+        "mean_sun_mars_longitude": 156.2929326305885,
+        "equation_of_center": -7.253463738758853,
+        "corrected_commutation": 105.72690062124542,
+        "annual_parallax_equation": 35.15461659315184,
+        "geocentric_sidereal_longitude": 191.44754922374034,
+        "geocentric_tropical_longitude": 218.63998251715023,
+        "true_precession": 27.192433293409902,
+        "days_since_epoch": 551892.25,
+        "apsis_assignment": {
+          "policy": "sn-local-uniform-1473-1523",
+          "status": "scholarly estimate, explicitly not the full 1543 apsidal theory",
+          "source": "C3 p.363 uniform estimate; p.455 applies it at 1473 February 19",
+          "assumptions": [
+            "Uniform mean-Sun apogee despite the historical nonuniform mechanism.",
+            "Hold e1=1460 and small radius=500 throughout this short interval; secular eccentricity evolution unavailable."
+          ]
+        },
+        "historical_applicability": "Modern-observation geometrical lengths, not an all-era variable-eccentricity theory. Direct angular evaluations are mathematical constructions; date evaluation requires an explicit supplied apsis or the limited scholarly policy."
+      }
+    },
+    {
+      "days": 555962.2083333335,
+      "result": {
+        "model_id": "copernicus-1543-mars-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "position_kind": "geometric",
+        "origin": "true Sun for absolute points; Mars eccentricity referred to mean Sun",
+        "length_unit": "Mars principal radius = 10000",
+        "earth_model": {
+          "model_id": "copernicus-1543-earth-longitude",
+          "frame_id": "copernicus-1543-sidereal",
+          "origin": "true Sun",
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -116.5931931477143,
+            -350.09574020776057
+          ],
+          "mean_sun": [
+            -112.53412214216794,
+            -302.2676737344864
+          ],
+          "earth": [
+            -6983.911845690818,
+            6963.003703187326
+          ],
+          "earth_from_mean_sun": [
+            -6871.3777235486505,
+            7265.271376921813
+          ],
+          "earth_to_sun": [
+            6983.911845690818,
+            -6963.003703187326
+          ],
+          "annual_radius": 10000.0,
+          "eccentric_component": 369.0,
+          "small_eccentric_radius": 48.0,
+          "eccentricity": 322.53631614310706,
+          "mean_sun_longitude": 313.4039636241505,
+          "earth_annual_direction": 133.4039636241505,
+          "mean_solar_apogee": 71.58057519890848,
+          "true_solar_apogee": 69.57972330529809,
+          "apsidal_equation": -2.0008518936103883,
+          "theta": 166.4315276487983,
+          "mean_solar_anomaly": 241.823388425242,
+          "true_solar_anomaly": 243.8242403188524,
+          "solar_equation": 1.6819297349438784,
+          "solar_sidereal_longitude": 315.08589335909437,
+          "mean_precession": 26.77387749472385,
+          "precession_equation": 0.5321386322824262,
+          "true_precession": 27.306016127006274,
+          "solar_tropical_longitude": 342.39190948610064,
+          "days_since_epoch": 555962.2083333335
+        },
+        "earth_to_mars_scale": 0.658,
+        "earth_geometry_in_mars_units": {
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -76.71832109119602,
+            -230.36299705670646
+          ],
+          "mean_sun": [
+            -74.0474523695465,
+            -198.89212931729205
+          ],
+          "earth": [
+            -4595.4139944645585,
+            4581.656436697261
+          ]
+        },
+        "mars_geometry": {
+          "mean_sun": [
+            -74.0474523695465,
+            -198.89212931729205
+          ],
+          "eccentric_center": [
+            -796.6791758828053,
+            1069.7305065253202
+          ],
+          "epicycle_center": [
+            -8030.720678068927,
+            7973.978730962849
+          ],
+          "mars": [
+            -7585.194281224471,
+            7747.0288913180575
+          ],
+          "principal_radius": 10000.0,
+          "eccentric_component": 1460.0,
+          "small_epicycle_radius": 500.0,
+          "mars_from_mean_sun": [
+            -7511.146828854924,
+            7945.921020635349
+          ],
+          "mean_sun_to_epicycle_center": 11406.334508481574,
+          "mean_sun_to_mars": 10934.12033731073
+        },
+        "earth_to_mars": [
+          -2989.780286759912,
+          3165.372454620797
+        ],
+        "earth_to_mars_distance": 4354.120914670409,
+        "mean_commutation": 177.06771028225194,
+        "mean_planet_longitude": 136.33625334189855,
+        "mars_apogee": 119.66666666666667,
+        "eccentric_anomaly": 16.669586675231884,
+        "epicycle_offset_direction": 333.0058400171304,
+        "mean_sun_mars_longitude": 133.38881733603915,
+        "equation_of_center": -2.9474360058594016,
+        "corrected_commutation": 180.01514628811134,
+        "annual_parallax_equation": -0.022889253471817028,
+        "geocentric_sidereal_longitude": 133.36592808256734,
+        "geocentric_tropical_longitude": 160.6719442095736,
+        "true_precession": 27.306016127006274,
+        "days_since_epoch": 555962.2083333335,
+        "apsis_assignment": {
+          "policy": "sn-local-uniform-1473-1523",
+          "status": "scholarly estimate, explicitly not the full 1543 apsidal theory",
+          "source": "C3 p.363 uniform estimate; p.455 applies it at 1473 February 19",
+          "assumptions": [
+            "Uniform mean-Sun apogee despite the historical nonuniform mechanism.",
+            "Hold e1=1460 and small radius=500 throughout this short interval; secular eccentricity evolution unavailable."
+          ]
+        },
+        "historical_applicability": "Modern-observation geometrical lengths, not an all-era variable-eccentricity theory. Direct angular evaluations are mathematical constructions; date evaluation requires an explicit supplied apsis or the limited scholarly policy."
+      }
+    }
+  ],
+  "mars_exploratory_cases": [
+    {
+      "days": 537697.0,
+      "result": {
+        "model_id": "copernicus-1543-mars-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "position_kind": "geometric",
+        "origin": "true Sun for absolute points; Mars eccentricity referred to mean Sun",
+        "length_unit": "Mars principal radius = 10000",
+        "earth_model": {
+          "model_id": "copernicus-1543-earth-longitude",
+          "frame_id": "copernicus-1543-sidereal",
+          "origin": "true Sun",
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -118.65826297548283,
+            -349.40122585308876
+          ],
+          "mean_sun": [
+            -118.70586301181812,
+            -301.40124945479727
+          ],
+          "earth": [
+            -6687.939137531069,
+            7238.172623447377
+          ],
+          "earth_from_mean_sun": [
+            -6569.233274519251,
+            7539.573872902174
+          ],
+          "earth_to_sun": [
+            6687.939137531069,
+            -7238.172623447377
+          ],
+          "annual_radius": 10000.0,
+          "eccentric_component": 369.0,
+          "small_eccentric_radius": 48.0,
+          "eccentricity": 323.93486241263605,
+          "mean_sun_longitude": 311.0656482175691,
+          "earth_annual_direction": 131.0656482175691,
+          "mean_solar_apogee": 71.24227654278708,
+          "true_solar_apogee": 68.50316734139173,
+          "apsidal_equation": -2.7391092013953653,
+          "theta": 161.1854581754186,
+          "mean_solar_anomaly": 239.82337167478204,
+          "true_solar_anomaly": 242.56248087617737,
+          "solar_equation": 1.671719747271709,
+          "solar_sidereal_longitude": 312.7373679648408,
+          "mean_precession": 26.07605494778454,
+          "precession_equation": 0.7123051317761818,
+          "true_precession": 26.788360079560725,
+          "solar_tropical_longitude": 339.52572804440155,
+          "days_since_epoch": 537697.0
+        },
+        "earth_to_mars_scale": 0.658,
+        "earth_geometry_in_mars_units": {
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -78.0771370378677,
+            -229.9060066113324
+          ],
+          "mean_sun": [
+            -78.10845786177633,
+            -198.3220221412566
+          ],
+          "earth": [
+            -4400.6639524954435,
+            4762.717586228375
+          ]
+        },
+        "mars_geometry": {
+          "mean_sun": [
+            -78.10845786177633,
+            -198.3220221412566
+          ],
+          "eccentric_center": [
+            -792.0542661452345,
+            1075.2090465156803
+          ],
+          "epicycle_center": [
+            1758.367668397867,
+            -8594.090201920135
+          ],
+          "mars": [
+            1760.7852339900498,
+            -9094.084357262582
+          ],
+          "principal_radius": 10000.0,
+          "eccentric_component": 1460.0,
+          "small_epicycle_radius": 500.0,
+          "mars_from_mean_sun": [
+            1838.8936918518261,
+            -8895.762335121326
+          ],
+          "mean_sun_to_epicycle_center": 8594.27529759835,
+          "mean_sun_to_mars": 9083.83825994803
+        },
+        "earth_to_mars": [
+          6161.449186485494,
+          -13856.801943490957
+        ],
+        "earth_to_mars_distance": 15164.907391038612,
+        "mean_commutation": 26.28956289277994,
+        "mean_planet_longitude": 284.77608532478916,
+        "mars_apogee": 119.27513695987655,
+        "eccentric_anomaly": 165.50094836491263,
+        "epicycle_offset_direction": 270.27703368970174,
+        "mean_sun_mars_longitude": 281.6794318442863,
+        "equation_of_center": -3.09665348050288,
+        "corrected_commutation": 29.38621637328282,
+        "annual_parallax_equation": 12.292967819651608,
+        "geocentric_sidereal_longitude": 293.9723996639379,
+        "geocentric_tropical_longitude": 320.7607597434986,
+        "true_precession": 26.788360079560725,
+        "days_since_epoch": 537697.0,
+        "apsis_assignment": {
+          "policy": "sn-uniform-exploratory",
+          "status": "hypothetical extrapolation, not Copernicus's arbitrary-date law or a validated reconstruction",
+          "source": "C3 p.363 supplies the uniform rate; its continuation outside the guarded 1473\u20131523 interval is a project experiment",
+          "assumptions": [
+            "Continue C3's 0;0,28,10 degree per Egyptian year uniformly without an accuracy claim.",
+            "Hold the 1543 Mars geometry, including eccentric component e1=1460 and small epicycle radius 500, fixed at all evaluated dates."
+          ]
+        },
+        "historical_applicability": "Modern-observation geometrical lengths, not an all-era variable-eccentricity theory. Direct angular evaluations are mathematical constructions; date evaluation requires an explicit supplied apsis or the limited scholarly policy."
+      }
+    },
+    {
+      "days": 555962.2083333335,
+      "result": {
+        "model_id": "copernicus-1543-mars-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "position_kind": "geometric",
+        "origin": "true Sun for absolute points; Mars eccentricity referred to mean Sun",
+        "length_unit": "Mars principal radius = 10000",
+        "earth_model": {
+          "model_id": "copernicus-1543-earth-longitude",
+          "frame_id": "copernicus-1543-sidereal",
+          "origin": "true Sun",
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -116.5931931477143,
+            -350.09574020776057
+          ],
+          "mean_sun": [
+            -112.53412214216794,
+            -302.2676737344864
+          ],
+          "earth": [
+            -6983.911845690818,
+            6963.003703187326
+          ],
+          "earth_from_mean_sun": [
+            -6871.3777235486505,
+            7265.271376921813
+          ],
+          "earth_to_sun": [
+            6983.911845690818,
+            -6963.003703187326
+          ],
+          "annual_radius": 10000.0,
+          "eccentric_component": 369.0,
+          "small_eccentric_radius": 48.0,
+          "eccentricity": 322.53631614310706,
+          "mean_sun_longitude": 313.4039636241505,
+          "earth_annual_direction": 133.4039636241505,
+          "mean_solar_apogee": 71.58057519890848,
+          "true_solar_apogee": 69.57972330529809,
+          "apsidal_equation": -2.0008518936103883,
+          "theta": 166.4315276487983,
+          "mean_solar_anomaly": 241.823388425242,
+          "true_solar_anomaly": 243.8242403188524,
+          "solar_equation": 1.6819297349438784,
+          "solar_sidereal_longitude": 315.08589335909437,
+          "mean_precession": 26.77387749472385,
+          "precession_equation": 0.5321386322824262,
+          "true_precession": 27.306016127006274,
+          "solar_tropical_longitude": 342.39190948610064,
+          "days_since_epoch": 555962.2083333335
+        },
+        "earth_to_mars_scale": 0.658,
+        "earth_geometry_in_mars_units": {
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -76.71832109119602,
+            -230.36299705670646
+          ],
+          "mean_sun": [
+            -74.0474523695465,
+            -198.89212931729205
+          ],
+          "earth": [
+            -4595.4139944645585,
+            4581.656436697261
+          ]
+        },
+        "mars_geometry": {
+          "mean_sun": [
+            -74.0474523695465,
+            -198.89212931729205
+          ],
+          "eccentric_center": [
+            -796.6791758828053,
+            1069.7305065253202
+          ],
+          "epicycle_center": [
+            -8030.720678068927,
+            7973.978730962849
+          ],
+          "mars": [
+            -7585.194281224471,
+            7747.0288913180575
+          ],
+          "principal_radius": 10000.0,
+          "eccentric_component": 1460.0,
+          "small_epicycle_radius": 500.0,
+          "mars_from_mean_sun": [
+            -7511.146828854924,
+            7945.921020635349
+          ],
+          "mean_sun_to_epicycle_center": 11406.334508481574,
+          "mean_sun_to_mars": 10934.12033731073
+        },
+        "earth_to_mars": [
+          -2989.780286759912,
+          3165.372454620797
+        ],
+        "earth_to_mars_distance": 4354.120914670409,
+        "mean_commutation": 177.06771028225194,
+        "mean_planet_longitude": 136.33625334189855,
+        "mars_apogee": 119.66666666666667,
+        "eccentric_anomaly": 16.669586675231884,
+        "epicycle_offset_direction": 333.0058400171304,
+        "mean_sun_mars_longitude": 133.38881733603915,
+        "equation_of_center": -2.9474360058594016,
+        "corrected_commutation": 180.01514628811134,
+        "annual_parallax_equation": -0.022889253471817028,
+        "geocentric_sidereal_longitude": 133.36592808256734,
+        "geocentric_tropical_longitude": 160.6719442095736,
+        "true_precession": 27.306016127006274,
+        "days_since_epoch": 555962.2083333335,
+        "apsis_assignment": {
+          "policy": "sn-uniform-exploratory",
+          "status": "hypothetical extrapolation, not Copernicus's arbitrary-date law or a validated reconstruction",
+          "source": "C3 p.363 supplies the uniform rate; its continuation outside the guarded 1473\u20131523 interval is a project experiment",
+          "assumptions": [
+            "Continue C3's 0;0,28,10 degree per Egyptian year uniformly without an accuracy claim.",
+            "Hold the 1543 Mars geometry, including eccentric component e1=1460 and small epicycle radius 500, fixed at all evaluated dates."
+          ]
+        },
+        "historical_applicability": "Modern-observation geometrical lengths, not an all-era variable-eccentricity theory. Direct angular evaluations are mathematical constructions; date evaluation requires an explicit supplied apsis or the limited scholarly policy."
+      }
+    },
+    {
+      "days": 739914.0,
+      "result": {
+        "model_id": "copernicus-1543-mars-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "position_kind": "geometric",
+        "origin": "true Sun for absolute points; Mars eccentricity referred to mean Sun",
+        "length_unit": "Mars principal radius = 10000",
+        "earth_model": {
+          "model_id": "copernicus-1543-earth-longitude",
+          "frame_id": "copernicus-1543-sidereal",
+          "origin": "true Sun",
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -95.58115031719419,
+            -356.4060096351378
+          ],
+          "mean_sun": [
+            -56.61195481742172,
+            -328.3809886342445
+          ],
+          "earth": [
+            9935.9517552145,
+            -713.9591272171947
+          ],
+          "earth_from_mean_sun": [
+            9992.563710031922,
+            -385.5781385829502
+          ],
+          "earth_to_sun": [
+            -9935.9517552145,
+            713.9591272171947
+          ],
+          "annual_radius": 10000.0,
+          "eccentric_component": 369.0,
+          "small_eccentric_radius": 48.0,
+          "eccentricity": 333.2251297916374,
+          "mean_sun_longitude": 177.79025222733617,
+          "earth_annual_direction": 357.79025222733617,
+          "mean_solar_apogee": 74.98763427955353,
+          "true_solar_apogee": 80.21851762201898,
+          "apsidal_equation": 5.230883342465461,
+          "theta": 219.2655200799087,
+          "mean_solar_anomaly": 102.80261794778264,
+          "true_solar_anomaly": 97.57173460531719,
+          "solar_equation": -1.9002417097862008,
+          "solar_sidereal_longitude": 175.89001051754997,
+          "mean_precession": 33.80175833967529,
+          "precession_equation": -1.1433713304857953,
+          "true_precession": 32.6583870091895,
+          "solar_tropical_longitude": 208.54839752673945,
+          "days_since_epoch": 739914.0
+        },
+        "earth_to_mars_scale": 0.658,
+        "earth_geometry_in_mars_units": {
+          "true_sun": [
+            0.0,
+            0.0
+          ],
+          "eccentric_center": [
+            -62.89239690871378,
+            -234.51515433992068
+          ],
+          "mean_sun": [
+            -37.250666269863494,
+            -216.07469052133288
+          ],
+          "earth": [
+            6537.856254931142,
+            -469.7851057089141
+          ]
+        },
+        "mars_geometry": {
+          "mean_sun": [
+            -37.250666269863494,
+            -216.07469052133288
+          ],
+          "eccentric_center": [
+            -845.4108251990037,
+            999.8517700508627
+          ],
+          "epicycle_center": [
+            5168.953725905658,
+            8989.05817910149
+          ],
+          "mars": [
+            4692.241154786549,
+            9139.873047523035
+          ],
+          "principal_radius": 10000.0,
+          "eccentric_component": 1460.0,
+          "small_epicycle_radius": 500.0,
+          "mars_from_mean_sun": [
+            4729.491821056412,
+            9355.947738044368
+          ],
+          "mean_sun_to_epicycle_center": 10575.397643612187,
+          "mean_sun_to_mars": 10483.408365720426
+        },
+        "earth_to_mars": [
+          -1845.6151001445933,
+          9609.658153231949
+        ],
+        "earth_to_mars_distance": 9785.286143994921,
+        "mean_commutation": 124.76309781323653,
+        "mean_planet_longitude": 53.02715441409964,
+        "mars_apogee": 123.60982404764925,
+        "eccentric_anomaly": 289.4173303664504,
+        "epicycle_offset_direction": 162.44448478055003,
+        "mean_sun_mars_longitude": 63.183108590598714,
+        "equation_of_center": 10.15595417649908,
+        "corrected_commutation": 114.60714363673745,
+        "annual_parallax_equation": 37.68864112539066,
+        "geocentric_sidereal_longitude": 100.87174971598937,
+        "geocentric_tropical_longitude": 133.53013672517886,
+        "true_precession": 32.6583870091895,
+        "days_since_epoch": 739914.0,
+        "apsis_assignment": {
+          "policy": "sn-uniform-exploratory",
+          "status": "hypothetical extrapolation, not Copernicus's arbitrary-date law or a validated reconstruction",
+          "source": "C3 p.363 supplies the uniform rate; its continuation outside the guarded 1473\u20131523 interval is a project experiment",
+          "assumptions": [
+            "Continue C3's 0;0,28,10 degree per Egyptian year uniformly without an accuracy claim.",
+            "Hold the 1543 Mars geometry, including eccentric component e1=1460 and small epicycle radius 500, fixed at all evaluated dates."
+          ]
+        },
+        "historical_applicability": "Modern-observation geometrical lengths, not an all-era variable-eccentricity theory. Direct angular evaluations are mathematical constructions; date evaluation requires an explicit supplied apsis or the limited scholarly policy."
+      }
+    }
+  ]
+}
