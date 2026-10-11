@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "historical_cases": [
+    {
+      "id": "X7-first-opposition-center",
+      "source": "P1 X.7 pp.495-496 (H341-342)",
+      "input": {"mean_centrum": "-41;33"},
+      "observable": "epicycle center longitude relative to apogee",
+      "expected": "-34;30",
+      "computed_cartesian_degrees": -34.499930776207314,
+      "historical_table_result": null,
+      "computed_minus_expected_arcminutes": 0.004153427561,
+      "tolerance_arcminutes": 1,
+      "note": "Ptolemy's rounded chord calculation; epicycle motion is not needed."
+    },
+    {
+      "id": "X7-second-opposition-center",
+      "source": "P1 X.7 pp.496-497 (H342-343)",
+      "input": {"mean_centrum": "40;11"},
+      "observable": "epicycle center longitude relative to apogee",
+      "expected": "33;20",
+      "computed_cartesian_degrees": 33.33375945050725,
+      "historical_table_result": null,
+      "computed_minus_expected_arcminutes": 0.025567030435,
+      "tolerance_arcminutes": 1,
+      "note": "Ptolemy's rounded chord calculation."
+    },
+    {
+      "id": "X7-third-opposition-center",
+      "source": "P1 X.7 pp.497-498 (H344-345)",
+      "input": {"mean_centrum": "135;39", "mean_anomaly": "171;25"},
+      "observable": "epicycle center longitude before perigee",
+      "expected": "52;56",
+      "computed_cartesian_degrees": 52.9352834517304,
+      "historical_table_result": null,
+      "computed_minus_expected_arcminutes": 0.117007103824,
+      "tolerance_arcminutes": 1,
+      "note": "Source gives both arguments for the opposition; the reported angle is for the center."
+    },
+    {
+      "id": "X8-center-distance",
+      "source": "P1 X.8 pp.500-501 (H349-350)",
+      "input": {"mean_centrum": "137;11", "mean_anomaly": "172;46"},
+      "observable": "Earth to epicycle center, deferent units",
+      "expected": "56;4",
+      "computed_cartesian_units": 56.05655232587374,
+      "historical_table_result": null,
+      "computed_minus_expected_units": -0.010114340793,
+      "tolerance_units": 0.016666666666666666,
+      "note": "Ptolemy uses rounded chords and intermediate lengths."
+    }
+  ],
+  "scholarly_table_case": {
+    "id": "Neugebauer-HAMA-table-15-row-1",
+    "source": "P2 HAMA pp.186-188, Table 15 row 1; reconstruction from Almagest IX.4 and XI.11 tables",
+    "date": "Nabonassar 450 X 8; proleptic Julian astronomical -297-08-10 per P2",
+    "nabonassar_date": {"year": 450, "month": 10, "day": 8, "fraction": 0},
+    "input": {"mean_longitude": "354;13,25", "mean_anomaly": "140;23,5", "apogee_longitude": "111;10"},
+    "neugebauer_reconstructed_equation_of_center": "10;37",
+    "computed_cartesian_equation_of_center_degrees": 10.621616424929698,
+    "neugebauer_reconstructed_epicycle_equation": "42;43",
+    "computed_cartesian_epicycle_equation_degrees": 42.81521173108047,
+    "neugebauer_unrounded_table_longitude": "47;33,25",
+    "neugebauer_reconstructed_table_longitude": "47;33",
+    "computed_cartesian_longitude_degrees": 47.66043926712124,
+    "computed_minus_table_arcminutes": 6.626356027274,
+    "note": "P2's table result is not an independently observed position. Geometric evaluation is compared diagnostically, not required to match the tabular approximation."
+  }
+}

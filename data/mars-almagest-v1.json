@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "model_id": "almagest-mars-longitude",
+  "model_status": "partially-validated",
+  "source_edition": "P1: G. J. Toomer, Ptolemy's Almagest, printed pages and book/chapter locators",
+  "epoch": {
+    "description": "Nabonassar year 1, Egyptian Thoth 1, Alexandria mean local noon",
+    "astronomical_julian_date": "-0746-02-26",
+    "source": "P1 X.10 p.505; P2 HAMA VI.A.2 p.1066 era table for civil date/JDN; p.186 for Nabonassar year arithmetic",
+    "status": "explicit epoch, civil-date correlation scholarly"
+  },
+  "parameters": {
+    "deferent_radius": {"sexagesimal": "60", "value": 60.0, "unit": "deferent units", "status": "explicit", "source": "P1 X.7 pp.494-495; X.8 p.501"},
+    "double_eccentricity": {"sexagesimal": "12", "value": 12.0, "unit": "deferent units", "status": "explicit", "source": "P1 X.7 p.494"},
+    "half_eccentricity": {"sexagesimal": "6", "value": 6.0, "unit": "deferent units", "status": "derived", "source": "P1 IX.6 p.444 equal division of double eccentricity; X.7 p.494"},
+    "epicycle_radius": {"sexagesimal": "39;30", "value": 39.5, "unit": "deferent units", "status": "explicit", "source": "P1 X.8 p.501"},
+    "mean_longitude_epoch": {"sexagesimal": "Aries 3;32", "value": 3.533333333333333, "unit": "degree", "status": "explicit", "source": "P1 X.10 p.505; IX.4 Mars table p.433"},
+    "mean_anomaly_epoch": {"sexagesimal": "327;13", "value": 327.21666666666664, "unit": "degree", "status": "explicit", "source": "P1 X.10 p.505; IX.4 Mars table p.433"},
+    "apogee_longitude_epoch": {"sexagesimal": "Cancer 16;40", "value": 106.66666666666667, "unit": "degree", "status": "explicit", "source": "P1 X.10 p.505; IX.4 Mars table p.433"},
+    "mean_longitude_daily_motion": {"sexagesimal": "0;31,26,36,53,51,33", "value": 0.5240597113554527, "unit": "degree per Egyptian day", "status": "explicit", "source": "P1 IX.3 p.426; IX.4 Mars table pp.433-434"},
+    "mean_anomaly_daily_motion": {"sexagesimal": "0;27,41,40,19,20,58", "value": 0.46157556708676273, "unit": "degree per Egyptian day", "status": "explicit", "source": "P1 IX.3 p.425; IX.4 Mars table pp.433-434"},
+    "apogee_motion": {"sexagesimal": "1 degree per 100 Egyptian years", "value": 0.000027397260273972603, "unit": "degree per Egyptian day", "status": "explicit rate, derived daily value", "source": "P1 IX.5-6 pp.443-445; X.10 p.505"}
+  }
+}

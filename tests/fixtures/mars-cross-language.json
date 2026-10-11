@@ -1,0 +1,704 @@
+{
+  "schema_version": 1,
+  "generated_by": "scripts/generate_mars_cross_language.py using Python Phase 1 evaluator",
+  "argument_cases": [
+    {
+      "id": "X7-first-opposition-center",
+      "arguments": [
+        -41.55,
+        0.0,
+        0
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          6.0,
+          0.0
+        ],
+        "equant": [
+          12.0,
+          0.0
+        ],
+        "epicycle_center": [
+          53.4433416214897,
+          -36.730495991568404
+        ],
+        "planet": [
+          83.00424065037376,
+          -62.92979461966381
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 318.45,
+        "mean_anomaly": 0.0,
+        "apogee_longitude": 0.0,
+        "mean_centrum": 318.45,
+        "epicycle_center_longitude": 325.50006922379265,
+        "equation_of_center": 7.050069223792661,
+        "epicycle_equation": -2.667711207137927,
+        "longitude": 322.8323580166547,
+        "equant_to_epicycle_center": 55.37761190717891,
+        "earth_to_epicycle_center": 64.84843945275689,
+        "earth_to_planet": 104.16267573760875
+      }
+    },
+    {
+      "id": "X7-second-opposition-center",
+      "arguments": [
+        40.18333333333333,
+        0.0,
+        0
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          6.0,
+          0.0
+        ],
+        "equant": [
+          12.0,
+          0.0
+        ],
+        "epicycle_center": [
+          54.24147803703947,
+          35.675759232311194
+        ],
+        "planet": [
+          84.41883625478084,
+          61.16256073815177
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 40.18333333333333,
+        "mean_anomaly": 0.0,
+        "apogee_longitude": 0.0,
+        "mean_centrum": 40.18333333333333,
+        "epicycle_center_longitude": 33.33375945050725,
+        "equation_of_center": -6.849573882826064,
+        "epicycle_equation": 2.590065916217128,
+        "longitude": 35.92382536672437,
+        "equant_to_epicycle_center": 55.291068569485304,
+        "earth_to_epicycle_center": 64.92224377241187,
+        "earth_to_planet": 104.24681650131865
+      }
+    },
+    {
+      "id": "X7-third-opposition-center",
+      "arguments": [
+        135.65,
+        171.41666666666666,
+        0
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          6.0,
+          0.0
+        ],
+        "equant": [
+          12.0,
+          0.0
+        ],
+        "epicycle_center": [
+          -33.86808341271006,
+          44.83900004457274
+        ],
+        "planet": [
+          -10.059700541042695,
+          13.320578367145806
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 135.65,
+        "mean_anomaly": 171.41666666666666,
+        "apogee_longitude": 0.0,
+        "mean_centrum": 135.65,
+        "epicycle_center_longitude": 127.0647165482696,
+        "equation_of_center": -8.58528345173039,
+        "epicycle_equation": -0.004614662489416332,
+        "longitude": 127.06010188578018,
+        "equant_to_epicycle_center": 64.1437214460817,
+        "earth_to_epicycle_center": 56.19237491908916,
+        "earth_to_planet": 16.692374996109077
+      }
+    },
+    {
+      "id": "X8-center-distance",
+      "arguments": [
+        137.18333333333334,
+        172.76666666666668,
+        0
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          6.0,
+          0.0
+        ],
+        "equant": [
+          12.0,
+          0.0
+        ],
+        "epicycle_center": [
+          -35.138578444714916,
+          43.67627918616738
+        ],
+        "planet": [
+          -9.774883272136258,
+          13.395378156103721
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 137.18333333333334,
+        "mean_anomaly": 172.76666666666668,
+        "apogee_longitude": 0.0,
+        "mean_centrum": 137.18333333333334,
+        "epicycle_center_longitude": 128.81748335201678,
+        "equation_of_center": -8.365849981316558,
+        "epicycle_equation": -2.698484153053471,
+        "longitude": 126.11899919896332,
+        "equant_to_epicycle_center": 64.26245358945283,
+        "earth_to_epicycle_center": 56.05655232587375,
+        "earth_to_planet": 16.582656570311947
+      }
+    },
+    {
+      "id": "Neugebauer-HAMA-table-15-row-1",
+      "arguments": [
+        354.2236111111111,
+        140.38472222222222,
+        111.16666666666667
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.166492629480486,
+          5.595204168429132
+        ],
+        "equant": [
+          -4.332985258960972,
+          11.190408336858264
+        ],
+        "epicycle_center": [
+          57.82950341416514,
+          4.902052863981213
+        ],
+        "planet": [
+          30.09036749459848,
+          33.02304748429659
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 354.2236111111111,
+        "mean_anomaly": 140.38472222222222,
+        "apogee_longitude": 111.16666666666667,
+        "mean_centrum": 243.0569444444444,
+        "epicycle_center_longitude": 4.845227536040775,
+        "equation_of_center": 10.621616424929698,
+        "epicycle_equation": 42.81521173108047,
+        "longitude": 47.66043926712124,
+        "equant_to_epicycle_center": 62.47974401828,
+        "earth_to_epicycle_center": 58.03689849923239,
+        "earth_to_planet": 44.67607727979367
+      }
+    },
+    {
+      "id": "synthetic-0",
+      "arguments": [
+        0,
+        0,
+        0
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          6.0,
+          0.0
+        ],
+        "equant": [
+          12.0,
+          0.0
+        ],
+        "epicycle_center": [
+          66.0,
+          0.0
+        ],
+        "planet": [
+          105.5,
+          0.0
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 0.0,
+        "mean_anomaly": 0.0,
+        "apogee_longitude": 0.0,
+        "mean_centrum": 0.0,
+        "epicycle_center_longitude": 0.0,
+        "equation_of_center": 0.0,
+        "epicycle_equation": 0.0,
+        "longitude": 0.0,
+        "equant_to_epicycle_center": 54.0,
+        "earth_to_epicycle_center": 66.0,
+        "earth_to_planet": 105.5
+      }
+    },
+    {
+      "id": "synthetic-1",
+      "arguments": [
+        90,
+        180,
+        105
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -1.552914270615125,
+          5.79555495773441
+        ],
+        "equant": [
+          -3.10582854123025,
+          11.59110991546882
+        ],
+        "epicycle_center": [
+          -3.105828541230247,
+          65.77545540170081
+        ],
+        "planet": [
+          -3.105828541230254,
+          26.27545540170081
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 90.0,
+        "mean_anomaly": 180.0,
+        "apogee_longitude": 105.0,
+        "mean_centrum": 345.0,
+        "epicycle_center_longitude": 92.70342165923071,
+        "equation_of_center": 2.703421659230713,
+        "epicycle_equation": 4.03781174820071,
+        "longitude": 96.74123340743142,
+        "equant_to_epicycle_center": 54.18434548623198,
+        "earth_to_epicycle_center": 65.8487410982826,
+        "earth_to_planet": 26.458377264947462
+      }
+    },
+    {
+      "id": "synthetic-2",
+      "arguments": [
+        359.7,
+        122.25,
+        111.17
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.1668181415974406,
+          5.595078117528317
+        ],
+        "equant": [
+          -4.333636283194881,
+          11.190156235056634
+        ],
+        "epicycle_center": [
+          57.601223700489655,
+          10.865863102948014
+        ],
+        "planet": [
+          36.69865316200914,
+          44.38201659471741
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 359.7,
+        "mean_anomaly": 122.25,
+        "apogee_longitude": 111.17,
+        "mean_centrum": 248.52999999999997,
+        "epicycle_center_longitude": 10.682710610167883,
+        "equation_of_center": 10.982710610167885,
+        "epicycle_equation": 39.73058506057717,
+        "longitude": 50.41329567074505,
+        "equant_to_epicycle_center": 61.93570898305873,
+        "earth_to_epicycle_center": 58.617130198994374,
+        "earth_to_planet": 57.58953499481668
+      }
+    },
+    {
+      "id": "synthetic-3",
+      "arguments": [
+        230.5,
+        280.75,
+        300
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          3.000000000000001,
+          -5.196152422706632
+        ],
+        "equant": [
+          6.000000000000002,
+          -10.392304845413264
+        ],
+        "epicycle_center": [
+          -30.660348771461287,
+          -54.864864109074986
+        ],
+        "planet": [
+          -65.29105562190784,
+          -35.865807736759166
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 230.5,
+        "mean_anomaly": 280.75,
+        "apogee_longitude": 300.0,
+        "mean_centrum": 290.5,
+        "epicycle_center_longitude": 240.80205894543818,
+        "equation_of_center": 10.302058945438176,
+        "epicycle_equation": -32.02110205944987,
+        "longitude": 208.7809568859883,
+        "equant_to_epicycle_center": 57.63496941532187,
+        "earth_to_epicycle_center": 62.85069848852049,
+        "earth_to_planet": 74.49347695492027
+      }
+    },
+    {
+      "id": "synthetic-4",
+      "arguments": [
+        -41.55,
+        171.41666666666666,
+        -60
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          3.000000000000001,
+          -5.196152422706632
+        ],
+        "equant": [
+          6.000000000000002,
+          -10.392304845413264
+        ],
+        "epicycle_center": [
+          46.62067459607296,
+          -46.393685695749994
+        ],
+        "planet": [
+          21.301048020413564,
+          -16.075926707507435
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 318.45,
+        "mean_anomaly": 171.41666666666666,
+        "apogee_longitude": 300.0,
+        "mean_centrum": 18.44999999999999,
+        "epicycle_center_longitude": 315.13982228256526,
+        "equation_of_center": -3.310177717434726,
+        "epicycle_equation": 7.818278663236754,
+        "longitude": 322.958100945802,
+        "equant_to_epicycle_center": 54.27834400358065,
+        "earth_to_epicycle_center": 65.7712807555772,
+        "earth_to_planet": 26.68651468950405
+      }
+    }
+  ],
+  "time_cases": [
+    {
+      "days": 0,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -1.7208193962665412,
+          5.747937073892933
+        ],
+        "equant": [
+          -3.4416387925330825,
+          11.495874147785866
+        ],
+        "epicycle_center": [
+          57.52037665106771,
+          15.260070950227314
+        ],
+        "planet": [
+          91.98396893044318,
+          -4.04046808890242
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 3.533333333333333,
+        "mean_anomaly": 327.21666666666664,
+        "apogee_longitude": 106.66666666666667,
+        "mean_centrum": 256.8666666666667,
+        "epicycle_center_longitude": 14.858207646766644,
+        "equation_of_center": 11.324874313433298,
+        "epicycle_equation": -17.37335296296942,
+        "longitude": 357.48485468379727,
+        "equant_to_epicycle_center": 61.078118049865715,
+        "earth_to_epicycle_center": 59.51019656736707,
+        "earth_to_planet": 92.07266653341901
+      }
+    },
+    {
+      "days": 0.5,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -1.7208207705189196,
+          5.7479366624686
+        ],
+        "equant": [
+          -3.441641541037839,
+          11.4958733249372
+        ],
+        "epicycle_center": [
+          57.47524254121679,
+          15.537016721032714
+        ],
+        "planet": [
+          92.10356747683436,
+          -3.4663806634690033
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 3.7953631890110597,
+        "mean_anomaly": 327.44745445021005,
+        "apogee_longitude": 106.66668036529681,
+        "mean_centrum": 257.12868282371426,
+        "epicycle_center_longitude": 15.12694982122279,
+        "equation_of_center": 11.331586632211724,
+        "epicycle_equation": -17.282298353090482,
+        "longitude": 357.8446514681324,
+        "equant_to_epicycle_center": 61.05077891590453,
+        "earth_to_epicycle_center": 59.5382431195391,
+        "earth_to_planet": 92.16877419638307
+      }
+    },
+    {
+      "days": 364.5,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -1.7218212001425912,
+          5.74763705836925
+        ],
+        "equant": [
+          -3.4436424002851824,
+          11.4952741167385
+        ],
+        "epicycle_center": [
+          -61.01265634480044,
+          -3.4500185042730838
+        ],
+        "planet": [
+          -26.799807755044746,
+          -23.1916240968902
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 194.55309812239585,
+        "mean_anomaly": 135.46096086979162,
+        "apogee_longitude": 106.67665296803654,
+        "mean_centrum": 87.87644515435932,
+        "epicycle_center_longitude": 183.23639771533178,
+        "equation_of_center": -11.316700407064076,
+        "epicycle_equation": 37.635378292849225,
+        "longitude": 220.871776008181,
+        "equant_to_epicycle_center": 59.477332977122096,
+        "earth_to_epicycle_center": 61.11012078149203,
+        "earth_to_planet": 35.44123479732069
+      }
+    },
+    {
+      "days": 365,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -1.72182257432324,
+          5.747636646705399
+        ],
+        "equant": [
+          -3.44364514864648,
+          11.495273293410799
+        ],
+        "epicycle_center": [
+          -60.97012565126211,
+          -3.720128797326028
+        ],
+        "planet": [
+          -26.58874143529559,
+          -23.16673311258087
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 194.81512797807358,
+        "mean_anomaly": 135.69174865333503,
+        "apogee_longitude": 106.67666666666668,
+        "mean_centrum": 88.1384613114069,
+        "epicycle_center_longitude": 183.49160768372164,
+        "equation_of_center": -11.323520294351937,
+        "epicycle_equation": 37.57398378839042,
+        "longitude": 221.06559147211206,
+        "equant_to_epicycle_center": 59.50465880753048,
+        "earth_to_epicycle_center": 61.08351316189487,
+        "earth_to_planet": 35.265545426415216
+      }
+    },
+    {
+      "days": 160000.25,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.1551180761052477,
+          5.599595170906948
+        ],
+        "equant": [
+          -4.3102361522104955,
+          11.199190341813896
+        ],
+        "epicycle_center": [
+          53.10269642873449,
+          -17.779325594362007
+        ],
+        "planet": [
+          92.27733422956892,
+          -22.83874781171389
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 333.2181651336141,
+        "mean_anomaly": 19.42279444047017,
+        "apogee_longitude": 111.05023515981736,
+        "mean_centrum": 222.16792997379673,
+        "epicycle_center_longitude": 341.4889273972838,
+        "equation_of_center": 8.270762263669724,
+        "epicycle_equation": 4.609658885676197,
+        "longitude": 346.09858628296,
+        "equant_to_epicycle_center": 64.31173464778675,
+        "earth_to_epicycle_center": 56.00000702314836,
+        "earth_to_planet": 95.06163692111892
+      }
+    },
+    {
+      "days": 164162,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.166257186009476,
+          5.595295327689353
+        ],
+        "equant": [
+          -4.332514372018952,
+          11.190590655378706
+        ],
+        "epicycle_center": [
+          57.829740914683825,
+          4.90232209472454
+        ],
+        "planet": [
+          30.09048411151775,
+          33.02319747242224
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 354.2236688671692,
+        "mean_anomaly": 140.38491076380888,
+        "apogee_longitude": 111.16425570776256,
+        "mean_centrum": 243.05941315940663,
+        "epicycle_center_longitude": 4.845472573680853,
+        "equation_of_center": 10.621803706511685,
+        "epicycle_equation": 42.81498570108312,
+        "longitude": 47.66045827476398,
+        "equant_to_epicycle_center": 62.47950306956769,
+        "earth_to_epicycle_center": 58.037157891990894,
+        "earth_to_planet": 44.67626669013534
+      }
+    },
+    {
+      "days": 175000.75,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.1952272086770592,
+          5.583992971188621
+        ],
+        "equant": [
+          -4.3904544173541185,
+          11.167985942377243
+        ],
+        "epicycle_center": [
+          0.623102319629175,
+          -54.349778966424964
+        ],
+        "planet": [
+          38.26098790796293,
+          -42.364806357382484
+        ],
+        "deferent_radius": 60.0,
+        "epicycle_radius": 39.5,
+        "mean_longitude": 274.37586532108253,
+        "mean_anomaly": 103.28708852545242,
+        "apogee_longitude": 111.46120776255708,
+        "mean_centrum": 162.91465755852545,
+        "epicycle_center_longitude": 270.65684846841947,
+        "equation_of_center": -3.71901685266306,
+        "epicycle_equation": 41.42933545912035,
+        "longitude": 312.0861839275398,
+        "equant_to_epicycle_center": 65.70930885194292,
+        "earth_to_epicycle_center": 54.35335068052361,
+        "earth_to_planet": 57.08484924559056
+      }
+    }
+  ]
+}

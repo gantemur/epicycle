@@ -1,0 +1,52 @@
+# Research sources and read-only legacy snapshots: never publish.
+/private/
+private/
+.DS_Store
+.env
+.env.*
+
+# Python environments, caches, packaging, and build output.
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+*.egg-info/
+dist/
+build/
+
+# Node dependencies and generated application output.
+node_modules/
+.next/
+.nuxt/
+.svelte-kit/
+coverage/
+vite.svg
+
+# Downloaded ephemeris kernels and other large astronomy datasets.
+*.bsp
+*.bpc
+*.tpc
+*.tls
+*.tm
+*.spk
+*.bc
+*.eph
+*.eph.gz
+/data/kernels/
+/data/downloads/
+
+# Scratch calculations and temporary numerical output.
+/scratch/
+/tmp/
+/temp/
+/outputs/
+*.tmp
+*.temp
+*.swp
+*~
