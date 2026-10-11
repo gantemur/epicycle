@@ -3,6 +3,7 @@ import { daysToEgyptian, daysToJulian, yearLabel } from './chronology.ts';
 import { renderDiagram, trailPoints } from './diagram.ts';
 import { message, type Language, type MessageKey } from './i18n.ts';
 import { evaluateDays, modelRecord, type MarsResult } from './model.ts';
+import { updatePlayButton } from './playback-view.ts';
 import { initialState, reduce, type Action, type AppState } from './state.ts';
 
 const root = document.querySelector<HTMLDivElement>('#app');
@@ -81,11 +82,17 @@ let state: AppState = initialState(savedLanguage);
 let lastFrame = 0;
 
 function dispatch(action: Action): void {
+  const previous = state;
   state = reduce(state, action);
   if (action.type === 'setDay' || action.type === 'step' || action.type === 'example') {
     element<HTMLParagraphElement>('#day-error').hidden = true;
   }
-  render();
+  if (state.language !== previous.language) applyLanguage(state.language);
+  if (action.type !== 'tick') updateControls();
+  if (state.day !== previous.day || state.showTrail !== previous.showTrail ||
+      state.trailDays !== previous.trailDays || state.language !== previous.language) {
+    updateTimeAndGeometry();
+  }
 }
 
 function formatAngle(angle: number): string {
@@ -139,22 +146,25 @@ function updateReadouts(result: MarsResult): void {
   element('#center-correction').textContent = formatAngle(result.equationOfCenter);
 }
 
-function render(): void {
-  applyLanguage(state.language);
+function updateTimeAndGeometry(): void {
   updateDates();
   const result = evaluateDays(state.day);
   updateReadouts(result);
   element('#diagram').innerHTML = renderDiagram(result, state.showTrail ? trailPoints(state.day, state.trailDays) : [], state.language);
-  const play = element<HTMLButtonElement>('#play');
-  play.textContent = `${state.playing ? 'Ⅱ' : '▶'}  ${message(state.language, state.playing ? 'pause' : 'play')}`;
-  play.setAttribute('aria-label', message(state.language, state.playing ? 'pause' : 'play'));
-  element<HTMLInputElement>('#speed').value = String(state.speed);
-  element('#speed-value').textContent = `${state.speed} ${message(state.language, 'daysPerSecond')}`;
-  element<HTMLInputElement>('#trail').checked = state.showTrail;
-  element<HTMLInputElement>('#trail-days').value = String(state.trailDays);
-  element<HTMLInputElement>('#trail-days').disabled = !state.showTrail;
-  element('#trail-value').textContent = `${state.trailDays} ${message(state.language, 'days')}`;
   if (document.activeElement !== element('#day-input')) element<HTMLInputElement>('#day-input').value = state.day.toFixed(2);
+}
+
+function updateControls(): void {
+  updatePlayButton(element<HTMLButtonElement>('#play'), state.playing, state.language);
+  const speed = element<HTMLInputElement>('#speed');
+  if (speed.value !== String(state.speed)) speed.value = String(state.speed);
+  element('#speed-value').textContent = `${state.speed} ${message(state.language, 'daysPerSecond')}`;
+  const trail = element<HTMLInputElement>('#trail');
+  if (trail.checked !== state.showTrail) trail.checked = state.showTrail;
+  const trailDays = element<HTMLInputElement>('#trail-days');
+  if (trailDays.value !== String(state.trailDays)) trailDays.value = String(state.trailDays);
+  if (trailDays.disabled === state.showTrail) trailDays.disabled = !state.showTrail;
+  element('#trail-value').textContent = `${state.trailDays} ${message(state.language, 'days')}`;
 }
 
 element('#back').addEventListener('click', () => dispatch({ type: 'step', days: -10 }));
@@ -192,5 +202,7 @@ function frame(timestamp: number): void {
   lastFrame = timestamp;
   requestAnimationFrame(frame);
 }
-render();
+applyLanguage(state.language);
+updateControls();
+updateTimeAndGeometry();
 requestAnimationFrame(frame);
