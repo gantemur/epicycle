@@ -35,15 +35,16 @@ export function trailPoints(day: number, span: number, samples = 160): Point[] {
     evaluateDays(beginning + (day - beginning) * index / samples).planet);
 }
 
-export function renderDiagram(result: MarsResult, trail: readonly Point[], language: Language): string {
+export function renderDiagram(result: MarsResult, trail: readonly Point[], language: Language,
+  instanceId = ''): string {
   const { earth: O, deferentCenter: D, equant: Q, epicycleCenter: C, planet: P } = result;
   const trailPath = trail.length > 1 ? `<polyline class="mars-trail" points="${trail.map(p => xy(screenPoint(p))).join(' ')}"/>` : '';
   const angle = result.longitude * Math.PI / 180;
   const arcEnd = { x: origin + 47 * Math.cos(angle), y: origin - 47 * Math.sin(angle) };
   const arc = `<path class="longitude-arc" d="M ${origin + 47},${origin} A 47,47 0 ${result.longitude > 180 ? 1 : 0} 0 ${xy(arcEnd)}"/>`;
   return `<svg class="sky-diagram" viewBox="0 0 ${size} ${size}" role="img" aria-label="${message(language, 'diagramAccessible')}">
-    <defs><radialGradient id="space-glow"><stop offset="0" stop-color="#183743"/><stop offset="1" stop-color="#091924"/></radialGradient></defs>
-    <circle cx="320" cy="320" r="319" fill="url(#space-glow)"/>
+    <defs><radialGradient id="space-glow${instanceId}"><stop offset="0" stop-color="#183743"/><stop offset="1" stop-color="#091924"/></radialGradient></defs>
+    <circle cx="320" cy="320" r="319" fill="url(#space-glow${instanceId})"/>
     <circle class="guide-ring" cx="320" cy="320" r="280"/>
     <circle class="guide-ring minor" cx="320" cy="320" r="140"/>
     <line class="axis" x1="20" y1="320" x2="620" y2="320"/>

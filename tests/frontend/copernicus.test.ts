@@ -11,7 +11,10 @@ import { civilToLocalJd, comparisonUt1Domain, example1473Ut1, example1512Ut1,
   utcMillisToAssumedUt1 } from '../../web/src/comparison-time.ts';
 import { angularDifference } from '../../web/src/model.ts';
 import { dateAllowed, models } from '../../web/src/model-registry.ts';
-import { initialState, reduce, selectedModels } from '../../web/src/state.ts';
+import { applyWorkspacePreset, emptyWorkspace, setClockInstant, setClockPlaying,
+  tickClock, updateDisplay } from '../../web/src/workspace-state.ts';
+import { displayAvailabilityAt } from '../../web/src/workspace-validation.ts';
+import type { TimeSeriesDisplay } from '../../web/src/workspace-types.ts';
 
 const nearly = (actual: number, expected: number, tolerance = 3e-8): void =>
   assert.ok(Math.abs(actual - expected) <= tolerance, `${actual} differs from ${expected}`);
@@ -63,28 +66,20 @@ test('exploratory policy agrees with Python through 2026 and keeps historical co
 });
 
 test('registry selectors and policy domain act only on selected models', () => {
-  let state = initialState();
+  let state = applyWorkspacePreset(emptyWorkspace(), 'compare-longitudes');
   assert.equal(models.copernicus.dependencies[0], 'copernicus-1543-earth-longitude');
-  assert.deepEqual(selectedModels(state), ['ptolemy']);
-  state = reduce(state, { type: 'singleModel', model: 'copernicus' });
-  assert.deepEqual(selectedModels(state), ['copernicus']);
-  state = reduce(state, { type: 'mode', mode: 'compare' });
-  state = reduce(state, { type: 'modelA', model: 'copernicus' });
-  state = reduce(state, { type: 'modelB', model: 'ptolemy' });
-  assert.deepEqual(selectedModels(state), ['copernicus', 'ptolemy']);
+  const plot = state.displays[0] as TimeSeriesDisplay;
+  assert.deepEqual(plot.traces.map(trace => trace.modelId), ['ptolemy', 'copernicus']);
   const future = frauenburgCivilToUt1(2026, 10, 11);
-  assert.equal(dateAllowed(future, ['ptolemy'], state.copernicusPolicy), true);
-  assert.equal(dateAllowed(future, ['copernicus'], state.copernicusPolicy), false);
-  assert.equal(reduce(state, { type: 'compareDate', ut1: future }), state);
-  const ptolemyOnly = reduce(reduce(state, { type: 'modelA', model: 'ptolemy' }),
-    { type: 'modelB', model: 'ptolemy' });
-  const ptolemyFuture = reduce(ptolemyOnly, { type: 'compareDate', ut1: future });
-  assert.equal(ptolemyFuture.compareUt1, future);
-  assert.equal(reduce(ptolemyFuture, { type: 'modelB', model: 'copernicus' }), ptolemyFuture);
-  state = reduce(state, { type: 'apsisPolicy', policy: exploratoryApsisPolicy });
-  state = reduce(state, { type: 'compareDate', ut1: future });
-  nearly(state.compareUt1, future);
-  assert.equal(reduce(state, { type: 'apsisPolicy', policy: 'sn-local-uniform-1473-1523' }), state);
+  assert.equal(dateAllowed(future, ['ptolemy'], plot.traces[0].policyId), true);
+  assert.equal(dateAllowed(future, ['copernicus'], plot.traces[1].policyId), false);
+  state = setClockInstant(state, future);
+  assert.equal(state.clock.ut1Jd, future);
+  assert.equal(displayAvailabilityAt(state.displays[0], future).status, 'partial');
+  const changed = updateDisplay(state, { ...plot, traces: [plot.traces[0],
+    { ...plot.traces[1], policyId: exploratoryApsisPolicy }] });
+  assert.equal(displayAvailabilityAt(changed.displays[0], future).status, 'available');
+  assert.equal((state.displays[0] as TimeSeriesDisplay).traces[1].policyId, plot.traces[1].policyId);
   assert.equal(evaluateSelectedModel('ptolemy', future, exploratoryApsisPolicy).model, 'ptolemy');
   assert.equal(evaluateSelectedModel('copernicus', future, exploratoryApsisPolicy).model, 'copernicus');
 });
@@ -93,7 +88,7 @@ test('Julian input and Today conversion keep civil systems distinct', () => {
   const valid = '1513-06-02T23:57';
   const instant = parseFrauenburgInput(valid);
   assert.equal(formatFrauenburgInput(instant), valid);
-  assert.equal(dateAllowed(instant, ['copernicus'], initialState().copernicusPolicy), true);
+  assert.equal(dateAllowed(instant, ['copernicus'], 'sn-local-uniform-1473-1523'), true);
   assert.throws(() => parseFrauenburgInput('1513-06-31T23:57'));
   assert.equal(formatFrauenburgInput(parseFrauenburgInput('-0500-03-01T12:00')),
     '-0500-03-01T12:00');
@@ -104,25 +99,26 @@ test('Julian input and Today conversion keep civil systems distinct', () => {
 });
 
 test('plot range stays fixed during playback, with wrapped breaks and stable unwrapping', () => {
-  let state = reduce(initialState(), { type: 'mode', mode: 'compare' });
+  let state = applyWorkspacePreset(emptyWorkspace(), 'compare-longitudes');
   const start = example1512Ut1 - 45, end = example1512Ut1 + 45;
-  state = reduce(state, { type: 'plotRange', start, end });
-  const key = selectedPlotCacheKey(state.plotStartUt1, state.plotEndUt1,
-    state.modelA, state.modelB, state.copernicusPolicy, state.plotMode, state.language);
-  state = reduce(state, { type: 'togglePlay' });
-  state = reduce(state, { type: 'tick', seconds: .05 });
-  assert.equal(state.plotStartUt1, start);
-  assert.equal(selectedPlotCacheKey(state.plotStartUt1, state.plotEndUt1,
-    state.modelA, state.modelB, state.copernicusPolicy, state.plotMode, state.language), key);
-  const continuous = sampleSelectedPlot(start, end, state.modelA, state.modelB,
-    state.copernicusPolicy, 'unwrapped');
+  const old = state.displays[0] as TimeSeriesDisplay;
+  state = updateDisplay(state, { ...old, window: { ...old.window, startUt1: start, endUt1: end } });
+  const plot = state.displays[0] as TimeSeriesDisplay;
+  const key = selectedPlotCacheKey(plot.window.startUt1, plot.window.endUt1,
+    'ptolemy', 'copernicus', 'sn-local-uniform-1473-1523', plot.longitudeMode, 'en');
+  state = tickClock(setClockPlaying(state, true), .05);
+  assert.equal((state.displays[0] as TimeSeriesDisplay).window.startUt1, start);
+  assert.equal(selectedPlotCacheKey(plot.window.startUt1, plot.window.endUt1,
+    'ptolemy', 'copernicus', 'sn-local-uniform-1473-1523', plot.longitudeMode, 'en'), key);
+  const continuous = sampleSelectedPlot(start, end, 'ptolemy', 'copernicus',
+    'sn-local-uniform-1473-1523', 'unwrapped');
   assert.equal(continuous.count, 30);
   for (let index = 1; index < continuous.a.length; index++) {
     assert.ok(Math.abs(continuous.a[index] - continuous.a[index - 1]) < 180);
   }
   assert.ok(Math.abs(continuous.a[0] - continuous.b[0]) <= 180);
-  const wrapped = sampleSelectedPlot(start, end, state.modelA, state.modelB,
-    state.copernicusPolicy, 'wrapped');
+  const wrapped = sampleSelectedPlot(start, end, 'ptolemy', 'copernicus',
+    'sn-local-uniform-1473-1523', 'wrapped');
   assert.equal(wrapped.minLongitude, 0);
   assert.equal(wrapped.maxLongitude, 360);
   for (let index = 0; index < wrapped.difference.length; index++) {
@@ -131,12 +127,12 @@ test('plot range stays fixed during playback, with wrapped breaks and stable unw
   }
   assert.deepEqual(wrappedSegments([358, 359, 1, 2]), [[358, 359], [1, 2]]);
   const twoYears = sampleSelectedPlot(example1512Ut1 - 365, example1512Ut1 + 365,
-    'ptolemy', 'copernicus', state.copernicusPolicy, 'unwrapped');
+    'ptolemy', 'copernicus', 'sn-local-uniform-1473-1523', 'unwrapped');
   const slopes = twoYears.a.slice(1).map((value, index) => Math.sign(value - twoYears.a[index]));
   assert.ok(slopes.some((slope, index) => index > 0 && slope !== slopes[index - 1]),
     'three-day samples retain retrograde stationary reversals');
   assert.throws(() => sampleSelectedPlot(start, start + 365 * 51,
-    'ptolemy', 'ptolemy', state.copernicusPolicy, 'wrapped'));
+    'ptolemy', 'ptolemy', 'sn-local-uniform-1473-1523', 'wrapped'));
 });
 
 function earth(actual: ReturnType<typeof evaluateEarthDays>, expected: Record<string, unknown>): void {
@@ -246,25 +242,21 @@ test('model disagreement requires declared alignment; plot unwraps whole turns',
   assert.throws(() => sampleComparisonPlot(comparisonUt1Domain.start - 1, comparisonUt1Domain.end));
 });
 
-test('one playback state advances both models and pauses at the policy boundary', () => {
-  let state = reduce(initialState(), { type: 'mode', mode: 'compare' });
-  assert.equal(state.compareUt1, example1512Ut1);
+test('one playback state advances both models and continues beyond a panel policy boundary', () => {
+  let state = applyWorkspacePreset(emptyWorkspace(), 'compare-longitudes');
+  assert.equal(state.clock.ut1Jd, example1512Ut1);
   for (let i = 0; i < 3; i++) {
-    state = reduce(state, { type: 'togglePlay' });
-    state = reduce(state, { type: 'tick', seconds: .05 });
-    const a = compareAtUt1(state.compareUt1, true);
+    state = tickClock(setClockPlaying(state, true), .05);
+    const a = compareAtUt1(state.clock.ut1Jd, true);
     nearly(a.ptolemyDays - a.copernicusDays,
       modelDaysAtUt1(example1512Ut1).ptolemy - modelDaysAtUt1(example1512Ut1).copernicus);
-    state = reduce(state, { type: 'togglePlay' });
-    const paused = state.compareUt1;
-    state = reduce(state, { type: 'tick', seconds: .1 });
-    assert.equal(state.compareUt1, paused);
+    state = setClockPlaying(state, false);
+    const paused = state.clock.ut1Jd;
+    state = tickClock(state, .1);
+    assert.equal(state.clock.ut1Jd, paused);
   }
-  state = reduce(state, { type: 'compareDate', ut1: comparisonUt1Domain.end - .01 });
-  state = reduce(state, { type: 'togglePlay' });
-  state = reduce(state, { type: 'tick', seconds: .1 });
-  assert.equal(state.compareUt1, comparisonUt1Domain.end);
-  assert.equal(state.playing, false);
-  state = reduce(state, { type: 'mode', mode: 'single' });
-  assert.equal(state.playing, false);
+  state = tickClock(setClockPlaying(setClockInstant(state, comparisonUt1Domain.end - .01), true), .1);
+  assert.ok(state.clock.ut1Jd > comparisonUt1Domain.end);
+  assert.equal(state.clock.playing, true);
+  assert.equal(displayAvailabilityAt(state.displays[0], state.clock.ut1Jd).status, 'partial');
 });

@@ -1,10 +1,18 @@
-# Status — Phase 4A workspace foundation awaiting review
+# Status — Phase 4B managed displays awaiting review
+
+## Local Phase 4B branch
+
+The accepted Phase 4A work was verified and saved as local checkpoint `5cbe0c2` on `codex/phase-4a-workspace`. The new `codex/phase-4b-displays` branch has uncommitted browser migration work. The live local page now uses one assumed-UT1 `WorkspaceState.clock`, stable managed geometry and longitude panels, independent trace/policy/window settings, panel controls, bilingual text, and responsive plot-first mobile layout. The original Single and Compare behavior is available through the Explore one model and Compare longitudes presets, with the Nabonassar/1473/1512 jumps retained. The former dual-clock controller has been removed. See [workspace architecture](workspace-architecture.md) for the current contracts and deferred interactions.
+
+Phase 4B is not merged, pushed, or deployed; the public `main` site remains the earlier accepted prototype. Scientific and visual review is required before those actions. The existing Pages workflow and all historical parameters, equations, source records, and fixtures are unchanged.
+
+Phase 4B verification: 30 Python tests, 37 frontend tests, TypeScript typecheck, production build, and `git diff --check` pass. The local browser was checked at desktop and 360–390 px widths in both languages; Safari Start/Pause was checked with actual pointer drags during animation. The built `dist/` contains only `index.html`, JavaScript, and CSS. Geometry tap-to-play is deferred.
 
 ## Local Phase 4A branch
 
-`codex/phase-4a-workspace` was created from the clean, committed Phase 3C branch at `d394608`. Phase 4A adds a typed, pure workspace state, model capability metadata, per-display validation and date availability, presets, and tests. The live browser remains the accepted Phase 3C interface; no panel migration, new historical model, Pages workflow change, merge, or deployment is part of Phase 4A. See [workspace architecture](workspace-architecture.md) for the design and Phase 4B handoff.
+`codex/phase-4a-workspace` was created from the clean, committed Phase 3C branch at `d394608`. Phase 4A added typed pure workspace state, model capability metadata, per-display validation and date availability, presets, and tests. It was checkpointed locally at `5cbe0c2` before the Phase 4B branch was created.
 
-Phase 4A verification: 30 Python tests, 28 frontend tests, TypeScript type checking, production build, and `git diff --check` passed. Phase 4A has not been committed or pushed.
+Phase 4A checkpoint verification: 30 Python tests, 32 frontend tests, TypeScript type checking, production build, and `git diff --check` passed. The checkpoint was not pushed.
 
 ## Local Phase 3C branch
 

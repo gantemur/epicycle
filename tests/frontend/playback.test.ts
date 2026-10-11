@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { updatePlayButton } from '../../web/src/playback-view.ts';
-import { initialState, reduce } from '../../web/src/state.ts';
+import { emptyWorkspace, setClockPlaying, tickClock } from '../../web/src/workspace-state.ts';
 
 test('the playback label is not replaced during unchanged running frames', () => {
   let textChanges = 0;
@@ -31,16 +31,16 @@ test('the playback label is not replaced during unchanged running frames', () =>
 });
 
 test('one playback state stops day progression across repeated cycles', () => {
-  let state = initialState();
+  let state = emptyWorkspace();
   for (let cycle = 0; cycle < 4; cycle++) {
-    const previousDay = state.day;
-    state = reduce(state, { type: 'togglePlay' });
-    state = reduce(state, { type: 'tick', seconds: 0.05 });
-    assert.ok(state.day > previousDay);
-    state = reduce(state, { type: 'togglePlay' });
-    const pausedDay = state.day;
-    state = reduce(state, { type: 'tick', seconds: 0.1 });
-    assert.equal(state.day, pausedDay);
-    assert.equal(state.playing, false);
+    const previousDay = state.clock.ut1Jd;
+    state = setClockPlaying(state, true);
+    state = tickClock(state, 0.05);
+    assert.ok(state.clock.ut1Jd > previousDay);
+    state = setClockPlaying(state, false);
+    const pausedDay = state.clock.ut1Jd;
+    state = tickClock(state, 0.1);
+    assert.equal(state.clock.ut1Jd, pausedDay);
+    assert.equal(state.clock.playing, false);
   }
 });

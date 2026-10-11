@@ -6,7 +6,10 @@ import model from '../../data/mars-almagest-v1.json' with { type: 'json' };
 import { angularDifference, evaluateArguments, evaluateDays, modelRecord, parameter, validateModel, type MarsResult } from '../../web/src/model.ts';
 import { civilToJdn, daysToEgyptian, daysToJulian, egyptianToDays, epochLocalJdn, jdnToCivil } from '../../web/src/chronology.ts';
 import { isLanguage, message, messages } from '../../web/src/i18n.ts';
-import { exampleDay, initialState, reduce } from '../../web/src/state.ts';
+import { exampleDay } from '../../web/src/historical-examples.ts';
+import { modelDaysAtUt1 } from '../../web/src/comparison-time.ts';
+import { emptyWorkspace, jumpToExample, setClockInstant, setClockPlaying,
+  setClockSpeed, stepClock, tickClock } from '../../web/src/workspace-state.ts';
 import { screenPoint, trailPoints } from '../../web/src/diagram.ts';
 
 const nearly = (actual: number, expected: number, tolerance = 2e-9): void =>
@@ -80,16 +83,16 @@ test('chronology, playback, and example jump are continuous', () => {
   assert.deepEqual(daysToEgyptian(exampleDay), { year: 450, month: 10, day: 8, fraction: 0 });
   assert.deepEqual(daysToJulian(exampleDay), { year: -297, month: 8, day: 10, fraction: 0.5 });
   assert.deepEqual(daysToJulian(0.5), { year: -746, month: 2, day: 27, fraction: 0 });
-  let state = initialState();
-  state = reduce(state, { type: 'togglePlay' });
-  state = reduce(state, { type: 'tick', seconds: 0.05 });
-  nearly(state.day, exampleDay + 0.6);
-  state = reduce(state, { type: 'step', days: 10 });
-  nearly(state.day, exampleDay + 10.6);
-  state = reduce(state, { type: 'example' });
-  assert.equal(state.day, exampleDay);
-  assert.equal(state.playing, false);
-  assert.equal(reduce(state, { type: 'setDay', day: -1 }), state);
+  let state = jumpToExample(emptyWorkspace(), 'nabonassar');
+  state = setClockPlaying(state, true);
+  state = tickClock(state, 0.05);
+  nearly(modelDaysAtUt1(state.clock.ut1Jd).ptolemy, exampleDay + 0.6);
+  state = stepClock(state, 10);
+  nearly(modelDaysAtUt1(state.clock.ut1Jd).ptolemy, exampleDay + 10.6);
+  state = jumpToExample(state, 'nabonassar');
+  nearly(modelDaysAtUt1(state.clock.ut1Jd).ptolemy, exampleDay);
+  assert.equal(state.clock.playing, false);
+  assert.equal(setClockInstant(state, -1), state);
 });
 
 test('trail comes from evaluated model and fixed viewport scale', () => {
@@ -110,8 +113,5 @@ test('both languages cover every interface key and language actions work', () =>
   }
   assert.equal(isLanguage('mn'), true);
   assert.equal(isLanguage('ru'), false);
-  assert.equal(initialState('mn').language, 'mn');
-  assert.equal(reduce(initialState(), { type: 'language', language: 'mn' }).language, 'mn');
-  assert.equal(reduce(initialState(), { type: 'trail', show: false }).showTrail, false);
-  assert.equal(reduce(initialState(), { type: 'speed', speed: 50 }).speed, 40);
+  assert.equal(setClockSpeed(emptyWorkspace(), 20).clock.speedDaysPerSecond, 20);
 });

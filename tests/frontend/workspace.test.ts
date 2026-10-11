@@ -4,9 +4,8 @@ import { example1512Ut1, frauenburgCivilToUt1, modelDaysAtUt1,
   ptolemyDayToAssumedUt1 } from '../../web/src/comparison-time.ts';
 import { exampleDay as sharedExampleDay } from '../../web/src/historical-examples.ts';
 import { modelCapabilities, type CapabilityRegistry } from '../../web/src/model-registry.ts';
-import { exampleDay as legacyExampleDay } from '../../web/src/state.ts';
 import { addDisplay, applyWorkspacePreset, emptyWorkspace, moveDisplay, removeDisplay,
-  jumpToExample, jumpToToday, panPlotWindow, restoreWorkspace, setClockInstant,
+  followWorkspaceClock, jumpToExample, jumpToToday, panPlotWindow, restoreWorkspace, setClockInstant,
   setClockPlaying, setDisplayCollapsed, stepClock, suggestedWorkspace, tickClock,
   updateDisplay, workspacePresets, zoomPlotWindow, type DisplayDraft } from '../../web/src/workspace-state.ts';
 import { displayAvailabilityAt, isValidWorkspace, nativeFrameForTrace, traceCoverage, validateDisplay,
@@ -123,7 +122,7 @@ test('pan and zoom transform only authoritative plot endpoints', () => {
 });
 
 test('legacy Nabonassar days cross the assumed UT1 boundary explicitly', () => {
-  assert.equal(sharedExampleDay, legacyExampleDay);
+  assert.equal(sharedExampleDay, 164162);
   for (const day of [0, 1000, 825000]) {
     const ut1 = ptolemyDayToAssumedUt1(day);
     assert.ok(Math.abs(modelDaysAtUt1(ut1).ptolemy - day) < 1e-9);

@@ -85,7 +85,7 @@ export function validateDisplay(display: DisplayConfig,
   }
   const window = display.window;
   if (!Number.isFinite(window.startUt1) || !Number.isFinite(window.endUt1) ||
-      window.startUt1 >= window.endUt1 || window.endUt1 - window.startUt1 > 365 * 50) {
+      window.startUt1 >= window.endUt1 || window.endUt1 - window.startUt1 > 365.25 * 100) {
     issues.push(issue('invalid-window', display.id));
   }
   if (display.frameAlignment === 'nominal-historical-tropical' &&

@@ -174,6 +174,26 @@ export function zoomPlotWindow(state: WorkspaceState, id: string, factor: number
   } });
 }
 
+/** Follow only after the marker leaves the central 60% of a plot window.
+ *  This preserves the span and avoids resampling curves on every animation frame.
+ */
+export function followWorkspaceClock(state: WorkspaceState): WorkspaceState {
+  let next = state;
+  for (const display of state.displays) {
+    if (display.kind !== 'time-series' || !display.window.followsClock) continue;
+    const span = display.window.endUt1 - display.window.startUt1;
+    const lower = display.window.startUt1 + 0.2 * span;
+    const upper = display.window.endUt1 - 0.2 * span;
+    if (state.clock.ut1Jd >= lower && state.clock.ut1Jd <= upper) continue;
+    next = updateDisplay(next, { ...display, window: {
+      ...display.window,
+      startUt1: state.clock.ut1Jd - span / 2,
+      endUt1: state.clock.ut1Jd + span / 2,
+    } });
+  }
+  return next;
+}
+
 const ptolemyGeometry: DisplayDraft = {
   kind: 'geometry', collapsed: false, body: 'Mars', modelId: 'ptolemy',
   policyId: 'mathematical-continuation', viewCenter: 'earth',

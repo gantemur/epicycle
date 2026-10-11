@@ -23,7 +23,8 @@ const dot = (p: Point, earth: Point, code: string, className: string, dx: number
 };
 
 /** Each point is translated by the evaluated Earth position; radii remain in Mars units. */
-export function renderCopernicusDiagram(result: CopernicusMarsResult, language: Language, trail: readonly Point[] = []): string {
+export function renderCopernicusDiagram(result: CopernicusMarsResult, language: Language,
+  trail: readonly Point[] = [], instanceId = ''): string {
   const { trueSun: S, eccentricCenter: F, meanSun: G, earth: E } = result.earthGeometryInMarsUnits;
   const { eccentricCenter: M, epicycleCenter: C, mars: P } = result.marsGeometry;
   const longitude = result.geocentricSiderealLongitude * Math.PI / 180;
@@ -31,8 +32,8 @@ export function renderCopernicusDiagram(result: CopernicusMarsResult, language: 
   const arc = `<path class="longitude-arc" d="M ${origin + 45},${origin} A 45,45 0 ${result.geocentricSiderealLongitude > 180 ? 1 : 0} 0 ${xy(arcEnd)}"/>`;
   const trailPath = trail.length > 1 ? `<polyline class="mars-trail" points="${trail.map(p => xy(shifted(p, { x: 0, y: 0 }))).join(' ')}"/>` : '';
   return `<svg class="sky-diagram" viewBox="0 0 640 640" role="img" aria-label="${message(language, 'copernicusDiagramAccessible')}">
-    <defs><radialGradient id="copernicus-space-glow"><stop offset="0" stop-color="#183743"/><stop offset="1" stop-color="#091924"/></radialGradient></defs>
-    <circle cx="320" cy="320" r="319" fill="url(#copernicus-space-glow)"/>
+    <defs><radialGradient id="copernicus-space-glow${instanceId}"><stop offset="0" stop-color="#183743"/><stop offset="1" stop-color="#091924"/></radialGradient></defs>
+    <circle cx="320" cy="320" r="319" fill="url(#copernicus-space-glow${instanceId})"/>
     <circle class="guide-ring" cx="320" cy="320" r="280"/>
     <line class="axis" x1="20" y1="320" x2="620" y2="320"/>
     <line class="axis" x1="320" y1="20" x2="320" y2="620"/>
