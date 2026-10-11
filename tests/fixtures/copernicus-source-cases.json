@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "model_ids": [
+    "copernicus-1543-earth-longitude",
+    "copernicus-1543-mars-longitude"
+  ],
+  "method": "Transcribed historical rounded values; not generated evaluator output",
+  "earth_1515": {
+    "source": "C1 III.21 ff.92r-v; C3 pp.162-163",
+    "classification": "parameter derivation",
+    "theta": "165;39",
+    "eccentricity": 323,
+    "apsidal_equation": "-2;6,30",
+    "maximum_apsidal_equation": "7;28"
+  },
+  "solar_1525": {
+    "source": "C1 III.12 ff.78r-v (precession example), III.25 ff.95v-96r (solar procedure); C3 pp.146,170 (worked solar example)",
+    "classification": "C3 computation from original printed solar tables, distinct from geometry; original precession example in C1",
+    "local_julian_date": [
+      1525,
+      4,
+      17,
+      0,
+      0
+    ],
+    "day_count": "1525 Egyptian years + 122 days",
+    "mean_sun": "6;54",
+    "theta": "166;40",
+    "precession_Copernicus": "27;21",
+    "precession_C3": "27;20",
+    "tropical_longitude": "35;50"
+  },
+  "mars_1512": {
+    "source": "C1 V.19 ff.159r-160r; C3 pp.364-366",
+    "classification": "Earth/Mars radius determination, not independent prediction",
+    "local_julian_date": [
+      1512,
+      1,
+      1,
+      6,
+      0
+    ],
+    "day_count": "1512 Egyptian years + 12;15 days",
+    "mean_sun": "262",
+    "mean_commutation": "98;28",
+    "mean_planet": "163;32",
+    "eccentric_anomaly": "43;52",
+    "implied_apogee": "119;40",
+    "observed_geocentric_sidereal_longitude": "191;28",
+    "mean_sun_to_epicycle_center_Copernicus": 11097,
+    "mean_sun_to_epicycle_center_C3_corrected": 11099,
+    "mean_sun_to_mars_printed": 10776,
+    "center_equation_Copernicus": "-7;13",
+    "center_equation_C3_corrected": "-7;14",
+    "annual_parallax_equation": "35;9",
+    "radius_derivation": "10776 sin(35;9) / sin(70;32), rounded to 6580",
+    "note": "Continuous geometry also differs by about 2 length units from the printed 10776; do not adjust lengths to force equality."
+  },
+  "mars_1473": {
+    "source": "C3 pp.454-455",
+    "classification": "scholarly printed-table reconstruction with approximate uniform apsis",
+    "local_julian_date": [
+      1473,
+      2,
+      19,
+      16,
+      48
+    ],
+    "day_count": "1473 Egyptian years + 52;42 days",
+    "mean_sun": "311;45",
+    "mean_commutation": "26;37",
+    "apogee": "119;17",
+    "precession": "26;47",
+    "center_equation": "-3;2",
+    "sidereal_longitude": "294;30",
+    "tropical_longitude": "321;17"
+  }
+}

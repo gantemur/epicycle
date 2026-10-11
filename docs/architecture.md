@@ -1,4 +1,4 @@
-# Proposed architecture (Phase 0)
+# Architecture
 
 ## Boundaries
 
@@ -27,12 +27,23 @@
 
 Vite's root is `web/`, its base is `/epicycle/`, its public directory is disabled, and the build emits only that import graph to `dist/`. The local information panel names the model's partial validation and distinguishes direct geometry from Ptolemy's table interpolation. Later comparison panels should reuse the evaluator/render boundary rather than adding a second body or variant to this Phase 2 view.
 
-## Comparison contract to settle before implementation
+## Comparison contract
 
 Phase 3A established the concrete [comparison convention](comparison-conventions.md): geocentric ecliptic longitude is the first observable; a sample carries physical-instant, frame, body, observer, and position-kind metadata; residuals require matched metadata and wrap on `[-180°, 180°)`. The Python chronology boundary explicitly converts an assumed UT1 JD to a sourced local mean meridian and, separately, to TT under a stated ΔT assumption. Neither the historical Egyptian day count nor a modern TDB is inferred from an unlabelled JD. Latitude and distance remain outside the first comparison.
 
-The first Copernican Mars result will depend on one source-verified, compatible Earth annual-motion version plus the Mars motion. Keep version, body, supported observable, epoch, frame, units, and source locators with both records; reject version mismatches when composition is implemented. The present data and evaluator add no placeholder Earth motion or general dependency framework. The source-reading scope is C1 III.1–26 and V.1–4, 15–19, 33–34, checked against C3 chs.3 and 5 as specified in the convention document.
+The first Copernican Mars result depends on one source-checked, compatible Earth annual-motion version plus the Mars motion. Keep version, body, supported observable, epoch, frame, units, and source locators with both records; reject version mismatches when composition is implemented. The Phase 3B implementation below uses an explicit Earth dependency, without a general dependency framework. The source-reading scope is C1 III.1–26 and V.1–4, 15–19, 33–34, checked against C3 chs.3 and 5 as specified in the convention document.
 
 ## Open decisions
 
 The micro-VSOP term threshold in CALTIB is a size heuristic (`|A|·3^power`), not a global error guarantee. Before choosing browser coefficients, benchmark longitude, latitude, and distance over declared historical epochs against an appropriate local high-precision ephemeris, including near close approaches and range boundaries. Verify the generator's source files, checksums, licenses, coefficients, and coordinate convention. Evaluate light-time and apparent-place needs separately. For Python, verify actual kernel coverage and the ancient ΔT model before claiming a historical error figure.
+
+
+## Phase 3B scientific implementation
+
+- `copernicus_earth.py` evaluates the 1543 double eccentric in true-Sun coordinates, plus the historical longitude component of precession. Direct arguments and continuous days are separate entry points. Its annual-circle centre G is the planetary mean Sun.
+- `copernicus_mars.py` checks the specific Earth record identity/schema, epoch and frame, then scales its geometry by 6580/10000 and composes Mars's eccentric and small epicycle. The result separates original Earth geometry, scaled Earth geometry, Mars construction, Earth-to-Mars vector, corrections and sidereal/tropical geocentric longitudes. Proper mean motion derives from Earth mean solar motion minus commutation.
+- The two versioned Copernican JSON records preserve adopted parameters, discarded variants and explicit nulls for missing secular laws. A caller must supply an apsis with provenance or select the limited scholarly reconstruction. Direct argument evaluation does not imply a time law.
+- `copernicus_diagnostic.py` joins the existing Ptolemaic evaluator to the Copernican pair at one tagged UT1 instant. Meridian choices and any planar frame alignment are explicit. It uses the existing `LongitudeSample` guard after alignment; there is no modern reference adapter.
+- `tests/fixtures/copernicus-source-cases.json` contains historical transcriptions. The scientific tests compare circle/vector invariants and independent scalar equations, original parameter derivations and scholarly table results. It is deliberately separate from the generated Phase 2 cross-language fixture.
+
+See [the mathematical specification](copernicus-earth-mars.md) for formula signs, coordinates, policy domain, measured discrepancies and commands. The existing browser import graph contains neither new evaluator; no Copernican browser implementation is implied by the Python phase.

@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "model_id": "copernicus-1543-mars-longitude",
+  "body": "Mars",
+  "model_status": "source-checked, partially numerically validated; arbitrary-date apogee unavailable",
+  "source_edition": "De revolutionibus, Nuremberg 1543 (N); C1 English, C2 Latin, C3 commentary",
+  "dependencies": [
+    {
+      "model_id": "copernicus-1543-earth-longitude",
+      "record": "earth-copernicus-1543-v1.json",
+      "required_schema_version": 1,
+      "relation": "same Christ epoch, mean local day, sidereal origin and annual direction; scale Earth lengths by 6580/10000"
+    }
+  ],
+  "epoch": {
+    "description": "Christ epoch, Julian 1 January 1 midnight, common Frauenburg/Cracow mean local time",
+    "astronomical_julian_date": "0001-01-01",
+    "calendar": "julian",
+    "day_fraction": 0,
+    "source": "C1 V.18 ff.158v-159r; C3 p.363; Earth dependency"
+  },
+  "frame": {
+    "id": "copernicus-1543-sidereal",
+    "origin": "mean Sun for Mars eccentricity; returned absolute points translated to true Sun",
+    "x_axis": "first star of Aries",
+    "orientation": "eastward ecliptic longitude, planar",
+    "source": "C1 V.19 ff.159r-160r; C3 pp.159-161,295-301,358-363"
+  },
+  "units": {
+    "length": "Mars principal circle radius R=10000; Earth annual radius r=6580",
+    "angle": "degree",
+    "time": "365-day Egyptian year"
+  },
+  "parameters": {
+    "principal_radius": {
+      "sexagesimal": "10000",
+      "value": 10000.0,
+      "unit": "Mars principal-radius units",
+      "status": "explicit",
+      "source": "C1 V.16 ff.157r-158r; V.19 f.159r; C3 pp.356,365"
+    },
+    "double_eccentricity": {
+      "sexagesimal": "1960",
+      "value": 1960.0,
+      "unit": "Mars principal-radius units",
+      "status": "derived sum e1 + small epicycle; explicit C3 summary",
+      "source": "C1 V.16 f.157r gives 1460 and 500; C3 pp.356-357,546 gives 1960"
+    },
+    "eccentric_component": {
+      "sexagesimal": "1460",
+      "value": 1460.0,
+      "unit": "Mars principal-radius units",
+      "status": "explicit geometrically derived",
+      "source": "C1 V.16 f.157r; V.19 f.159r; C3 pp.356-357,365,546"
+    },
+    "small_epicycle_radius": {
+      "sexagesimal": "500",
+      "value": 500.0,
+      "unit": "Mars principal-radius units",
+      "status": "explicit",
+      "source": "C1 V.16 f.157r; V.19 f.159r; C3 pp.356-357,365,546"
+    },
+    "earth_annual_radius": {
+      "sexagesimal": "6580",
+      "value": 6580.0,
+      "unit": "Mars principal-radius units",
+      "status": "explicit geometrically derived",
+      "source": "C1 V.19 ff.159v-160r; C3 p.366 eq.(45), p.546"
+    },
+    "mean_commutation_epoch": {
+      "sexagesimal": "238;22",
+      "value": 238.36666666666667,
+      "unit": "degree",
+      "status": "explicit",
+      "source": "C1 V.18 f.158v; C3 p.363 eq.(51)"
+    },
+    "mean_commutation_annual_motion": {
+      "sexagesimal": "168;28,30,36,4",
+      "value": 168.47516697530864,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "explicit 1543 reading",
+      "source": "C2 V.1 f.134v (text) and f.137v (table years 1 and 60), visually checked; C1 table f.137v; C3 pp.361-363,546",
+      "original_notation": "2,48;28,30,36,4 (integer base 60)"
+    },
+    "apogee_1523": {
+      "sexagesimal": "119;40",
+      "value": 119.66666666666667,
+      "unit": "degree",
+      "status": "explicit geometrically derived",
+      "source": "C1 V.16 f.158v; C3 pp.357-358",
+      "epoch_local_julian": [
+        1523,
+        2,
+        22,
+        5,
+        0
+      ]
+    }
+  },
+  "unavailable": {
+    "apogee_annual_motion": {
+      "value": null,
+      "status": "not prescribed by Copernicus",
+      "source": "C3 pp.362-363",
+      "reason": "nonuniform mean-Sun apsis requires both Earth-centre displacement and motion of true-Sun Mars apsis; no complete law given"
+    },
+    "eccentricity_secular_law": {
+      "value": null,
+      "status": "not prescribed",
+      "source": "C3 pp.358-363",
+      "reason": "1960 is modern-observation geometry; ancient reconstruction instead uses 2000"
+    }
+  },
+  "optional_reconstructions": {
+    "sn-local-uniform-1473-1523": {
+      "status": "scholarly estimate, explicitly not the full 1543 apsidal theory",
+      "source": "C3 p.363 uniform estimate; p.455 applies it at 1473 February 19",
+      "annual_motion": {
+        "sexagesimal": "0;0,28,10",
+        "value": 0.007824074074074074,
+        "unit": "degree per 365-day Egyptian year",
+        "status": "scholarly reconstruction",
+        "source": "C3 pp.363,455"
+      },
+      "anchor_parameter": "apogee_1523",
+      "domain_start_local_julian": [
+        1473,
+        2,
+        19,
+        0,
+        0
+      ],
+      "domain_end_local_julian": [
+        1523,
+        2,
+        22,
+        5,
+        0
+      ],
+      "domain_status": "project guard spanning the scholarly 1473 example to the 1523 anchor; not an attested validity or accuracy interval",
+      "assumptions": [
+        "Uniform mean-Sun apogee despite the historical nonuniform mechanism.",
+        "Hold e1=1460 and small radius=500 throughout this short interval; secular eccentricity evolution unavailable."
+      ]
+    }
+  },
+  "alternatives_not_used": {
+    "ancient_eccentric_component": {
+      "sexagesimal": "1500",
+      "value": 1500.0,
+      "unit": "Mars principal-radius units",
+      "status": "ancient-opposition reconstruction, not the adopted variant",
+      "source": "C1 V.15 ff.155r-156v; C3 pp.350-351,358"
+    },
+    "ancient_double_eccentricity": {
+      "sexagesimal": "2000",
+      "value": 2000.0,
+      "unit": "Mars principal-radius units",
+      "status": "ancient-opposition reconstruction",
+      "source": "C3 pp.350-351,358"
+    },
+    "mean_commutation_annual_motion_M": {
+      "sexagesimal": "168;28,29,13,12",
+      "value": 168.47478333333333,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "manuscript / C1 prose variant",
+      "source": "C1 V.1 f.134v; C3 p.361; not N1543"
+    },
+    "mean_planet_annual_motion_N_prose": {
+      "sexagesimal": "191;16,18,30,36",
+      "value": 191.27180833333335,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "printed prose inconsistent with mean Sun minus commutation",
+      "source": "C2 V.1 f.135r, visually checked; implementation derives 191;16,18,31,0 as C3 p.546"
+    },
+    "prutenic_apsidal_motion": {
+      "sexagesimal": "0;0,28,44,37",
+      "value": 0.007984336419753086,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "later work, excluded",
+      "source": "C3 p.363"
+    }
+  },
+  "historical_table_parameters": {
+    "status": "not implemented or presumed equal to geometry",
+    "source": "C3 p.543 warning; pp.443-455 tables and procedures",
+    "complete_transcription": null
+  },
+  "applicability": "Modern-observation geometrical lengths, not an all-era variable-eccentricity theory. Direct angular evaluations are mathematical constructions; date evaluation requires an explicit supplied apsis or the limited scholarly policy.",
+  "other_reported_epochs": {
+    "Alexander": {
+      "astronomical_julian_date": "-0323-11-12",
+      "day_fraction": 0.5,
+      "calendar": "julian",
+      "days_before_christ_epoch": 118025.5,
+      "status": "source-rounded alternative epoch retained for lineage, not used by evaluator",
+      "source": "C1 III.19 ff.90r-v; V.18 f.159r; C3 pp.165,363,543-546",
+      "positions": {
+        "mean_commutation": {
+          "sexagesimal": "120;39",
+          "value": 120.65,
+          "unit": "degree"
+        }
+      }
+    }
+  }
+}

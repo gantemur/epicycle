@@ -1,4 +1,4 @@
-# Status — Phase 3A scientific infrastructure awaiting review
+# Status — Phase 3B Earth–Mars implementation awaiting scientific review
 
 Git is initialized on `main`. No commit, remote, push, or deployment exists. `private/` remains ignored and outside the Vite root and build import graph.
 
@@ -10,4 +10,15 @@ The Neugebauer Table 15 discrepancy is now independently reconstructed from a li
 
 Run the commands in [README.md](../README.md). Phase 2 verification includes Python tests, TypeScript tests, a production build, and local browser checks at desktop, 360 px, and 390 px in both languages. The geometry, playback, trail toggle, example jump, and source panel were inspected. No horizontal overflow was observed at either phone width. The built `dist/` contains only HTML, CSS, and JS assets; no private paths.
 
-The [comparison conventions](comparison-conventions.md) now specify explicit civil/JD/UT1/LMT/TT boundaries, an uncertain ancient ΔT, metadata-checked geocentric longitude residuals, and the source work needed for a coupled Copernican Earth + Mars model. No Copernican or modern adapter has been implemented. Open work: the complete XI.11–12 table remains unimplemented; row 3's rounding path is unresolved; Alexandria's historical meridian and any ancient ΔT choice must be sourced before physical-instant comparisons. The UI remains the accepted one-model Phase 2 prototype, with no latitude or modern prediction.
+The [comparison conventions](comparison-conventions.md) now specify explicit civil/JD/UT1/LMT/TT boundaries, an uncertain ancient ΔT, metadata-checked geocentric longitude residuals, and the source work needed for a coupled Copernican Earth + Mars model. A coupled Copernican Earth–Mars Python evaluator is now implemented; no modern adapter is present. Open work: the complete XI.11–12 table remains unimplemented; row 3's rounding path is unresolved; Alexandria's historical meridian and any ancient ΔT choice must be sourced before physical-instant comparisons. The UI remains the accepted one-model Phase 2 prototype, with no latitude or modern prediction.
+
+
+## Phase 3B
+
+Phase 3A is accepted with partial validation. The new [Copernican specification](copernicus-earth-mars.md) documents the 1543 Earth double eccentric and Mars eccentric/small-epicycle construction, source lineage, true Sun versus mean Sun, chronology and the unresolved Mars apsidal evolution. Versioned Earth/Mars JSON records and transcribed source-case fixtures preserve original notation and unused alternatives. Critical readings were checked visually in C2's Nuremberg 1543 printing.
+
+Earth checkpoint A was completed before Mars implementation. Source checks reproduce the 1515 eccentricity derivation, the 1525 precession/solar table example, the January 1512 Mars parameter derivation and the scholarly 1473 table example, with measured discrepancies rather than altered constants. The continuous geometric results differ from the cited solar and Mars table examples by 0.807′ and 1.170′ sidereal respectively. The January 1512 rounded-argument result differs from the observation used to determine the radius by −1.500′; it is not independent predictive validation.
+
+The date API has **no default Mars apsidal law**. It requires a supplied apsis with provenance or the explicit `sn-local-uniform-1473-1523` scholarly approximation, restricted to the documented interval. This is not full historical verification. The two-model diagnostic uses one declared UT1 instant and separate meridians, and suppresses residuals without an explicit planar frame alignment. Modern frame calibration, a full Copernican correction-table implementation, arbitrary-date apsidal/eccentricity evolution and broader independent prediction checks remain unavailable.
+
+Verification: **28 Python tests, 9 frontend tests, production build, and the documented diagnostic command passed**. The final scientific review correction documents the January 1512 distance arithmetic, C3's inconsistent supplementary 1500 anomaly entry, and the omitted Toruń meridian reduction in the 1473 example. No dependencies or browser files changed. Historical Ptolemaic parameters/formulas/fixtures remain unchanged. No commit, push or deployment was made. Stop here for scientific review; the proposed next phase is a limited two-model browser port with policy/frame labels and cross-language fixtures, subject to acceptance.

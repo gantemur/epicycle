@@ -2,7 +2,7 @@
 
 Epicycle Atlas is an English–Mongolian atlas of pre-Keplerian planetary constructions. The local first prototype pairs a mobile-friendly Mars diagram with independent Python research calculations. The project is independent of [SOL](https://github.com/gantemur/sol); SOL's existing animations remain a read-only legacy reference.
 
-**Status:** Phase 2 has a local TypeScript/Vite browser prototype of the source-checked, partially numerically validated *Almagest* Mars longitude geometry. The historical correction tables and deployment remain future work. Git is initialized on `main`; there is no commit or remote. The configured future base path is `/epicycle/`.
+**Status:** Phase 3B adds a Python implementation of Copernicus's 1543 Earth–Mars longitude geometry, with source records, partial validation, an explicit limited apsis reconstruction and a conditional comparison diagnostic. The browser remains the accepted Phase 2 Ptolemaic prototype. See the [Copernican specification and evaluation commands](docs/copernicus-earth-mars.md) and [status](docs/status.md). No commit, push or deployment was made; the configured future base path is `/epicycle/`.
 
 ## Run locally
 

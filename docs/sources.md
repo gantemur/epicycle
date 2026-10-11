@@ -14,7 +14,7 @@ Inventory checked locally in Phase 0. All 20 PDFs are in `private/sources/` (abo
 | P8 | `P8Pedersen.pdf` | Pedersen, survey of the *Almagest*; contextual check. |
 | P15 | `P15Riddell.pdf` | Riddell, *The Latitudes of Venus and Mercury in the Almagest*. |
 | C1 | `C1revolutionibus.pdf` | English *De revolutionibus* translation; compare readings with original print and commentary. |
-| C2 | `C2Kopernik.pdf` | Latin *De revolutionibus* scan/text; edition details to verify. |
+| C2 | `C2Kopernik.pdf` | Nuremberg 1543 Latin printing, e-rara / ETH Zürich, Rar 1370 (cover identifies DOI 10.3931/e-rara-420); critical numeric readings visually checked in Phase 3B. |
 | C3 | `C3SwerdlowNeugebauer.pdf` | Swerdlow and Neugebauer, *Mathematical Astronomy in Copernicus's De Revolutionibus*. |
 | C4 | `C4Swerdlow.pdf` | Swerdlow, *The Derivation and First Draft of Copernicus's Planetary Theory*; *Commentariolus* work. |
 | C6 | `C6Cramer.pdf` | Cramer, *The Copernican System: A Detailed Synopsis*; secondary overview. |
@@ -35,3 +35,8 @@ Inventory checked locally in Phase 0. All 20 PDFs are in `private/sources/` (abo
 - **Latitude and physical ordering later:** P1 Book XIII; P5, P7, P15, and D1 for interpretations; P3/P4 for the *Planetary Hypotheses* and its physical arrangement.
 
 Historical source citations in model data must give an exact passage/table and page in the identified edition. The map above is only a reading guide, not numerical transcription or validation. The public upstream code references are [SOL](https://github.com/gantemur/sol) and [CALTIB](https://github.com/gantemur/caltib); local snapshots, not their current main branches, were audited here.
+
+
+## Phase 3B extraction audit
+
+The [Copernican specification](copernicus-earth-mars.md) and two JSON parameter records now distinguish N1543, C1's restored earlier readings, geometric derivations, printed-table parameters and scholarly reconstructions. C2 III.23 f.93v confirms the solar anomaly epoch 211;14 against C1's 211;19. C2 V.1 f.134v and table f.137v confirm Mars commutation 168;28,30,36,4 per Egyptian year; f.135r's separate proper-motion number is slightly inconsistent and retained as an unused alternative. These are original folio locators, not PDF-page offsets. C3 p.543's geometry/table warning and pp.362–363's missing Mars apsis law govern the implementation status. No source scans, images or substantial extracts have been added to the repository.

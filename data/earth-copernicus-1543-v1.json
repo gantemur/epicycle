@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "model_id": "copernicus-1543-earth-longitude",
+  "body": "Earth / apparent Sun",
+  "model_status": "source-checked, partially numerically validated geometry",
+  "source_edition": "De revolutionibus, Nuremberg 1543 (N); C1 English checked against C2 Latin and C3 commentary",
+  "epoch": {
+    "description": "Christ epoch, 1 January 1 CE, midnight, mean local time at the common Frauenburg/Cracow meridian assumed by Copernicus",
+    "astronomical_julian_date": "0001-01-01",
+    "day_fraction": 0,
+    "calendar": "julian",
+    "time_scale": "historical mean local days",
+    "source": "C1 III.11 f.77r; III.19 f.90r-v; C3 pp.144,165,543",
+    "status": "explicit; actual modern meridian must be supplied at UT1 boundary"
+  },
+  "frame": {
+    "id": "copernicus-1543-sidereal",
+    "origin": "true Sun S",
+    "x_axis": "first star of Aries (Copernicus catalogue origin)",
+    "orientation": "eastward ecliptic longitude, planar",
+    "tropical_conversion": "add historical true precession; not a modern precession transform",
+    "source": "C1 III.12 ff.77v-78r; III.19 f.90v; C3 pp.145-146,159-161"
+  },
+  "units": {
+    "length": "R=10000 for Earth annual circle",
+    "time": "365-day Egyptian years; supplied days divided by 365",
+    "angle": "degree"
+  },
+  "parameters": {
+    "annual_radius": {
+      "sexagesimal": "10000",
+      "value": 10000.0,
+      "unit": "Earth annual-radius units",
+      "status": "explicit",
+      "source": "C1 III.21 ff.92r-v; C3 pp.162-163"
+    },
+    "eccentric_component": {
+      "sexagesimal": "369",
+      "value": 369.0,
+      "unit": "Earth annual-radius units",
+      "status": "explicit geometrically derived",
+      "source": "C1 III.21 f.92v; C3 p.163 eq.(26)"
+    },
+    "small_eccentric_radius": {
+      "sexagesimal": "48",
+      "value": 48.0,
+      "unit": "Earth annual-radius units",
+      "status": "explicit geometrically derived",
+      "source": "C1 III.21 f.92v; C3 p.163 eq.(26)"
+    },
+    "mean_sun_epoch": {
+      "sexagesimal": "272;31",
+      "value": 272.51666666666665,
+      "unit": "degree",
+      "status": "explicit",
+      "source": "C1 III.19 f.90v; solar mean table f.81v; C3 pp.165,544"
+    },
+    "mean_sun_annual_motion": {
+      "sexagesimal": "359;44,49,7,4",
+      "value": 359.7469771604938,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "explicit",
+      "source": "C1 III.14 f.81r; C2 III.23 f.93v; C3 pp.154-156,544",
+      "original_notation": "5,59;44,49,7,4 (integer base 60)"
+    },
+    "solar_anomaly_epoch": {
+      "sexagesimal": "211;14",
+      "value": 211.23333333333332,
+      "unit": "degree",
+      "status": "explicit 1543 reading",
+      "source": "C2 III.23 f.93v, visually checked; C3 p.165 eq.(30), p.544; C1 gives alternative 211;19"
+    },
+    "mean_apogee_epoch": {
+      "sexagesimal": "61;17",
+      "value": 61.28333333333333,
+      "unit": "degree",
+      "status": "derived",
+      "source": "272;31 minus 211;14; C3 p.165 eq.(30), not independently stated by Copernicus"
+    },
+    "mean_apogee_annual_motion": {
+      "sexagesimal": "0;0,24,20,14",
+      "value": 0.00676033950617284,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "explicit",
+      "source": "C1 III.22 f.93r; C3 pp.164,544"
+    },
+    "theta_epoch": {
+      "sexagesimal": "6;45",
+      "value": 6.75,
+      "unit": "degree",
+      "status": "explicit",
+      "source": "C1 III.11 f.77r; C3 pp.144,543"
+    },
+    "theta_annual_motion": {
+      "sexagesimal": "0;6,17,24,9",
+      "value": 0.1048340277777778,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "explicit",
+      "source": "C1 III.6 f.70r; C3 pp.138,543"
+    },
+    "mean_precession_epoch": {
+      "sexagesimal": "5;32",
+      "value": 5.533333333333333,
+      "unit": "degree",
+      "status": "explicit",
+      "source": "C1 III.11 f.77r; C3 pp.144,543"
+    },
+    "mean_precession_annual_motion": {
+      "sexagesimal": "0;0,50,12,5",
+      "value": 0.01394483024691358,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "explicit",
+      "source": "C1 III.6 f.70r; C3 pp.139,543"
+    },
+    "precession_equation_amplitude": {
+      "sexagesimal": "1;10",
+      "value": 1.1666666666666667,
+      "unit": "degree",
+      "status": "explicit",
+      "source": "C1 III.7 f.73r; C3 pp.136,140,543"
+    }
+  },
+  "derived": {
+    "eccentricity_min": 321,
+    "eccentricity_max": 417,
+    "source": "C1 III.21 ff.92r-v; C3 p.163"
+  },
+  "alternatives_not_used": {
+    "solar_anomaly_epoch_C1": {
+      "sexagesimal": "211;19",
+      "value": 211.31666666666666,
+      "unit": "degree",
+      "status": "translation / manuscript variant",
+      "source": "C1 III.23 f.93v; C3 p.165 n.51 explains restored earlier readings"
+    },
+    "solar_anomaly_epoch_recomputed": {
+      "sexagesimal": "211;12",
+      "value": 211.2,
+      "unit": "degree",
+      "status": "scholarly recomputation, not adopted",
+      "source": "C3 p.165 n.51"
+    },
+    "mean_tropical_sun_epoch": {
+      "sexagesimal": "278;2",
+      "value": 278.03333333333336,
+      "unit": "degree",
+      "status": "explicit but inconsistent by one arcminute",
+      "source": "C1 III.19 f.90v; C3 p.165 n.51: sidereal plus mean precession gives 278;3"
+    },
+    "table_max_eccentricity": {
+      "sexagesimal": "414",
+      "value": 414.0,
+      "unit": "Earth annual-radius units",
+      "status": "underlying printed correction table, not geometry",
+      "source": "C3 pp.167-168: sixth column uses earlier maximum"
+    },
+    "table_minimum_max_equation": {
+      "sexagesimal": "1;51",
+      "value": 1.85,
+      "unit": "degree",
+      "status": "printed correction table adjustment",
+      "source": "C3 pp.167-168: geometry with e=321 gives about 1;50"
+    }
+  },
+  "limitations": [
+    "No solar correction-table interpolation; continuous geometry with annual rates divided by 365, not truncated daily-table arithmetic.",
+    "Precession uses the historical plane-libration approximation; no obliquity or latitude evaluation.",
+    "No modern physical validity interval asserted."
+  ],
+  "other_reported_epochs": {
+    "Alexander": {
+      "astronomical_julian_date": "-0323-11-12",
+      "day_fraction": 0.5,
+      "calendar": "julian",
+      "days_before_christ_epoch": 118025.5,
+      "status": "source-rounded alternative epoch retained for lineage, not used by evaluator",
+      "source": "C1 III.19 ff.90r-v; V.18 f.159r; C3 pp.165,363,543-546",
+      "positions": {
+        "mean_sun": {
+          "sexagesimal": "225;37",
+          "value": 225.61666666666667,
+          "unit": "degree"
+        },
+        "solar_anomaly": {
+          "sexagesimal": "166;31",
+          "value": 166.51666666666668,
+          "unit": "degree"
+        },
+        "mean_precession": {
+          "sexagesimal": "1;2",
+          "value": 1.0333333333333334,
+          "unit": "degree"
+        },
+        "theta": {
+          "sexagesimal": "332;52",
+          "value": 332.8666666666667,
+          "unit": "degree"
+        }
+      }
+    }
+  }
+}
