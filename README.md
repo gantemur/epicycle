@@ -1,8 +1,8 @@
 # Epicycle Atlas
 
-Epicycle Atlas is an English–Mongolian atlas of pre-Keplerian planetary constructions. The local first prototype pairs a mobile-friendly Mars diagram with independent Python research calculations. The project is independent of [SOL](https://github.com/gantemur/sol); SOL's existing animations remain a read-only legacy reference.
+Epicycle Atlas is an English–Mongolian atlas of pre-Keplerian planetary constructions. Its development workspace pairs historical Mars geometry with longitude plots, backed by independent Python research calculations. The project is independent of [SOL](https://github.com/gantemur/sol); SOL's animations remain a read-only legacy reference.
 
-**Status:** The deployed `main` site at [gantemur.github.io/epicycle](https://gantemur.github.io/epicycle/) remains the accepted single-model Ptolemaic prototype. The uncommitted `codex/phase-3c-comparison` branch adds review-pending single-model selection and Ptolemy–Copernicus browser comparison. It uses the accepted Phase 3B Python geometry and public source records; it has not been merged or deployed. See the [Copernican specification](docs/copernicus-earth-mars.md), [comparison conventions](docs/comparison-conventions.md), and [status](docs/status.md).
+**Status:** The deployed `main` site at [gantemur.github.io/epicycle](https://gantemur.github.io/epicycle/) remains the accepted single-model Ptolemaic prototype. Phase 4B is committed on `codex/phase-4b-displays` for final review; it has not been merged or deployed. The development branch uses the accepted historical evaluators and public source records. See the [Copernican specification](docs/copernicus-earth-mars.md), [comparison conventions](docs/comparison-conventions.md), and [status](docs/status.md).
 
 ## Run locally
 
@@ -13,12 +13,16 @@ npm ci
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173/epicycle/`. Single mode starts with the accepted Ptolemaic Nabonassar view and can also show the Copernican Earth–Mars construction. Compare mode starts with Ptolemy as Model A and Copernicus as Model B; either selector can choose either implemented model. Both use one assumed UT1 instant and a provisional Alexandria meridian. The Copernican apogee defaults to the guarded 1473–1523 scholarly reconstruction; other dates require explicit exploratory extrapolation, which continues the historical rate and fixed 1543 geometry without an accuracy claim. Today converts a Gregorian/UTC instant to the displayed Julian historical convention. The fixed plot window accepts presets, custom dates, pan/zoom and wrapped or continuous longitudes. The model difference requires a visibly declared nominal historical tropical-frame alignment; it is Model B minus Model A, not an observational error. Use the header toggle for English or Mongolian. To verify or build:
+Open `http://127.0.0.1:5173/epicycle/`. One assumed-UT1 clock drives independently configurable geometry and time-series panels. Presets replace the arrangement; adding, moving, or editing a panel does not change the others. The plot offers longitude overlays or signed model disagreement (B − A), with its own date window, pan/zoom, and explicit nominal historical tropical-frame alignment. This difference is between models, not observational error.
+
+Copernican geometry defaults to the source-limited 1473–1523 reconstruction. Comparison plots can explicitly select exploratory continuation; dashed portions show dates outside that reference interval, without an accuracy claim. The original Nabonassar and 1473/1512 jumps remain available. The global clock is independent of panel date policies. Use the header toggle for English or Mongolian. To verify or build:
 
 ```sh
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 npm run test:frontend
+npm run typecheck
 npm run build
+git diff --check
 ```
 
 `npm run build` produces `dist/` with the `/epicycle/` asset base. `web/` is the only Vite root, `publicDir` is disabled, and only the public JSON definitions and fixtures are imported. `private/` is ignored and must not be copied into a build or deployment. The shared numerical fixtures can be regenerated with `PYTHONPATH=src python3 scripts/generate_mars_cross_language.py` and `PYTHONPATH=src python3 scripts/generate_copernicus_cross_language.py`.

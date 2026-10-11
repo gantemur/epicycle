@@ -4,6 +4,8 @@ import { example1512Ut1, frauenburgCivilToUt1, modelDaysAtUt1,
   ptolemyDayToAssumedUt1 } from '../../web/src/comparison-time.ts';
 import { exampleDay as sharedExampleDay } from '../../web/src/historical-examples.ts';
 import { modelCapabilities, type CapabilityRegistry } from '../../web/src/model-registry.ts';
+import { message } from '../../web/src/i18n.ts';
+import { geometryUnavailableMessageKey } from '../../web/src/workspace-geometry-view.ts';
 import { addDisplay, applyWorkspacePreset, emptyWorkspace, moveDisplay, removeDisplay,
   followWorkspaceClock, jumpToExample, jumpToToday, panPlotWindow, restoreWorkspace, setClockInstant,
   setClockPlaying, setDisplayCollapsed, stepClock, suggestedWorkspace, tickClock,
@@ -103,6 +105,17 @@ test('plot windows and per-display availability do not control the one shared cl
   const exploratory = updateDisplay(later, { ...copernicus, policyId: 'sn-uniform-exploratory' });
   assert.equal(displayAvailabilityAt(exploratory.displays[2], future).status, 'available');
   assert.equal(later.displays[2], copernicus); // no automatic extrapolation
+});
+
+test('guarded Copernican geometry explains its unavailable date in both languages', () => {
+  const state = applyWorkspacePreset(emptyWorkspace(), 'detailed-comparison');
+  const copernicus = state.displays[2] as GeometryDisplay;
+  const availability = displayAvailabilityAt(copernicus, frauenburgCivilToUt1(1600, 1, 1));
+  assert.equal(availability.status, 'unavailable');
+  const key = geometryUnavailableMessageKey(copernicus, availability);
+  assert.equal(key, 'geometryGuardUnavailable');
+  assert.match(message('en', key), /1473–1523.*exploratory extrapolation/i);
+  assert.match(message('mn', key), /1473–1523.*туршилтын экстраполяц/i);
 });
 
 test('pan and zoom transform only authoritative plot endpoints', () => {

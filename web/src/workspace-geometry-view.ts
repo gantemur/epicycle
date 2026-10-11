@@ -5,7 +5,7 @@ import type { ApsisPolicy } from './copernicus.ts';
 import { renderDiagram, trailPoints } from './diagram.ts';
 import { message, type Language, type MessageKey } from './i18n.ts';
 import { modelCapabilities, modelIds, models, type ModelId } from './model-registry.ts';
-import { displayAvailabilityAt } from './workspace-validation.ts';
+import { displayAvailabilityAt, type Availability } from './workspace-validation.ts';
 import type { GeometryDisplay } from './workspace-types.ts';
 
 const t = (language: Language, key: MessageKey): string => message(language, key);
@@ -69,6 +69,16 @@ function setValue(panel: HTMLElement, selector: string, value: string): void {
   if (node && node.textContent !== value) node.textContent = value;
 }
 
+export function geometryUnavailableMessageKey(display: GeometryDisplay,
+  availability: Availability): MessageKey {
+  if (availability.issues.some(item => item.code === 'renderer-unavailable')) return 'rendererUnavailable';
+  if (display.modelId === 'copernicus' && display.policyId === 'sn-local-uniform-1473-1523' &&
+      availability.issues.some(item => item.code === 'outside-policy-domain')) {
+    return 'geometryGuardUnavailable';
+  }
+  return 'currentUnavailable';
+}
+
 export function renderGeometryDynamic(panel: HTMLElement, display: GeometryDisplay,
   ut1Jd: number, language: Language): void {
   const frame = panel.querySelector<HTMLElement>('[data-geometry-frame]');
@@ -77,9 +87,10 @@ export function renderGeometryDynamic(panel: HTMLElement, display: GeometryDispl
   const availability = displayAvailabilityAt(display, ut1Jd);
   const unavailable = panel.querySelector<HTMLElement>('[data-unavailable]');
   if (availability.status !== 'available') {
-    const key = availability.issues.some(item => item.code === 'renderer-unavailable')
-      ? 'rendererUnavailable' : 'currentUnavailable';
-    if (unavailable) { unavailable.hidden = false; unavailable.textContent = t(language, key); }
+    if (unavailable) {
+      unavailable.hidden = false;
+      unavailable.textContent = t(language, geometryUnavailableMessageKey(display, availability));
+    }
     if (frame.innerHTML) frame.innerHTML = '';
     if (readouts) readouts.hidden = true;
     return;
