@@ -8,3 +8,7 @@
 6. **Phase 5 — research investigations:** local high-precision JPL comparisons, fits explicitly labeled modern, sensitivity analyses, reproducible publication tables/figures, and eventually archived release/data. No fitting or publication work is authorized by Phase 0.
 
 Gate each stage on source fidelity, time/frame documentation, and numerical validation, rather than visual plausibility.
+
+## Current workspace sequence
+
+Phase 4A is the local architecture/state foundation on `codex/phase-4a-workspace`; it adds no visible workspace UI or new science. Phase 4B will migrate the accepted Phase 3C Single and Compare experiences into managed panels using one clock, then expose the first workspace controls. Subsequent catalogue expansion still requires sourced models and validation. See [workspace architecture](workspace-architecture.md).

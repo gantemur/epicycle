@@ -1,12 +1,11 @@
-import { egyptianToDays } from './chronology.ts';
 import { isLanguage, type Language } from './i18n.ts';
-import sourceCases from '../../tests/fixtures/mars-source-cases.json' with { type: 'json' };
-import { comparisonUt1Domain, example1473Ut1, example1512Ut1 } from './comparison-time.ts';
+import { exampleDay } from './historical-examples.ts';
+import { comparisonUt1Domain, computationalUt1Domain, example1473Ut1, example1512Ut1 } from './comparison-time.ts';
 import { apsisPolicy, exploratoryApsisPolicy, type ApsisPolicy } from './copernicus.ts';
 import { dateAllowed, usesCopernicus, type ModelId } from './model-registry.ts';
 
-export const exampleDay = egyptianToDays(sourceCases.scholarly_table_case.nabonassar_date);
-export const computationalUt1Domain = { start: 1200000, end: 3000000 } as const;
+export { exampleDay } from './historical-examples.ts';
+export { computationalUt1Domain } from './comparison-time.ts';
 
 export type AppState = Readonly<{
   day: number; compareUt1: number; playing: boolean; speed: number;

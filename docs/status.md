@@ -1,8 +1,14 @@
-# Status — Phase 3C browser comparison awaiting scientific and visual review
+# Status — Phase 4A workspace foundation awaiting review
+
+## Local Phase 4A branch
+
+`codex/phase-4a-workspace` was created from the clean, committed Phase 3C branch at `d394608`. Phase 4A adds a typed, pure workspace state, model capability metadata, per-display validation and date availability, presets, and tests. The live browser remains the accepted Phase 3C interface; no panel migration, new historical model, Pages workflow change, merge, or deployment is part of Phase 4A. See [workspace architecture](workspace-architecture.md) for the design and Phase 4B handoff.
+
+Phase 4A verification: 30 Python tests, 28 frontend tests, TypeScript type checking, production build, and `git diff --check` passed. Phase 4A has not been committed or pushed.
 
 ## Local Phase 3C branch
 
-The local `codex/phase-3c-comparison` branch adds review-pending model selection and Compare mode. The deployed `main` site still has the accepted Ptolemaic single-model experience. Phase 3C has not been committed, pushed, merged or deployed. The GitHub Pages workflow is unchanged.
+The `codex/phase-3c-comparison` branch contains committed review-pending model selection and Compare mode. The deployed `main` site still has the accepted Ptolemaic single-model experience. Phase 3C has not been merged or deployed. The GitHub Pages workflow is unchanged.
 
 The browser ports the accepted Phase 3B Earth and Mars geometries from the existing public JSON records. Its small registry supports Ptolemy or Copernicus alone and independent Model A/B choices. The selected evaluators use one assumed UT1 instant, the documented 19°40′ E Frauenburg meridian, and a visibly provisional 30° E Alexandria choice. The original Ptolemaic Nabonassar controls remain available in Single mode.
 

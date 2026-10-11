@@ -4,6 +4,8 @@ export const frauenburgMeridian = 19 + 40 / 60;
 export const alexandriaMeridian = 30;
 export const ptolemyEpochJd = 1448638;
 export const copernicusEpochLocalJd = 1721423.5;
+/** Numerical interaction range, not a historical validity claim. */
+export const computationalUt1Domain = { start: 1200000, end: 3000000 } as const;
 
 export function civilToLocalJd(year: number, month: number, day: number, fraction = 0): number {
   if (!Number.isFinite(fraction) || fraction < 0 || fraction >= 1) throw new RangeError('Invalid day fraction');
@@ -27,6 +29,12 @@ export function modelDaysAtUt1(ut1Jd: number): { ptolemy: number; copernicus: nu
     ptolemy: ut1Jd + alexandriaMeridian / 360 - ptolemyEpochJd,
     copernicus: ut1Jd + frauenburgMeridian / 360 - copernicusEpochLocalJd,
   };
+}
+
+/** Inverse of the provisional Alexandria LMT boundary for legacy single mode. */
+export function ptolemyDayToAssumedUt1(day: number): number {
+  if (!Number.isFinite(day)) throw new RangeError('Ptolemaic day must be finite');
+  return day + ptolemyEpochJd - alexandriaMeridian / 360;
 }
 
 export function frauenburgCivilToUt1(year: number, month: number, day: number, hour = 0, minute = 0): number {
