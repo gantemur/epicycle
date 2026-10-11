@@ -1464,6 +1464,10 @@ footer span {
   gap: 12px;
   margin: 13px 0 4px;
 }
+.plot-boundary-help,.plot-window-error {
+  grid-column: 1/-1;
+  margin: 0;
+}
 .panel-check {
   display: flex!important;
   align-items: center;
@@ -1527,6 +1531,15 @@ footer span {
   stroke-width: 2.2;
   stroke-linejoin: round;
   stroke-linecap: round;
+}
+.workspace-trace[data-provenance="dashed"] {
+  stroke-width: 3.2;
+  stroke-linecap: butt;
+}
+.plot-zero {
+  stroke: #d8e7e1;
+  stroke-width: 1.6;
+  stroke-dasharray: 5 5;
 }
 .workspace-sources {
   margin: 28px 0 42px;

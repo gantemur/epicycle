@@ -6,6 +6,7 @@ import { renderGeometryDynamic, renderGeometryStatic } from './workspace-geometr
 import { changeGeometry, changePlot, changeTrace, addTrace, removeTrace,
   validReplacement } from './workspace-panel-actions.ts';
 import { renderPlotDynamic, renderPlotStatic } from './workspace-plot-view.ts';
+import { applyPlotWindowInputs, type PlotWindowInputIssue } from './workspace-plot-window.ts';
 import { renderWorkspaceSources } from './workspace-sources.ts';
 import { addDisplay, applyWorkspacePreset, followWorkspaceClock, jumpToExample,
   jumpToToday, moveDisplay, panPlotWindow, removeDisplay, setClockDirection,
@@ -18,6 +19,10 @@ const root = document.querySelector<HTMLDivElement>('#app');
 if (!root) throw new Error('Missing app root');
 const t = (key: MessageKey): string => message(language, key);
 const tr = (key: MessageKey): string => '<span data-i18n="' + key + '"></span>';
+const plotWindowErrorKeys: Record<PlotWindowInputIssue, MessageKey> = {
+  format: 'plotInputFormat', 'julian-date': 'plotInvalidJulianDate',
+  order: 'plotEndBeforeStart', limit: 'plotRangeTooLong', domain: 'plotOutsideNumericalDomain',
+};
 let language: Language = isLanguage(localStorage.getItem('epicycle-language'))
   ? localStorage.getItem('epicycle-language') as Language : 'en';
 let state: WorkspaceState = suggestedWorkspace(window.innerWidth);
@@ -110,6 +115,7 @@ function mountPanel(display: DisplayConfig): HTMLElement {
         '<p class="scientific-note" data-unavailable hidden></p><ul class="legend" data-panel-legend></ul>' +
         '<dl class="comparison-readouts" data-panel-readouts></dl>'
       : '<p class="plot-frame-note" data-frame-note></p><div class="workspace-plot-legend" data-plot-legend></div>' +
+        '<p class="plot-frame-note" data-provenance-note hidden></p>' +
         '<div class="workspace-plot-frame" data-plot-frame></div><p class="field-help" data-plot-status></p>' +
         '<dl class="comparison-readouts" data-current-traces></dl><p data-disagreement hidden></p>',
     '</div>',
@@ -210,13 +216,14 @@ function refreshLanguage(): void {
   renderDynamic();
 }
 
-function updatePanel(replacement: DisplayConfig | null, panel: HTMLElement): void {
+function updatePanel(replacement: DisplayConfig | null, panel: HTMLElement,
+  errorKey: MessageKey = 'invalidDisplay'): void {
   const error = panel.querySelector<HTMLElement>('[data-panel-error]')!;
   if (!replacement || !validReplacement(replacement)) {
     const current = state.displays.find(display => display.id === panel.dataset.panelId);
     if (current?.kind === 'geometry') renderGeometryStatic(panel, current, language);
     else if (current?.kind === 'time-series') renderPlotStatic(panel, current, language);
-    error.textContent = t('invalidDisplay'); error.hidden = false; return;
+    error.textContent = t(errorKey); error.hidden = false; return;
   }
   error.hidden = true;
   commit(updateDisplay(state, replacement));
@@ -253,12 +260,18 @@ function onPanelAction(action: string, panel: HTMLElement, button: HTMLElement):
     if (action === 'add-trace') updatePanel(addTrace(display), panel);
     else if (action === 'remove-trace') updatePanel(removeTrace(display, button.dataset.traceId!), panel);
     else if (action === 'apply-window') {
-      try {
-        updatePanel({ ...display, window: { ...display.window,
-          startUt1: parseFrauenburgInput(panel.querySelector<HTMLInputElement>('[data-setting="window-start"]')!.value),
-          endUt1: parseFrauenburgInput(panel.querySelector<HTMLInputElement>('[data-setting="window-end"]')!.value),
-        } }, panel);
-      } catch { updatePanel(null, panel); }
+      const startInput = panel.querySelector<HTMLInputElement>('[data-setting="window-start"]')!;
+      const endInput = panel.querySelector<HTMLInputElement>('[data-setting="window-end"]')!;
+      const result = applyPlotWindowInputs(display, startInput.value, endInput.value);
+      if (result.ok) updatePanel(result.display, panel);
+      else {
+        panel.querySelector<HTMLElement>('[data-panel-error]')!.hidden = true;
+        const error = panel.querySelector<HTMLElement>('[data-window-error]')!;
+        error.textContent = t(plotWindowErrorKeys[result.issue]);
+        error.hidden = false;
+        const field = result.field === 'start' ? startInput : endInput;
+        field.focus();
+      }
     } else if (action === 'pan-left' || action === 'pan-right') {
       const span = display.window.endUt1 - display.window.startUt1;
       commit(panPlotWindow(state, id, span * (action === 'pan-left' ? -0.25 : 0.25)));
@@ -311,15 +324,28 @@ root.addEventListener('change', event => {
     updatePanel(changeGeometry(display, input.dataset.setting,
       input instanceof HTMLInputElement && input.type === 'checkbox' ? input.checked : input.value), panel);
   } else if (display.kind === 'time-series' && input.dataset.traceSetting) {
-    updatePanel(changeTrace(display, input.dataset.traceId!, input.dataset.traceSetting, input.value), panel);
+    const errorKey: MessageKey = display.analysis.kind === 'model-disagreement'
+      ? input.dataset.traceSetting === 'observable' &&
+          input.value === 'geocentric-sidereal-longitude' &&
+          display.frameAlignment === 'nominal-historical-tropical'
+        ? 'disagreementFrameIncompatible' : 'disagreementPairIncompatible'
+      : 'invalidDisplay';
+    updatePanel(changeTrace(display, input.dataset.traceId!, input.dataset.traceSetting, input.value),
+      panel, errorKey);
   } else if (display.kind === 'time-series' && input.dataset.setting) {
     if (input.dataset.setting === 'window-preset' && input.value !== 'custom') {
       const span = Number(input.value);
       updatePanel({ ...display, window: { ...display.window,
         startUt1: state.clock.ut1Jd - span / 2, endUt1: state.clock.ut1Jd + span / 2 } }, panel);
     } else if (!['window-start', 'window-end', 'window-preset'].includes(input.dataset.setting)) {
-      updatePanel(changePlot(display, input.dataset.setting,
-        input instanceof HTMLInputElement && input.type === 'checkbox' ? input.checked : input.value), panel);
+      const setting = input.dataset.setting;
+      const errorKey: MessageKey = setting === 'frame-alignment' ||
+        (setting === 'analysis' && display.frameAlignment === 'native')
+        ? 'disagreementFrameIncompatible' : setting === 'first-trace' || setting === 'second-trace'
+          ? 'disagreementPairIncompatible' : 'invalidDisplay';
+      updatePanel(changePlot(display, setting,
+        input instanceof HTMLInputElement && input.type === 'checkbox' ? input.checked : input.value),
+        panel, errorKey);
     }
   }
 });

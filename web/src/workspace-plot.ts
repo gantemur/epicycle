@@ -12,9 +12,17 @@ export type TraceSamples = Readonly<{
 }>;
 export type WorkspacePlotSamples = Readonly<{
   startUt1: number; endUt1: number; count: number;
+  times: readonly number[];
   mode: 'wrapped' | 'unwrapped';
+  rawTraces: readonly TraceSamples[];
   traces: readonly TraceSamples[];
+  disagreement: Readonly<{ first: PlotTrace; second: PlotTrace;
+    values: readonly (number | null)[] }> | null;
   minLongitude: number; maxLongitude: number;
+}>;
+export type PlotPoint = Readonly<{ index: number; value: number }>;
+export type StyledPlotSegment = Readonly<{
+  style: 'solid' | 'dashed'; points: readonly PlotPoint[];
 }>;
 
 /** The current clock and language do not affect mathematical curve samples. */
@@ -22,6 +30,8 @@ export function workspacePlotCacheKey(plot: TimeSeriesDisplay): string {
   return JSON.stringify({
     window: [plot.window.startUt1, plot.window.endUt1],
     mode: plot.longitudeMode, alignment: plot.frameAlignment,
+    analysis: plot.analysis.kind === 'overlay' ? ['overlay'] :
+      ['model-disagreement', plot.analysis.firstTraceId, plot.analysis.secondTraceId],
     traces: plot.traces.map(trace => [trace.body, trace.modelId, trace.observableId, trace.policyId]),
   });
 }
@@ -76,17 +86,46 @@ function alignWholeTurns(traces: { trace: PlotTrace; values: (number | null)[] }
   }
 }
 
+function plotSampleTimes(plot: TimeSeriesDisplay, regularCount: number): number[] {
+  const { startUt1, endUt1 } = plot.window;
+  const span = endUt1 - startUt1;
+  const times = new Set(Array.from({ length: regularCount + 1 }, (_, index) =>
+    startUt1 + span * index / regularCount));
+  for (const trace of plot.traces) {
+    const capability = modelCapabilities[trace.modelId];
+    const policyRange = capability?.policies[trace.policyId];
+    const referenceRange = capability?.exploratoryReferenceRanges?.[trace.policyId];
+    for (const range of [policyRange, referenceRange]) {
+      if (!range) continue;
+      if (range.start > startUt1 && range.start < endUt1) times.add(range.start);
+      if (range.end > startUt1 && range.end < endUt1) times.add(range.end);
+    }
+  }
+  return [...times].sort((a, b) => a - b);
+}
+
+function sameTrace(a: PlotTrace, b: PlotTrace): boolean {
+  return a.id === b.id && a.body === b.body && a.modelId === b.modelId &&
+    a.observableId === b.observableId && a.policyId === b.policyId;
+}
+
 /** At most three historical days per sample segment, as in the Phase 3C plot. */
-export function sampleWorkspacePlot(plot: TimeSeriesDisplay): WorkspacePlotSamples {
+export function sampleWorkspacePlot(plot: TimeSeriesDisplay,
+  previous?: WorkspacePlotSamples): WorkspacePlotSamples {
   if (validateDisplay(plot).length) throw new RangeError('Unsupported plot configuration');
   const { startUt1, endUt1 } = plot.window;
   const span = endUt1 - startUt1;
-  const count = Math.max(2, Math.ceil(span / 3));
-  const traces: { trace: PlotTrace; values: (number | null)[] }[] = plot.traces.map(trace => {
-    const raw = Array.from({ length: count + 1 }, (_, index) =>
-      traceLongitudeAt(trace, startUt1 + span * index / count));
-    return { trace, values: plot.longitudeMode === 'wrapped' ? raw : unwrapAvailable(raw) };
+  const times = plotSampleTimes(plot, Math.max(2, Math.ceil(span / 3)));
+  const sameTimes = previous?.times.length === times.length &&
+    times.every((time, index) => time === previous.times[index]);
+  const rawTraces: TraceSamples[] = plot.traces.map(trace => {
+    const cached = sameTimes ? previous?.rawTraces.find(old => sameTrace(old.trace, trace)) : undefined;
+    return cached ?? { trace, values: times.map(ut1Jd => traceLongitudeAt(trace, ut1Jd)) };
   });
+  const traces: { trace: PlotTrace; values: (number | null)[] }[] = rawTraces.map(raw => ({
+    trace: raw.trace,
+    values: plot.longitudeMode === 'wrapped' ? [...raw.values] : unwrapAvailable(raw.values),
+  }));
   if (plot.longitudeMode === 'unwrapped' &&
       plot.frameAlignment === 'nominal-historical-tropical') alignWholeTurns(traces);
   let minimum = Infinity;
@@ -97,12 +136,24 @@ export function sampleWorkspacePlot(plot: TimeSeriesDisplay): WorkspacePlotSampl
       maximum = Math.max(maximum, value);
     }
   }
-  return { startUt1, endUt1, count, mode: plot.longitudeMode, traces,
+  let disagreement: WorkspacePlotSamples['disagreement'] = null;
+  const analysis = plot.analysis;
+  if (analysis.kind === 'model-disagreement') {
+    const first = rawTraces.find(item => item.trace.id === analysis.firstTraceId)!;
+    const second = rawTraces.find(item => item.trace.id === analysis.secondTraceId)!;
+    disagreement = { first: first.trace, second: second.trace,
+      values: first.values.map((a, index) => {
+        const b = second.values[index];
+        return a === null || b === null ? null : angularDifference(b, a);
+      }) };
+  }
+  return { startUt1, endUt1, count: times.length - 1, times, mode: plot.longitudeMode,
+    rawTraces, traces, disagreement,
     minLongitude: plot.longitudeMode === 'wrapped' ? 0 : Number.isFinite(minimum) ? minimum : 0,
     maxLongitude: plot.longitudeMode === 'wrapped' ? 360 : Number.isFinite(maximum) ? maximum : 360 };
 }
 
-/** Returns only a justified same-body, same-observable model disagreement. */
+/** Returns B − A in angularDifference's principal interval [−180°, 180°). */
 export function modelDisagreementAt(plot: TimeSeriesDisplay, ut1Jd: number): number | null {
   const analysis = plot.analysis;
   if (analysis.kind !== 'model-disagreement' || validateDisplay(plot).length) return null;
@@ -116,9 +167,9 @@ export function modelDisagreementAt(plot: TimeSeriesDisplay, ut1Jd: number): num
 
 /** Converts null gaps and wrapped jumps to independent SVG subpaths. */
 export function plotSegments(values: readonly (number | null)[], mode: 'wrapped' | 'unwrapped'):
-  { index: number; value: number }[][] {
-  const segments: { index: number; value: number }[][] = [];
-  let current: { index: number; value: number }[] = [];
+  PlotPoint[][] {
+  const segments: PlotPoint[][] = [];
+  let current: PlotPoint[] = [];
   let previous: number | null = null;
   values.forEach((value, index) => {
     if (value === null || (previous !== null && mode === 'wrapped' && Math.abs(value - previous) > 180)) {
@@ -130,4 +181,31 @@ export function plotSegments(values: readonly (number | null)[], mode: 'wrapped'
   });
   if (current.length) segments.push(current);
   return segments;
+}
+
+/** Split drawing styles at declared reference bounds, without resetting longitude turns. */
+export function styledPlotSegments(trace: TraceSamples, times: readonly number[],
+  mode: 'wrapped' | 'unwrapped', sources: readonly PlotTrace[] = [trace.trace]): StyledPlotSegment[] {
+  const ranges = sources.map(source => modelCapabilities[source.modelId]
+    ?.exploratoryReferenceRanges?.[source.policyId]).filter(range => range !== undefined);
+  const styleAt = (first: PlotPoint, second: PlotPoint): 'solid' | 'dashed' => {
+    const midpoint = (times[first.index] + times[second.index]) / 2;
+    return ranges.some(range => midpoint < range.start || midpoint > range.end) ? 'dashed' : 'solid';
+  };
+  const styled: StyledPlotSegment[] = [];
+  for (const path of plotSegments(trace.values, mode)) {
+    if (path.length < 2) continue;
+    let style = styleAt(path[0], path[1]);
+    let points: PlotPoint[] = [path[0], path[1]];
+    for (let index = 2; index < path.length; index += 1) {
+      const nextStyle = styleAt(path[index - 1], path[index]);
+      if (nextStyle !== style) {
+        styled.push({ style, points });
+        points = [path[index - 1], path[index]];
+        style = nextStyle;
+      } else points.push(path[index]);
+    }
+    styled.push({ style, points });
+  }
+  return styled;
 }

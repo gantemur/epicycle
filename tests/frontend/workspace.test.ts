@@ -95,7 +95,7 @@ test('plot windows and per-display availability do not control the one shared cl
   assert.ok(later.clock.ut1Jd > future);
   assert.equal(displayAvailabilityAt(later.displays[1], later.clock.ut1Jd).status, 'available');
   assert.equal(displayAvailabilityAt(later.displays[2], later.clock.ut1Jd).status, 'unavailable');
-  assert.equal(displayAvailabilityAt(later.displays[0], later.clock.ut1Jd).status, 'partial');
+  assert.equal(displayAvailabilityAt(later.displays[0], later.clock.ut1Jd).status, 'available');
   assert.ok(displayAvailabilityAt(later.displays[2], later.clock.ut1Jd).issues.some(
     item => item.code === 'outside-policy-domain'));
   assert.equal(stepClock(later, -1).clock.playing, false);
@@ -194,7 +194,9 @@ test('several traces can overlay bodies, while model disagreement requires compa
 });
 
 test('plot coverage exposes unavailable source-limited dates as a gap', () => {
-  const plot = applyWorkspacePreset(emptyWorkspace(), 'compare-longitudes').displays[0] as TimeSeriesDisplay;
+  const preset = applyWorkspacePreset(emptyWorkspace(), 'compare-longitudes').displays[0] as TimeSeriesDisplay;
+  const plot = { ...preset, traces: preset.traces.map(trace => trace.modelId === 'copernicus'
+    ? { ...trace, policyId: 'sn-local-uniform-1473-1523' } : trace) };
   const window = { ...plot.window, startUt1: frauenburgCivilToUt1(1522, 1, 1),
     endUt1: frauenburgCivilToUt1(1524, 1, 1) };
   const expanded = { ...plot, window };
@@ -206,7 +208,10 @@ test('plot coverage exposes unavailable source-limited dates as a gap', () => {
 });
 
 test('historical plot coverage survives a current-time marker outside the source domain', () => {
-  const state = applyWorkspacePreset(emptyWorkspace(), 'compare-longitudes');
+  const preset = applyWorkspacePreset(emptyWorkspace(), 'compare-longitudes');
+  const original = preset.displays[0] as TimeSeriesDisplay;
+  const state = updateDisplay(preset, { ...original, traces: original.traces.map(trace =>
+    trace.modelId === 'copernicus' ? { ...trace, policyId: 'sn-local-uniform-1473-1523' } : trace) });
   const plot = state.displays[0] as TimeSeriesDisplay;
   const sourceCoverage = traceCoverage(plot, plot.traces[1]);
   assert.equal(sourceCoverage.status, 'full');

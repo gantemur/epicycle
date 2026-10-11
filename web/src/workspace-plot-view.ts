@@ -1,8 +1,8 @@
 import { formatFrauenburgInput } from './comparison-time.ts';
 import { message, type Language, type MessageKey } from './i18n.ts';
 import { modelCapabilities, modelIds, models, type ModelId } from './model-registry.ts';
-import { modelDisagreementAt, plotSegments, sampleWorkspacePlot,
-  traceLongitudeAt, workspacePlotCacheKey, type WorkspacePlotSamples } from './workspace-plot.ts';
+import { modelDisagreementAt, sampleWorkspacePlot, styledPlotSegments,
+  traceLongitudeAt, workspacePlotCacheKey, type PlotPoint, type WorkspacePlotSamples } from './workspace-plot.ts';
 import { nativeFrameForTrace, traceCoverage, validateDisplay } from './workspace-validation.ts';
 import { initialPlotTraceLimit, type PlotTrace, type TimeSeriesDisplay } from './workspace-types.ts';
 
@@ -27,6 +27,13 @@ function traceLabel(trace: PlotTrace, language: Language): string {
     trace.observableId === 'geocentric-sidereal-longitude' ? 'siderealObservable' : 'tropicalObservable')}`;
 }
 
+function tracePolicyLabel(trace: PlotTrace, language: Language): string {
+  if (trace.modelId !== 'copernicus') return '';
+  const key: MessageKey = trace.policyId === 'sn-uniform-exploratory'
+    ? 'exploratoryPolicy' : 'sourceLimitedPolicy';
+  return ` · ${t(language, key)}`;
+}
+
 function traceSettings(trace: PlotTrace, index: number, language: Language): string {
   const modelOptions = modelIds.map(id => `<option value="${id}" ${id === trace.modelId ? 'selected' : ''}>${t(language, models[id].label)}</option>`).join('');
   const observables = modelCapabilities[trace.modelId].observables.map(item => {
@@ -49,13 +56,38 @@ function tracePairOptions(display: TimeSeriesDisplay, selected: string, language
   return display.traces.map((trace, index) => `<option value="${trace.id}" ${trace.id === selected ? 'selected' : ''}>${t(language, 'trace')} ${index + 1} · ${t(language, models[trace.modelId as ModelId].label)}</option>`).join('');
 }
 
+function disagreementLabel(first: PlotTrace, second: PlotTrace, language: Language): string {
+  return `Δλ = ${t(language, models[second.modelId as ModelId].label)} − ${t(language,
+    models[first.modelId as ModelId].label)} (°)`;
+}
+
+/** Keep exact segment ends while omitting movements too small to display. Dense SVG paths hide dashes in Safari. */
+function drawablePoints(points: readonly PlotPoint[], x: (index: number) => number,
+  y: (value: number) => number): PlotPoint[] {
+  if (points.length <= 2) return [...points];
+  const drawn = [points[0]];
+  let lastX = x(points[0].index);
+  let lastY = y(points[0].value);
+  for (const point of points.slice(1, -1)) {
+    const nextX = x(point.index);
+    const nextY = y(point.value);
+    if (Math.hypot(nextX - lastX, nextY - lastY) < 0.5) continue;
+    drawn.push(point);
+    lastX = nextX;
+    lastY = nextY;
+  }
+  drawn.push(points[points.length - 1]);
+  return drawn;
+}
+
 /** The panel shell and plot frame stay mounted across clock ticks. */
 export function renderPlotStatic(panel: HTMLElement, display: TimeSeriesDisplay, language: Language): void {
   const title = panel.querySelector<HTMLElement>('[data-panel-title]');
   if (title) {
     const modelNames = [...new Set(display.traces.map(trace => trace.modelId))]
       .map(id => t(language, models[id as ModelId].label)).join(' / ');
-    title.textContent = `${t(language, 'plotPanel')} · ${modelNames}`;
+    title.textContent = `${t(language, display.analysis.kind === 'model-disagreement'
+      ? 'disagreementPlotTitle' : 'plotPanel')} · ${modelNames}`;
   }
   const settings = panel.querySelector<HTMLElement>('[data-panel-settings]');
   if (!settings) return;
@@ -71,12 +103,14 @@ export function renderPlotStatic(panel: HTMLElement, display: TimeSeriesDisplay,
       <label>${t(language, 'plotStart')}<input data-setting="window-start" type="text" value="${formatFrauenburgInput(display.window.startUt1)}"></label>
       <label>${t(language, 'plotEnd')}<input data-setting="window-end" type="text" value="${formatFrauenburgInput(display.window.endUt1)}"></label>
       <button type="button" data-action="apply-window">${t(language, 'plotApply')}</button>
+      <p class="error plot-window-error" data-window-error role="alert" hidden></p>
+      <p class="field-help plot-boundary-help">${t(language, 'plotBoundaryHint')}</p>
       <div class="plot-pan-buttons"><button type="button" data-action="pan-left">${t(language, 'plotPanLeft')}</button>
         <button type="button" data-action="zoom-in">${t(language, 'plotZoomIn')}</button>
         <button type="button" data-action="zoom-out">${t(language, 'plotZoomOut')}</button>
         <button type="button" data-action="pan-right">${t(language, 'plotPanRight')}</button></div>
       <label class="panel-check"><input type="checkbox" data-setting="follow-time" ${display.window.followsClock ? 'checked' : ''}> ${t(language, 'followTime')}</label>
-      <label>${t(language, 'plotDisplay')}<select data-setting="longitude-mode"><option value="unwrapped" ${display.longitudeMode === 'unwrapped' ? 'selected' : ''}>${t(language, 'plotUnwrapped')}</option><option value="wrapped" ${display.longitudeMode === 'wrapped' ? 'selected' : ''}>${t(language, 'plotWrapped')}</option></select></label>
+      ${display.analysis.kind === 'overlay' ? `<label>${t(language, 'plotDisplay')}<select data-setting="longitude-mode"><option value="unwrapped" ${display.longitudeMode === 'unwrapped' ? 'selected' : ''}>${t(language, 'plotUnwrapped')}</option><option value="wrapped" ${display.longitudeMode === 'wrapped' ? 'selected' : ''}>${t(language, 'plotWrapped')}</option></select></label>` : ''}
       <label>${t(language, 'frameChoice')}<select data-setting="frame-alignment"><option value="native" ${display.frameAlignment === 'native' ? 'selected' : ''}>${t(language, 'nativeFrames')}</option>
         <option value="nominal-historical-tropical" ${display.frameAlignment === 'nominal-historical-tropical' ? 'selected' : ''}>${t(language, 'nominalFrames')}</option></select></label>
       <label>${t(language, 'analysisChoice')}<select data-setting="analysis"><option value="overlay" ${display.analysis.kind === 'overlay' ? 'selected' : ''}>${t(language, 'overlayAnalysis')}</option>
@@ -88,40 +122,84 @@ export function renderPlotStatic(panel: HTMLElement, display: TimeSeriesDisplay,
     </div>`;
   if (settings instanceof HTMLDetailsElement) settings.open = wasOpen;
   const legend = panel.querySelector<HTMLElement>('[data-plot-legend]');
-  if (legend) legend.innerHTML = display.traces.map((trace, index) => `<span style="--trace-color:${colors[index]}">${traceLabel(trace, language)} · ${frameLabel(trace, language)}</span>`).join('');
+  if (legend) {
+    const analysis = display.analysis;
+    if (analysis.kind === 'model-disagreement') {
+      const first = display.traces.find(trace => trace.id === analysis.firstTraceId);
+      const second = display.traces.find(trace => trace.id === analysis.secondTraceId);
+      legend.innerHTML = first && second ? `<span style="--trace-color:${colors[0]}">${t(language,
+        'disagreementPlotTitle')} · ${disagreementLabel(first, second, language)} · ${t(language,
+        'plotWindow')}: ${formatFrauenburgInput(display.window.startUt1)} – ${formatFrauenburgInput(display.window.endUt1)}</span>` : '';
+    } else legend.innerHTML = display.traces.map((trace, index) => `<span style="--trace-color:${colors[index]}">${traceLabel(trace, language)} · ${frameLabel(trace, language)}${tracePolicyLabel(trace, language)}</span>`).join('');
+  }
+  const provenanceNote = panel.querySelector<HTMLElement>('[data-provenance-note]');
+  if (provenanceNote) {
+    const analysis = display.analysis;
+    const sourceTraces = analysis.kind === 'model-disagreement'
+      ? display.traces.filter(trace => trace.id === analysis.firstTraceId ||
+        trace.id === analysis.secondTraceId) : display.traces;
+    const policies = new Set(sourceTraces.filter(trace => trace.modelId === 'copernicus')
+      .map(trace => trace.policyId));
+    const notes = [policies.has('sn-uniform-exploratory') ? t(language, 'exploratoryCurveNote') : '',
+      policies.has('sn-local-uniform-1473-1523') ? t(language, 'sourceLimitedCurveNote') : '']
+      .filter(Boolean);
+    provenanceNote.textContent = notes.join(' ');
+    provenanceNote.hidden = notes.length === 0;
+  }
   const frameNote = panel.querySelector<HTMLElement>('[data-frame-note]');
   if (frameNote) frameNote.textContent = t(language,
     display.frameAlignment === 'native' ? 'nativeFrameWarning' : 'alignmentNote');
   const current = panel.querySelector<HTMLElement>('[data-current-traces]');
-  if (current) current.innerHTML = display.traces.map((trace, index) =>
-    `<div><dt style="color:${colors[index]}">${traceLabel(trace, language)}</dt><dd data-current-trace="${trace.id}"></dd></div>`).join('');
+  if (current) {
+    current.hidden = display.analysis.kind === 'model-disagreement';
+    current.innerHTML = current.hidden ? '' : display.traces.map((trace, index) =>
+      `<div><dt style="color:${colors[index]}">${traceLabel(trace, language)}</dt><dd data-current-trace="${trace.id}"></dd></div>`).join('');
+  }
 }
 
-function plotSvg(samples: WorkspacePlotSamples, language: Language): string {
+/** The disagreement gets its own symmetric degree scale; longitude turns never set its limits. */
+export function plotSvg(samples: WorkspacePlotSamples, language: Language): string {
+  const difference = samples.disagreement;
   const low = samples.minLongitude;
   const high = samples.maxLongitude;
   const padding = samples.mode === 'wrapped' ? 0 : Math.max(5, (high - low) * 0.12);
-  const min = low - padding;
-  const max = high + padding || min + 1;
-  const x = (index: number): number => plotLeft + index * plotWidth / samples.count;
+  let largestDifference = 0;
+  if (difference) for (const value of difference.values) {
+    if (value !== null) largestDifference = Math.max(largestDifference, Math.abs(value));
+  }
+  const desired = Math.max(0.1, largestDifference * 1.1);
+  const magnitude = 10 ** Math.floor(Math.log10(desired));
+  const limit = [1, 2, 5, 10].map(unit => unit * magnitude).find(value => value >= desired)!;
+  const min = difference ? -limit : low - padding;
+  const max = difference ? limit : high + padding || min + 1;
+  const x = (index: number): number => plotLeft +
+    (samples.times[index] - samples.startUt1) * plotWidth / (samples.endUt1 - samples.startUt1);
   const y = (value: number): number => 350 - (value - min) * 300 / (max - min);
-  const paths = samples.traces.map((trace, colorIndex) => plotSegments(trace.values, samples.mode)
-    .map(segment => `<path class="workspace-trace" stroke="${colors[colorIndex]}" d="${segment.map((point, index) =>
+  const paths = (difference
+    ? [{ curve: 'disagreement', color: colors[0], segments: styledPlotSegments(
+      { trace: difference.first, values: difference.values }, samples.times, 'wrapped',
+      [difference.first, difference.second]) }]
+    : samples.traces.map((trace, index) => ({ curve: 'longitude', color: colors[index],
+      segments: styledPlotSegments(trace, samples.times, samples.mode) })))
+    .map(series => series.segments.map(segment => `<path class="workspace-trace" data-curve="${series.curve}" data-provenance="${segment.style}" stroke="${series.color}"${segment.style === 'dashed' ? ' stroke-dasharray="24 20"' : ''} d="${drawablePoints(segment.points, x, y).map((point, index) =>
       `${index === 0 ? 'M' : 'L'}${x(point.index).toFixed(1)},${y(point.value).toFixed(1)}`).join(' ')}"/>`).join('')).join('');
   const horizontal = Array.from({ length: 5 }, (_, index) => {
     const value = min + (max - min) * (4 - index) / 4;
     const yy = 50 + index * 75;
-    return `<line class="plot-grid" x1="${plotLeft}" x2="${plotRight}" y1="${yy}" y2="${yy}"/><text class="plot-label" x="100" y="${yy + 4}" text-anchor="end">${value.toFixed(0)}°</text>`;
+    const decimals = difference ? (limit < 1 ? 2 : limit < 10 ? 1 : 0) : 0;
+    return `<line class="plot-grid" x1="${plotLeft}" x2="${plotRight}" y1="${yy}" y2="${yy}"/><text class="plot-label" x="100" y="${yy + 4}" text-anchor="end">${value.toFixed(decimals)}°</text>`;
   }).join('');
   const date = (ut1: number): string => formatFrauenburgInput(ut1).split('T')[0];
-  return `<svg viewBox="0 0 800 430" role="img" aria-label="${t(language, 'plotTitle')}">
-    ${horizontal}<line class="plot-axis" x1="${plotLeft}" x2="${plotRight}" y1="350" y2="350"/>
+  return `<svg viewBox="0 0 800 430" role="img" aria-label="${t(language,
+    difference ? 'disagreementPlotTitle' : 'plotTitle')}">
+    ${horizontal}${difference ? `<line class="plot-zero" x1="${plotLeft}" x2="${plotRight}" y1="${y(0)}" y2="${y(0)}"/>` : ''}<line class="plot-axis" x1="${plotLeft}" x2="${plotRight}" y1="350" y2="350"/>
     ${paths}<line data-plot-marker class="plot-marker" y1="50" y2="350"/>
     <text data-plot-marker-label class="plot-label" y="39"></text>
     <text class="plot-label" x="${plotLeft}" y="376" text-anchor="start">${date(samples.startUt1)}</text>
     <text class="plot-label" x="${plotRight}" y="376" text-anchor="end">${date(samples.endUt1)}</text>
     <text class="plot-axis-title" x="415" y="415" text-anchor="middle">${t(language, 'plotX')}</text>
-    <text class="plot-axis-title" x="26" y="200" text-anchor="middle" transform="rotate(-90 26 200)">${t(language, 'plotYShort')}</text>
+    <text class="plot-axis-title" x="26" y="200" text-anchor="middle" transform="rotate(-90 26 200)">${t(language,
+      difference ? 'disagreementYShort' : 'plotYShort')}</text>
   </svg>`;
 }
 
@@ -134,15 +212,19 @@ export function renderPlotDynamic(panel: HTMLElement, display: TimeSeriesDisplay
   ut1Jd: number, language: Language): void {
   const frame = panel.querySelector<HTMLElement>('[data-plot-frame]');
   if (!frame) return;
-  if (validateDisplay(display).length) {
-    if (frame.textContent !== t(language, 'invalidDisplay')) frame.textContent = t(language, 'invalidDisplay');
+  const issues = validateDisplay(display);
+  if (issues.length) {
+    const key: MessageKey = issues.some(issue => issue.code === 'incompatible-frame')
+      ? 'disagreementFrameIncompatible' : issues.some(issue => issue.code === 'invalid-disagreement')
+        ? 'disagreementPairIncompatible' : 'invalidDisplay';
+    if (frame.textContent !== t(language, key)) frame.textContent = t(language, key);
     caches.delete(panel);
     return;
   }
   const key = workspacePlotCacheKey(display);
   let cache = caches.get(panel);
   if (!cache || cache.key !== key) {
-    cache = { key, language, samples: sampleWorkspacePlot(display) };
+    cache = { key, language, samples: sampleWorkspacePlot(display, cache?.samples) };
     caches.set(panel, cache);
     frame.innerHTML = plotSvg(cache.samples, language);
   } else if (cache.language !== language) {
@@ -168,11 +250,16 @@ export function renderPlotDynamic(panel: HTMLElement, display: TimeSeriesDisplay
     if (markerLabel.textContent !== date) markerLabel.textContent = date;
   }
   const outside = ut1Jd < samples.startUt1 || ut1Jd > samples.endUt1;
-  const gaps = display.traces.some(trace => traceCoverage(display, trace).status !== 'full');
-  const status = [outside ? t(language, 'markerAtEdge') : '', gaps ? t(language, 'plotGap') : '']
+  const gaps = (samples.disagreement ? [samples.disagreement.first, samples.disagreement.second] : display.traces)
+    .some(trace => traceCoverage(display, trace).status !== 'full');
+  const noDifference = samples.disagreement?.values.every(value => value === null) ?? false;
+  const status = [samples.disagreement ? t(language, 'disagreementZeroNote') : '',
+    outside ? t(language, 'markerAtEdge') : '', gaps ? t(language,
+      samples.disagreement ? 'disagreementGap' : 'plotGap') : '',
+    noDifference ? t(language, 'disagreementNoData') : '']
     .filter(Boolean).join(' ');
   setText(panel, '[data-plot-status]', status);
-  for (const trace of display.traces) {
+  for (const trace of samples.disagreement ? [] : display.traces) {
     const value = traceLongitudeAt(trace, ut1Jd);
     setText(panel, `[data-current-trace="${trace.id}"]`, value === null
       ? t(language, 'currentUnavailable') : `${value.toFixed(3)}°`);
@@ -182,8 +269,9 @@ export function renderPlotDynamic(panel: HTMLElement, display: TimeSeriesDisplay
     disagreement.hidden = display.analysis.kind !== 'model-disagreement';
     if (!disagreement.hidden) {
       const value = modelDisagreementAt(display, ut1Jd);
-      disagreement.textContent = value === null ? t(language, 'disagreementUnavailable')
-        : `${t(language, 'disagreementAnalysis')}: ${value >= 0 ? '+' : ''}${value.toFixed(3)}°`;
+      disagreement.textContent = value === null ? t(language, 'disagreementDateUnavailable')
+        : `${disagreementLabel(samples.disagreement!.first, samples.disagreement!.second,
+          language)}: ${value >= 0 ? '+' : ''}${value.toFixed(3)}°`;
     }
   }
 }

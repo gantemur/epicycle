@@ -3,6 +3,7 @@ import type { ViewCenter } from './model-registry.ts';
 export const workspaceSchemaVersion = 1;
 export const maxWorkspacePanels = 4;
 export const initialPlotTraceLimit = 4;
+export const maxPlotWindowDays = 365.25 * 100;
 
 /** An assumed UT1 Julian Day is the sole evolving time coordinate. */
 export type WorkspaceClock = Readonly<{

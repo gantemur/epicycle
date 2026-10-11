@@ -65,7 +65,8 @@ test('panel settings and policies are independent, with four ordinary traces', (
 test('a 1500–1600 window preserves Ptolemy and gaps source-limited Copernicus after 1523', () => {
   const state = applyWorkspacePreset(emptyWorkspace(), 'compare-longitudes');
   const original = state.displays[0] as TimeSeriesDisplay;
-  const plot = { ...original, window: { ...original.window,
+  const plot = { ...original, traces: original.traces.map(trace => trace.modelId === 'copernicus'
+    ? { ...trace, policyId: 'sn-local-uniform-1473-1523' } : trace), window: { ...original.window,
     startUt1: frauenburgCivilToUt1(1500, 1, 1),
     endUt1: frauenburgCivilToUt1(1600, 1, 1) } };
   assert.equal(traceCoverage(plot, plot.traces[0]).status, 'full');

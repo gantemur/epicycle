@@ -72,13 +72,14 @@ test('registry selectors and policy domain act only on selected models', () => {
   assert.deepEqual(plot.traces.map(trace => trace.modelId), ['ptolemy', 'copernicus']);
   const future = frauenburgCivilToUt1(2026, 10, 11);
   assert.equal(dateAllowed(future, ['ptolemy'], plot.traces[0].policyId), true);
-  assert.equal(dateAllowed(future, ['copernicus'], plot.traces[1].policyId), false);
+  assert.equal(plot.traces[1].policyId, exploratoryApsisPolicy);
+  assert.equal(dateAllowed(future, ['copernicus'], plot.traces[1].policyId), true);
   state = setClockInstant(state, future);
   assert.equal(state.clock.ut1Jd, future);
-  assert.equal(displayAvailabilityAt(state.displays[0], future).status, 'partial');
+  assert.equal(displayAvailabilityAt(state.displays[0], future).status, 'available');
   const changed = updateDisplay(state, { ...plot, traces: [plot.traces[0],
-    { ...plot.traces[1], policyId: exploratoryApsisPolicy }] });
-  assert.equal(displayAvailabilityAt(changed.displays[0], future).status, 'available');
+    { ...plot.traces[1], policyId: 'sn-local-uniform-1473-1523' }] });
+  assert.equal(displayAvailabilityAt(changed.displays[0], future).status, 'partial');
   assert.equal((state.displays[0] as TimeSeriesDisplay).traces[1].policyId, plot.traces[1].policyId);
   assert.equal(evaluateSelectedModel('ptolemy', future, exploratoryApsisPolicy).model, 'ptolemy');
   assert.equal(evaluateSelectedModel('copernicus', future, exploratoryApsisPolicy).model, 'copernicus');
@@ -258,5 +259,5 @@ test('one playback state advances both models and continues beyond a panel polic
   state = tickClock(setClockPlaying(setClockInstant(state, comparisonUt1Domain.end - .01), true), .1);
   assert.ok(state.clock.ut1Jd > comparisonUt1Domain.end);
   assert.equal(state.clock.playing, true);
-  assert.equal(displayAvailabilityAt(state.displays[0], state.clock.ut1Jd).status, 'partial');
+  assert.equal(displayAvailabilityAt(state.displays[0], state.clock.ut1Jd).status, 'available');
 });

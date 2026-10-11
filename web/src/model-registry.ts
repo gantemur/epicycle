@@ -42,6 +42,8 @@ export type ModelCapability = Readonly<{
   renderedViewCenters: readonly ViewCenter[];
   viewCenters: readonly ViewCenter[];
   policies: Readonly<Record<string, Ut1Range | null>>;
+  /** An exploratory policy may name the reference interval used for curve styling. */
+  exploratoryReferenceRanges?: Readonly<Record<string, Ut1Range>>;
 }>;
 export type CapabilityRegistry = Readonly<Record<string, ModelCapability>>;
 
@@ -66,6 +68,7 @@ export const modelCapabilities: CapabilityRegistry = {
       [apsisPolicy]: comparisonUt1Domain,
       [exploratoryApsisPolicy]: null,
     },
+    exploratoryReferenceRanges: { [exploratoryApsisPolicy]: comparisonUt1Domain },
   },
 };
 

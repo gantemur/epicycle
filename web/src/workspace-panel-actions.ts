@@ -1,4 +1,5 @@
 import { modelCapabilities } from './model-registry.ts';
+import { exploratoryApsisPolicy } from './copernicus.ts';
 import { validateDisplay } from './workspace-validation.ts';
 import type { DisplayConfig, GeometryDisplay, PlotTrace, TimeSeriesDisplay } from './workspace-types.ts';
 
@@ -28,7 +29,7 @@ export function changeTrace(display: TimeSeriesDisplay, traceId: string,
   if (setting === 'model' && modelCapabilities[value]) {
     replacement = { ...old, modelId: value,
       observableId: 'geocentric-tropical-longitude',
-      policyId: value === 'ptolemy' ? 'mathematical-continuation' : sourcePolicy };
+      policyId: value === 'ptolemy' ? 'mathematical-continuation' : exploratoryApsisPolicy };
   } else if (setting === 'policy') replacement = { ...old, policyId: value };
   else if (setting === 'observable') replacement = { ...old, observableId: value };
   const next: TimeSeriesDisplay = { ...display,
@@ -71,8 +72,12 @@ export function changePlot(display: TimeSeriesDisplay, setting: string, value: s
         secondTraceId: display.traces[1].id } : { kind: 'overlay' } };
   } else if ((setting === 'first-trace' || setting === 'second-trace') &&
       display.analysis.kind === 'model-disagreement' && typeof value === 'string') {
-    next = { ...display, analysis: { ...display.analysis,
-      [setting === 'first-trace' ? 'firstTraceId' : 'secondTraceId']: value } };
+    const { firstTraceId, secondTraceId } = display.analysis;
+    const swap = setting === 'first-trace' ? value === secondTraceId : value === firstTraceId;
+    next = { ...display, analysis: swap
+      ? { kind: 'model-disagreement', firstTraceId: secondTraceId, secondTraceId: firstTraceId }
+      : { ...display.analysis,
+        [setting === 'first-trace' ? 'firstTraceId' : 'secondTraceId']: value } };
   }
   return validateDisplay(next).length ? null : next;
 }

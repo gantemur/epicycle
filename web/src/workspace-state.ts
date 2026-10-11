@@ -1,5 +1,6 @@
 import { computationalUt1Domain, example1473Ut1, example1512Ut1,
   ptolemyDayToAssumedUt1, utcMillisToAssumedUt1 } from './comparison-time.ts';
+import { exploratoryApsisPolicy } from './copernicus.ts';
 import { modelCapabilities, type CapabilityRegistry } from './model-registry.ts';
 import { exampleDay } from './historical-examples.ts';
 import { isValidWorkspace, validateDisplay } from './workspace-validation.ts';
@@ -208,7 +209,7 @@ const comparisonTraces: readonly PlotTrace[] = [
   { id: 'trace-1', body: 'Mars', modelId: 'ptolemy',
     observableId: 'geocentric-tropical-longitude', policyId: 'mathematical-continuation' },
   { id: 'trace-2', body: 'Mars', modelId: 'copernicus',
-    observableId: 'geocentric-tropical-longitude', policyId: 'sn-local-uniform-1473-1523' },
+    observableId: 'geocentric-tropical-longitude', policyId: exploratoryApsisPolicy },
 ];
 const longitudePlot: DisplayDraft = {
   kind: 'time-series', collapsed: false, traces: comparisonTraces,

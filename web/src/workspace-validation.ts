@@ -1,6 +1,6 @@
 import { computationalUt1Domain } from './comparison-time.ts';
 import { modelCapabilities, type CapabilityRegistry, type ModelCapability } from './model-registry.ts';
-import { initialPlotTraceLimit, maxWorkspacePanels, workspaceSchemaVersion,
+import { initialPlotTraceLimit, maxPlotWindowDays, maxWorkspacePanels, workspaceSchemaVersion,
   type DisplayConfig, type PlotTrace, type TimeSeriesDisplay, type WorkspaceState } from './workspace-types.ts';
 
 export type IssueCode = 'invalid-schema' | 'invalid-clock' | 'invalid-display' | 'duplicate-id' |
@@ -85,7 +85,7 @@ export function validateDisplay(display: DisplayConfig,
   }
   const window = display.window;
   if (!Number.isFinite(window.startUt1) || !Number.isFinite(window.endUt1) ||
-      window.startUt1 >= window.endUt1 || window.endUt1 - window.startUt1 > 365.25 * 100) {
+      window.startUt1 >= window.endUt1 || window.endUt1 - window.startUt1 > maxPlotWindowDays) {
     issues.push(issue('invalid-window', display.id));
   }
   if (display.frameAlignment === 'nominal-historical-tropical' &&
