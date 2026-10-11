@@ -6,6 +6,8 @@ Phase 1; the returned JD must not be used as a modern ephemeris timestamp.
 """
 
 from math import floor, isfinite
+from dataclasses import dataclass
+from typing import Optional
 
 
 def _leap(year, calendar):
@@ -118,3 +120,51 @@ def local_jd_to_civil(jd, calendar="julian"):
 def bce_ce(year):
     """Display astronomical integer year in civil BCE/CE notation."""
     return f"{1 - year} BCE" if year <= 0 else f"{year} CE"
+
+
+@dataclass(frozen=True)
+class ScaledJulianDay:
+    """A JD value with a declared time scale and optional local mean meridian.
+
+    UT1 is a physical instant argument by convention. For ancient dates its
+    relation to TT is uncertain. LMT is local mean solar time, not a time scale
+    suitable for a modern ephemeris. TDB conversion is deliberately absent.
+    """
+
+    value: float
+    scale: str
+    meridian_east_degrees: Optional[float] = None
+    provenance: Optional[str] = None
+
+    def __post_init__(self):
+        if not isfinite(self.value) or self.scale not in ("UT1", "TT", "LMT"):
+            raise ValueError("finite JD and a supported time scale are required")
+        if self.scale == "LMT":
+            if self.meridian_east_degrees is None or not isfinite(self.meridian_east_degrees):
+                raise ValueError("LMT needs an explicit east longitude")
+        elif self.meridian_east_degrees is not None:
+            raise ValueError("only LMT has a local meridian")
+
+
+def ut1_to_local_mean(jd_ut1, meridian_east_degrees):
+    """Conditional mean-time relation: LMT = UT1 + east longitude / 360 day."""
+    if jd_ut1.scale != "UT1" or not isfinite(meridian_east_degrees) or not -180 <= meridian_east_degrees <= 180:
+        raise ValueError("UT1 JD and an east longitude in [-180, 180] are required")
+    return ScaledJulianDay(jd_ut1.value + meridian_east_degrees / 360,
+                           "LMT", meridian_east_degrees, jd_ut1.provenance)
+
+
+def ut1_to_tt(jd_ut1, delta_t_seconds, provenance):
+    """TT = UT1 + assumed ΔT; provenance must identify the assumption."""
+    if jd_ut1.scale != "UT1" or not isfinite(delta_t_seconds) or not provenance:
+        raise ValueError("UT1 JD, finite ΔT and its provenance are required")
+    return ScaledJulianDay(jd_ut1.value + delta_t_seconds / 86400, "TT", provenance=provenance)
+
+
+def ptolemy_days_at_ut1(jd_ut1, alexandria_meridian_east_degrees):
+    """Map an assumed UT1 instant to the historical Alexandria-noon count.
+
+    The meridian is mandatory: its historical choice must be recorded by the
+    caller. No TT, UTC, or TDB interpretation is applied to the model days.
+    """
+    return ut1_to_local_mean(jd_ut1, alexandria_meridian_east_degrees).value - EPOCH_LOCAL_JDN

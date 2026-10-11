@@ -1,0 +1,11 @@
+{
+  "source": "P2 Neugebauer, HAMA, printed p. 188, Table 15, rows 1-5; method explained pp. 186-187. Arguments K and alpha are printed at minute precision except row 1 seconds. A=111;10 is from p. 186.",
+  "apogee": "111;10",
+  "cases": [
+    {"row": 1, "mean_centrum": "243;3,25", "mean_anomaly": "140;23,5", "center": "10;37", "mean_equation": "41;8", "distance_difference": "5;24", "coefficient_sixtieths": "17;36", "distance_adjustment": "1;35", "epicycle": "42;43", "longitude": "47;33", "status": "reproduced"},
+    {"row": 2, "mean_centrum": "248;18", "mean_anomaly": "145;0", "center": "10;57", "mean_equation": "41;4", "distance_difference": "5;49", "coefficient_sixtieths": "12;26", "distance_adjustment": "1;12", "epicycle": "42;16", "longitude": "52;41", "status": "reproduced"},
+    {"row": 3, "mean_centrum": "253;32", "mean_anomaly": "149;37", "center": "11;12", "mean_equation": "40;41", "distance_difference": "6;17", "coefficient_sixtieths": "7;25", "distance_adjustment": "0;47", "epicycle": "41;28", "longitude": "57;22", "status": "rounding_sensitive"},
+    {"row": 4, "mean_centrum": "258;47", "mean_anomaly": "154;14", "center": "11;21", "mean_equation": "39;52", "distance_difference": "6;47", "coefficient_sixtieths": "2;24", "distance_adjustment": "0;16", "epicycle": "40;8", "longitude": "61;26", "status": "reproduced"},
+    {"row": 5, "mean_centrum": "264;1", "mean_anomaly": "158;51", "center": "11;25", "mean_equation": "38;29", "distance_difference": "5;29", "coefficient_sixtieths": "-3;3", "distance_adjustment": "-0;17", "epicycle": "38;12", "longitude": "64;48", "status": "reproduced"}
+  ]
+}

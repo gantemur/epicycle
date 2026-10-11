@@ -29,7 +29,9 @@ Vite's root is `web/`, its base is `/epicycle/`, its public directory is disable
 
 ## Comparison contract to settle before implementation
 
-Specify a common observable such as geocentric ecliptic longitude of date, distinguish historical computed/true position from modern apparent position (light time, aberration, nutation as applicable), and label any correction applied to either. Compare angular residuals on `[-180°, 180°)`; unwrap only for continuous time-series display. Latitude and distance appear only where the historical model and scale define them. Cite time-scale and frame assumptions alongside every reported residual.
+Phase 3A established the concrete [comparison convention](comparison-conventions.md): geocentric ecliptic longitude is the first observable; a sample carries physical-instant, frame, body, observer, and position-kind metadata; residuals require matched metadata and wrap on `[-180°, 180°)`. The Python chronology boundary explicitly converts an assumed UT1 JD to a sourced local mean meridian and, separately, to TT under a stated ΔT assumption. Neither the historical Egyptian day count nor a modern TDB is inferred from an unlabelled JD. Latitude and distance remain outside the first comparison.
+
+The first Copernican Mars result will depend on one source-verified, compatible Earth annual-motion version plus the Mars motion. Keep version, body, supported observable, epoch, frame, units, and source locators with both records; reject version mismatches when composition is implemented. The present data and evaluator add no placeholder Earth motion or general dependency framework. The source-reading scope is C1 III.1–26 and V.1–4, 15–19, 33–34, checked against C3 chs.3 and 5 as specified in the convention document.
 
 ## Open decisions
 
