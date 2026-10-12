@@ -1,0 +1,603 @@
+{
+  "generator": "scripts/generate_sun_cross_language.py; Python evaluators, not source transcriptions",
+  "ptolemy_argument_cases": [
+    {
+      "arguments": [
+        330.75,
+        65.5
+      ],
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          53.386493531008405,
+          -27.042371312625963
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 330.75,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 265.25,
+        "longitude": 333.13598192147236,
+        "solar_equation": 2.3859819214723643,
+        "earth_to_sun": 59.844862250207726
+      }
+    },
+    {
+      "arguments": [
+        65.5,
+        65.5
+      ],
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          25.918327666014946,
+          56.87257942978395
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 65.5,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 0.0,
+        "longitude": 65.5,
+        "solar_equation": 0.0,
+        "earth_to_sun": 62.5
+      }
+    },
+    {
+      "arguments": [
+        155.5,
+        65.5
+      ],
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          -53.56094314595199,
+          27.15649773656571
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 155.5,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 90.0,
+        "longitude": 153.11405596961117,
+        "solar_equation": -2.3859440303888277,
+        "earth_to_sun": 60.05206074732157
+      }
+    },
+    {
+      "arguments": [
+        245.5,
+        65.5
+      ],
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          -23.84486145273376,
+          -52.32277307540123
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 245.5,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 180.0,
+        "longitude": 245.5,
+        "solar_equation": 0.0,
+        "earth_to_sun": 57.50000000000001
+      }
+    },
+    {
+      "arguments": [
+        290.95,
+        65.5
+      ],
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          22.489919741355802,
+          -53.7586651833555
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 290.95,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 225.45,
+        "longitude": 292.701980082696,
+        "solar_equation": 1.7519800826960363,
+        "earth_to_sun": 58.273412224347595
+      }
+    },
+    {
+      "arguments": [
+        0,
+        0
+      ],
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          2.5,
+          0.0
+        ],
+        "sun": [
+          62.5,
+          0.0
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 0.0,
+        "apogee_longitude": 0.0,
+        "mean_anomaly": 0.0,
+        "longitude": 0.0,
+        "solar_equation": 0.0,
+        "earth_to_sun": 62.5
+      }
+    },
+    {
+      "arguments": [
+        359.9,
+        147.2
+      ],
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -2.1014165087392107,
+          1.3542705257068497
+        ],
+        "sun": [
+          57.89849210605805,
+          1.249550823752943
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 359.9,
+        "apogee_longitude": 147.2,
+        "mean_anomaly": 212.7,
+        "longitude": 1.2363513020593133,
+        "solar_equation": 1.3363513020593132,
+        "earth_to_sun": 57.91197428353146
+      }
+    }
+  ],
+  "ptolemy_date_cases": [
+    {
+      "days": 0,
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          53.386493531008405,
+          -27.042371312625963
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 330.75,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 265.25,
+        "longitude": 333.13598192147236,
+        "solar_equation": 2.3859819214723643,
+        "earth_to_sun": 59.844862250207726,
+        "days_since_epoch": 0
+      }
+    },
+    {
+      "days": 308227.8125,
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          22.495588995921615,
+          -53.7564943060329
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 290.9557970723836,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 225.45579707238358,
+        "longitude": 292.70794611702706,
+        "solar_equation": 1.7521490446434882,
+        "earth_to_sun": 58.27359783253456,
+        "days_since_epoch": 308227.8125
+      }
+    },
+    {
+      "days": -1.5,
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          52.6126509938723,
+          -28.383288127736154
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 329.27154708233667,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 263.77154708233667,
+        "longitude": 331.6541819915889,
+        "solar_equation": 2.3826349092522605,
+        "earth_to_sun": 59.78044905774044,
+        "days_since_epoch": -1.5
+      }
+    },
+    {
+      "days": 272419.5,
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          8.36940628814315,
+          -57.27534370737894
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 277.0197355890414,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 211.51973558904137,
+        "longitude": 278.3135532825785,
+        "solar_equation": 1.2938176935371075,
+        "earth_to_sun": 57.88360699208717,
+        "days_since_epoch": 272419.5
+      }
+    },
+    {
+      "days": 829532.5,
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          54.37938486106556,
+          29.744186091132583
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 27.246614366886206,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 321.7466143668862,
+        "longitude": 28.677574706869816,
+        "solar_equation": 1.4309603399836135,
+        "earth_to_sun": 61.98253063639635,
+        "days_since_epoch": 829532.5
+      }
+    },
+    {
+      "days": 1012700.5,
+      "result": {
+        "model_id": "ptolemy-almagest-sun-longitude",
+        "frame_id": "ptolemy-almagest-tropical",
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          1.0367331066405978,
+          2.274903177191358
+        ],
+        "sun": [
+          -53.73789360024641,
+          -22.214691942393213
+        ],
+        "eccentric_radius": 60.0,
+        "eccentricity": 2.5,
+        "mean_longitude": 204.0892960705096,
+        "apogee_longitude": 65.5,
+        "mean_anomaly": 138.5892960705096,
+        "longitude": 202.4596974802167,
+        "solar_equation": -1.6295985902928862,
+        "earth_to_sun": 58.14854896458582,
+        "days_since_epoch": 1012700.5
+      }
+    }
+  ],
+  "copernicus_date_cases": [
+    {
+      "days": 0,
+      "result": {
+        "model_id": "copernicus-1543-sun-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -177.29661395288542,
+          -323.61537460516536
+        ],
+        "mean_sun": [
+          -205.1476167171078,
+          -362.7091291578721
+        ],
+        "earth": [
+          -644.2475853504652,
+          9627.645780330888
+        ],
+        "earth_from_mean_sun": [
+          -439.09996863335743,
+          9990.35490948876
+        ],
+        "earth_to_sun": [
+          644.2475853504652,
+          -9627.645780330888
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 416.7054799485739,
+        "mean_sun_longitude": 272.51666666666665,
+        "earth_annual_direction": 92.51666666666665,
+        "mean_solar_apogee": 61.28333333333333,
+        "true_solar_apogee": 60.50757938036892,
+        "apsidal_equation": -0.7757539529644077,
+        "theta": 6.75,
+        "mean_solar_anomaly": 211.23333333333332,
+        "true_solar_anomaly": 212.00908728629773,
+        "solar_equation": 1.3116544058079853,
+        "solar_sidereal_longitude": 273.82832107247464,
+        "mean_precession": 5.533333333333333,
+        "precession_equation": -0.2723529244985563,
+        "true_precession": 5.260980408834777,
+        "solar_tropical_longitude": 279.0893014813094,
+        "days_since_epoch": 0,
+        "body": "Sun",
+        "underlying_model_id": "copernicus-1543-earth-longitude",
+        "longitude": 279.0893014813094
+      }
+    },
+    {
+      "days": 551892.25,
+      "result": {
+        "model_id": "copernicus-1543-sun-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -117.05369832738562,
+          -349.9420404979679
+        ],
+        "mean_sun": [
+          -113.90818304083908,
+          -302.0452166619128
+        ],
+        "earth": [
+          1274.394875408099,
+          9601.11663286379
+        ],
+        "earth_from_mean_sun": [
+          1388.3030584489381,
+          9903.161849525703
+        ],
+        "earth_to_sun": [
+          -1274.394875408099,
+          -9601.11663286379
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 322.8101409063958,
+        "mean_sun_longitude": 262.0198332518339,
+        "earth_annual_direction": 82.01983325183392,
+        "mean_solar_apogee": 71.50519355477338,
+        "true_solar_apogee": 69.33738945126676,
+        "apsidal_equation": -2.167804103506626,
+        "theta": 165.26256840230215,
+        "mean_solar_anomaly": 190.51463969706055,
+        "true_solar_anomaly": 192.68244380056717,
+        "solar_equation": 0.41926395662983396,
+        "solar_sidereal_longitude": 262.43909720846375,
+        "mean_precession": 26.61838467809276,
+        "precession_equation": 0.5740486153171426,
+        "true_precession": 27.192433293409902,
+        "solar_tropical_longitude": 289.63153050187367,
+        "days_since_epoch": 551892.25,
+        "body": "Sun",
+        "underlying_model_id": "copernicus-1543-earth-longitude",
+        "longitude": 289.63153050187367
+      }
+    },
+    {
+      "days": 556747.0,
+      "result": {
+        "model_id": "copernicus-1543-sun-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -116.50437278127086,
+          -350.1253077440171
+        ],
+        "mean_sun": [
+          -112.26930471795518,
+          -302.3125040351874
+        ],
+        "earth": [
+          -10039.821093549077,
+          -1503.8596234091942
+        ],
+        "earth_from_mean_sun": [
+          -9927.551788831122,
+          -1201.5471193740068
+        ],
+        "earth_to_sun": [
+          10039.821093549077,
+          1503.8596234091942
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 322.4860413690463,
+        "mean_sun_longitude": 6.901031525456347,
+        "earth_annual_direction": 186.90103152545635,
+        "mean_solar_apogee": 71.595110700575,
+        "true_solar_apogee": 69.62659548605319,
+        "apsidal_equation": -1.9685152145218012,
+        "theta": 166.65693277587522,
+        "mean_solar_anomaly": 295.30592082488135,
+        "true_solar_anomaly": 297.27443603940316,
+        "solar_equation": 1.6179374710730485,
+        "solar_sidereal_longitude": 8.518968996529402,
+        "mean_precession": 26.8038604716303,
+        "precession_equation": 0.5239532550051649,
+        "true_precession": 27.327813726635465,
+        "solar_tropical_longitude": 35.846782723164864,
+        "days_since_epoch": 556747.0,
+        "body": "Sun",
+        "underlying_model_id": "copernicus-1543-earth-longitude",
+        "longitude": 35.846782723164864
+      }
+    },
+    {
+      "days": 739915.0,
+      "result": {
+        "model_id": "copernicus-1543-sun-longitude",
+        "frame_id": "copernicus-1543-sidereal",
+        "origin": "true Sun",
+        "true_sun": [
+          0.0,
+          0.0
+        ],
+        "eccentric_center": [
+          -95.58103510510622,
+          -356.4060405327559
+        ],
+        "mean_sun": [
+          -56.611708179257526,
+          -328.38120228261926
+        ],
+        "earth": [
+          9941.106005511954,
+          -542.0176161846956
+        ],
+        "earth_from_mean_sun": [
+          9997.717713691212,
+          -213.63641390207636
+        ],
+        "earth_to_sun": [
+          -9941.106005511954,
+          542.0176161846956
+        ],
+        "annual_radius": 10000.0,
+        "eccentric_component": 369.0,
+        "small_eccentric_radius": 48.0,
+        "eccentricity": 333.2252984326849,
+        "mean_sun_longitude": 178.77586038399022,
+        "earth_annual_direction": 358.7758603839902,
+        "mean_solar_apogee": 74.98765280103163,
+        "true_solar_apogee": 80.218565654261,
+        "apsidal_equation": 5.23091285322937,
+        "theta": 219.2658072964232,
+        "mean_solar_anomaly": 103.78820758295859,
+        "true_solar_anomaly": 98.55729472972922,
+        "solar_equation": -1.8967006022220403,
+        "solar_sidereal_longitude": 176.87915978176818,
+        "mean_precession": 33.801796544689665,
+        "precession_equation": -1.1433736561665186,
+        "true_precession": 32.65842288852315,
+        "solar_tropical_longitude": 209.53758267029133,
+        "days_since_epoch": 739915.0,
+        "body": "Sun",
+        "underlying_model_id": "copernicus-1543-earth-longitude",
+        "longitude": 209.53758267029133
+      }
+    }
+  ]
+}

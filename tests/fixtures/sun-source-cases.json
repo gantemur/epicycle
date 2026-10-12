@@ -1,0 +1,33 @@
+{
+  "source": "P1 Toomer, Almagest III.2, III.6–8; P2 Neugebauer, HAMA I.B.1 p. 60",
+  "status": "transcribed historical arguments and rounded outputs; not evaluator-generated",
+  "table_rows": [
+    {"mean_anomaly_degrees": 6, "symmetric_anomaly_degrees": 354, "equation_magnitude_sexagesimal": "0;14", "equation_magnitude_degrees": 0.23333333333333334, "source": "P1 III.6 p. 167 row 1"},
+    {"mean_anomaly_degrees": 90, "symmetric_anomaly_degrees": 270, "equation_magnitude_sexagesimal": "2;23", "equation_magnitude_degrees": 2.3833333333333333, "source": "P1 III.6 p. 167 row 15"},
+    {"mean_anomaly_degrees": 93, "symmetric_anomaly_degrees": 267, "equation_magnitude_sexagesimal": "2;23", "equation_magnitude_degrees": 2.3833333333333333, "source": "P1 III.6 p. 167 row 16"},
+    {"mean_anomaly_degrees": 135, "symmetric_anomaly_degrees": 225, "equation_magnitude_sexagesimal": "1;44", "equation_magnitude_degrees": 1.7333333333333334, "source": "P1 III.6 p. 167 row 30"},
+    {"mean_anomaly_degrees": 174, "symmetric_anomaly_degrees": 186, "equation_magnitude_sexagesimal": "0;16", "equation_magnitude_degrees": 0.26666666666666666, "source": "P1 III.6 p. 167 row 43"},
+    {"mean_anomaly_degrees": 180, "symmetric_anomaly_degrees": 180, "equation_magnitude_sexagesimal": "0;00", "equation_magnitude_degrees": 0, "source": "P1 III.6 p. 167 row 45"}
+  ],
+  "epoch": {
+    "mean_longitude_sexagesimal": "Pisces 0;45",
+    "mean_anomaly_sexagesimal": "265;15",
+    "table_equation_sexagesimal": "+2;23",
+    "table_true_longitude_sexagesimal": "Pisces 3;8",
+    "source": "P1 III.2 p. 142; P1 III.7 p. 169; P2 p. 60"
+  },
+  "nabonassar_845_example": {
+    "date": "Nabonassar 845 Mechir 18/19, 19;30 equinoctial hours after Alexandria noon",
+    "elapsed_egyptian_years": 844,
+    "elapsed_months": 5,
+    "elapsed_days": 17,
+    "elapsed_hours": 19.5,
+    "mean_motion_sexagesimal": "320;12,20",
+    "mean_longitude_sexagesimal": "Capricorn 20;57",
+    "mean_anomaly_sexagesimal": "225;27",
+    "table_equation_sexagesimal": "+1;45",
+    "table_true_longitude_sexagesimal": "Capricorn 22;42",
+    "rounded_stellar_use_sexagesimal": "Capricorn 23",
+    "source": "P2 p. 60 reconstruction of P1 VII.3 p. 338"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "model_id": "ptolemy-almagest-sun-longitude",
+  "body": "Sun",
+  "model_status": "source-checked eccentric geometry; partial historical table validation",
+  "source_edition": "P1 G. J. Toomer, Ptolemy's Almagest; checked against P2 Neugebauer, HAMA I.B.1",
+  "epoch": {
+    "description": "Nabonassar year 1, Egyptian Thoth 1, Alexandria mean local noon",
+    "local_julian_day": 1448638,
+    "calendar": "Egyptian 365-day years; proleptic Julian correlation",
+    "time_scale": "historical local mean days, not UT1 or TT",
+    "source": "P1 III.7–8 pp. 168–169; P2 pp. 59–60",
+    "status": "explicit epoch; Julian correlation scholarly"
+  },
+  "frame": {
+    "id": "ptolemy-almagest-tropical",
+    "origin": "Earth",
+    "x_axis": "Ptolemy's tropical vernal equinox",
+    "orientation": "eastward ecliptic longitude, planar",
+    "source": "P1 III.4 pp. 153–156; III.8 p. 169; P2 pp. 55, 58–60"
+  },
+  "units": {
+    "length": "eccentric-circle radius units, R=60; not physical distance",
+    "time": "mean local day from Nabonassar epoch",
+    "angle": "degree"
+  },
+  "parameters": {
+    "eccentric_radius": {
+      "sexagesimal": "60",
+      "value": 60.0,
+      "unit": "historical radius units",
+      "status": "explicit normalization",
+      "source": "P1 III.4–5 pp. 155–160; P2 pp. 57–58"
+    },
+    "eccentricity": {
+      "sexagesimal": "2;30",
+      "value": 2.5,
+      "unit": "historical radius units",
+      "status": "historical geometric derivation",
+      "source": "P1 III.4 pp. 155–156; P2 p. 58"
+    },
+    "apogee_longitude": {
+      "sexagesimal": "Gemini 5;30",
+      "value": 65.5,
+      "unit": "tropical degree, fixed",
+      "status": "historical geometric derivation",
+      "source": "P1 III.4 pp. 155–156; P2 p. 58"
+    },
+    "mean_longitude_epoch": {
+      "sexagesimal": "Pisces 0;45",
+      "value": 330.75,
+      "unit": "tropical degree",
+      "status": "historical epoch derivation",
+      "source": "P1 III.2 p. 142; III.7 pp. 168–169; P2 p. 60"
+    },
+    "mean_anomaly_epoch": {
+      "sexagesimal": "265;15",
+      "value": 265.25,
+      "unit": "degree from solar apogee",
+      "status": "historical epoch derivation",
+      "source": "P1 III.2 p. 142; III.7 p. 169; P2 p. 60"
+    },
+    "tropical_year": {
+      "sexagesimal": "365;14,48",
+      "value": 365.24666666666667,
+      "unit": "mean day",
+      "status": "explicit adopted period",
+      "source": "P1 III.1 p. 140; P2 pp. 54–55"
+    },
+    "mean_longitude_daily_motion": {
+      "sexagesimal": "0;59,8,17,13,12,31",
+      "value": 0.9856352784422152,
+      "unit": "degree per mean day",
+      "status": "printed six-place value",
+      "source": "P1 III.1–2 pp. 140, 142–143; P2 p. 55"
+    }
+  },
+  "source_examples": "tests/fixtures/sun-source-cases.json",
+  "limitations": [
+    "Continuous exact eccentric geometry, not the complete original III.6 table interpolation.",
+    "The solar apogee is fixed in Ptolemy's tropical frame; no planetary apsidal motion applies.",
+    "No modern frame calibration, physical solar distance or arbitrary-date accuracy claim."
+  ]
+}
