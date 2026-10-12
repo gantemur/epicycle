@@ -5,7 +5,7 @@ import math
 from pathlib import Path
 import unittest
 
-from epicycle_atlas.chronology import EPOCH_LOCAL_JDN, civil_to_local_jd, egyptian_to_days
+from epicycle_atlas.chronology import EPOCH_LOCAL_JDN, civil_to_local_jd, days_to_local_jd, egyptian_to_days
 from epicycle_atlas.sun_almagest import (
     analytic_solar_equation, evaluate_sun, evaluate_sun_from_arguments,
     parameters,
@@ -25,6 +25,13 @@ def signed_difference(first, second):
 
 
 class SunSourceChecks(unittest.TestCase):
+    def test_solar_record_uses_shared_nabonassar_epoch(self):
+        solar_record = json.loads((Path(__file__).parents[1] / "data" /
+                                   "sun-almagest-v1.json").read_text())
+        self.assertEqual(solar_record["epoch"]["local_julian_day"], EPOCH_LOCAL_JDN)
+        self.assertEqual(egyptian_to_days(1, 1, 1), 0)
+        self.assertEqual(days_to_local_jd(0), solar_record["epoch"]["local_julian_day"])
+
     def test_source_record_notation(self):
         expected = {
             "eccentric_radius": 60,

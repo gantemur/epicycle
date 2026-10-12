@@ -242,7 +242,7 @@ h2 {
   stroke-width: 1.6;
   opacity: .65;
 }
-.equant-ray {
+.equant-ray, .solar-mean-ray {
   stroke: #9bc4c1;
   stroke-width: 2;
   stroke-dasharray: 8 7;
@@ -1572,7 +1572,7 @@ footer span {
 [data-geometry-frame].hide-circles .guide-ring, [data-geometry-frame].hide-circles .deferent-circle, [data-geometry-frame].hide-circles .epicycle-circle, [data-geometry-frame].hide-circles .copernicus-principal-circle {
   opacity: 0;
 }
-[data-geometry-frame].hide-lines .axis, [data-geometry-frame].hide-lines .apsidal-line, [data-geometry-frame].hide-lines .equant-ray, [data-geometry-frame].hide-lines .epicycle-spoke, [data-geometry-frame].hide-lines .copernicus-earth-spoke, [data-geometry-frame].hide-lines .sun-earth-ray, [data-geometry-frame].hide-lines .sun-mars-ray {
+[data-geometry-frame].hide-lines .axis, [data-geometry-frame].hide-lines .apsidal-line, [data-geometry-frame].hide-lines .equant-ray, [data-geometry-frame].hide-lines .solar-mean-ray, [data-geometry-frame].hide-lines .epicycle-spoke, [data-geometry-frame].hide-lines .copernicus-earth-spoke, [data-geometry-frame].hide-lines .sun-earth-ray, [data-geometry-frame].hide-lines .sun-mars-ray {
   opacity: 0;
 }
 [data-geometry-frame].hide-labels text {

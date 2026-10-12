@@ -1,4 +1,4 @@
-import { correspondingModelForBody, defaultPolicyForModel, historicalBodies,
+import { correspondingModelForBody, defaultPolicyForModel, firstModelForBody, historicalBodies,
   modelCapabilities, type HistoricalBody, type ModelId } from './model-registry.ts';
 import { validateDisplay } from './workspace-validation.ts';
 import type { DisplayConfig, GeometryDisplay, PlotTrace, TimeSeriesDisplay } from './workspace-types.ts';
@@ -62,8 +62,12 @@ export function addTrace(display: TimeSeriesDisplay): TimeSeriesDisplay | null {
   let number = 1;
   const ids = new Set(display.traces.map(trace => trace.id));
   while (ids.has(`trace-${number}`)) number += 1;
-  const trace: PlotTrace = { id: `trace-${number}`, body: 'Mars', modelId: 'ptolemy',
-    observableId: 'geocentric-tropical-longitude', policyId: 'mathematical-continuation' };
+  const body: HistoricalBody = display.traces.length > 0 &&
+    display.traces.every(trace => trace.body === 'Sun') ? 'Sun' : 'Mars';
+  const modelId = firstModelForBody(body);
+  const trace: PlotTrace = { id: `trace-${number}`, body, modelId,
+    observableId: 'geocentric-tropical-longitude',
+    policyId: defaultPolicyForModel(modelId, 'plot') };
   return { ...display, traces: [...display.traces, trace] };
 }
 

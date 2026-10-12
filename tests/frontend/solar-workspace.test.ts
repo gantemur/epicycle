@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { modelDaysAtUt1, frauenburgCivilToUt1 } from '../../web/src/comparison-time.ts';
 import { evaluateCopernicusSunDays } from '../../web/src/copernicus-sun.ts';
@@ -7,7 +8,7 @@ import { modelCapabilities, modelIdsForBody } from '../../web/src/model-registry
 import { copernicusSunTrail, ptolemySunTrail, renderCopernicusSunDiagram,
   renderPtolemySunDiagram } from '../../web/src/sun-diagram.ts';
 import { evaluatePtolemySunDays } from '../../web/src/sun-almagest.ts';
-import { changeGeometry, changeTrace } from '../../web/src/workspace-panel-actions.ts';
+import { addTrace, changeGeometry, changeTrace, removeTrace } from '../../web/src/workspace-panel-actions.ts';
 import { modelDisagreementAt, sampleWorkspacePlot, traceLongitudeAt,
   workspacePlotCacheKey } from '../../web/src/workspace-plot.ts';
 import { renderWorkspaceSources } from '../../web/src/workspace-sources.ts';
@@ -51,6 +52,47 @@ test('body changes choose a compatible solar model and leave other panels alone'
   assert.equal(changedTrace.traces[1].body, 'Sun');
   assert.equal(changedTrace.traces[1].policyId, 'mathematical-continuation');
   assert.equal(original.displays[0], plot);
+});
+
+test('Add trace follows an all-solar or all-Mars plot and keeps independent valid traces', () => {
+  const solar = applyWorkspacePreset(emptyWorkspace(), 'solar-comparison').displays[0] as TimeSeriesDisplay;
+  const withSolar = addTrace(solar)!;
+  const solarTrace = withSolar.traces[2];
+  assert.deepEqual([solarTrace.body, solarTrace.modelId, solarTrace.policyId],
+    ['Sun', 'ptolemy-sun', 'mathematical-continuation']);
+  assert.equal(solarTrace.id, 'trace-3');
+  assert.equal(solar.traces.length, 2);
+  assert.notStrictEqual(withSolar.traces, solar.traces);
+  assert.notStrictEqual(solarTrace, solar.traces[0]);
+  assert.deepEqual(validateDisplay(withSolar), []);
+
+  const changedBody = changeTrace(withSolar, solarTrace.id, 'body', 'Mars')!;
+  assert.equal(changedBody.traces[2].modelId, 'ptolemy');
+  assert.equal(withSolar.traces[2].body, 'Sun');
+  assert.deepEqual(validateDisplay(changedBody), []);
+  const mixedAddition = addTrace(changedBody)!;
+  assert.equal(mixedAddition.traces[3].body, 'Mars');
+  assert.equal(new Set(mixedAddition.traces.map(trace => trace.id)).size, 4);
+  assert.equal(addTrace(mixedAddition), null);
+
+  const mars = applyWorkspacePreset(emptyWorkspace(), 'compare-longitudes').displays[0] as TimeSeriesDisplay;
+  const withMars = addTrace(mars)!;
+  assert.deepEqual([withMars.traces[2].body, withMars.traces[2].modelId], ['Mars', 'ptolemy']);
+  assert.deepEqual(validateDisplay(withMars), []);
+  const readded = addTrace(removeTrace(withMars, 'trace-1')!)!;
+  assert.equal(new Set(readded.traces.map(trace => trace.id)).size, readded.traces.length);
+  assert.deepEqual(validateDisplay(readded), []);
+});
+
+test('shared trail wording is body-neutral in both languages', () => {
+  assert.equal(message('en', 'trail'), 'Show trail');
+  assert.equal(message('mn', 'trail'), 'Мөрийг харуулах');
+  for (const language of ['en', 'mn'] as const) {
+    const help = message(language, 'trailHelp');
+    assert.ok(help.length > 0);
+    assert.ok(message(language, 'trailLengthHelp').length > 0);
+    assert.doesNotMatch(`${message(language, 'trail')} ${help}`, /Mars|Ангараг/);
+  }
 });
 
 test('solar comparison uses one clock, supports two solar traces and rejects mixed-body residuals', () => {
@@ -109,6 +151,11 @@ test('solar diagrams and trails retain original lengths and moving viewing origi
   assert.match(original, /deferent-circle/);
   assert.match(original, /sight-line/);
   assert.match(original, /solar-trail/);
+  assert.match(original, /<line class="solar-mean-ray"/);
+  assert.doesNotMatch(original, /class="equant-ray"/);
+  const stylesheet = readFileSync(new URL('../../web/src/style.css', import.meta.url), 'utf8');
+  assert.match(stylesheet, /\.equant-ray, \.solar-mean-ray\s*\{/);
+  assert.match(stylesheet, /\[data-geometry-frame\]\.hide-lines \.solar-mean-ray[^{}]*\{\s*opacity: 0;/);
   const copernicus = evaluateCopernicusSunDays(days.copernicus);
   const earthTrail = copernicusSunTrail(days.copernicus, 180, 'true-sun');
   const sunTrail = copernicusSunTrail(days.copernicus, 180, 'earth');

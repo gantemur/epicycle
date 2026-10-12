@@ -65,7 +65,7 @@ export function renderPtolemySunDiagram(result: PtolemySunResult, trail: readonl
     ${circle(D, result.eccentricRadius, ptolemyScale, 'deferent-circle')}
     ${line(O, D, ptolemyScale, 'apsidal-line')}
     ${line(D, P, ptolemyScale, 'epicycle-spoke')}
-    ${line(O, meanDirection, ptolemyScale, 'equant-ray')}
+    ${line(O, meanDirection, ptolemyScale, 'solar-mean-ray')}
     ${trailPath(trail, ptolemyScale)}
     ${line(O, P, ptolemyScale, 'sight-line')}
     ${dot(O, ptolemyScale, 'O', 'earth-dot', -58, 55, language, 'earthDescription')}

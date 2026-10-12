@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import fixtures from '../fixtures/sun-cross-language.json' with { type: 'json' };
 import source from '../fixtures/sun-source-cases.json' with { type: 'json' };
+import { egyptianToDays, epochLocalJdn } from '../../web/src/chronology.ts';
 import { evaluateEarthDays } from '../../web/src/copernicus.ts';
 import { evaluateCopernicusSunDays } from '../../web/src/copernicus-sun.ts';
 import { angularDifference } from '../../web/src/model.ts';
@@ -44,6 +45,11 @@ test('Ptolemaic Sun shares its source record and agrees with independent Python 
     numericFields += compareResult(evaluatePtolemySunDays(item.days), item.result);
   }
   assert.ok(numericFields >= 150);
+});
+
+test('solar record uses the shared Ptolemaic Nabonassar epoch', () => {
+  assert.equal(sunRecord.epoch.local_julian_day, epochLocalJdn);
+  assert.equal(egyptianToDays({ year: 1, month: 1, day: 1, fraction: 0 }), 0);
 });
 
 test('original source cases, equation sign and eccentric invariants stay separate from the fixture', () => {
