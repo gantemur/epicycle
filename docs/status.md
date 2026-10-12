@@ -1,14 +1,14 @@
-# Status — Phase 5A development, Phase 4C deployed
+# Status — Phase 5A deployed
 
-## Phase 5A development branch
+## Current public release — Phase 5A
 
-`codex/phase-5a-solar-models` adds Ptolemy's *Almagest* III solar eccentric and exposes Copernicus's accepted 1543 Earth construction as an independent geocentric Sun prediction. The two Sun models have distinct identities from their Mars counterparts. The shared workspace now supports solar geometry, Sun and Mars longitude traces, same-body solar model disagreement under the declared nominal historical tropical-frame alignment, and a Solar comparison preset. The public `main` site remains Phase 4C until scientific and visual review authorizes release.
+The [public `main` site](https://gantemur.github.io/epicycle/) includes Ptolemy's *Almagest* III eccentric Sun and Copernicus's 1543 Earth/Sun double-eccentric construction as independently selectable geocentric Sun predictions. Their model identities are distinct from the Mars models. One clock drives independently configurable solar and Martian geometry and longitude panels, solar longitude overlays, signed same-body historical model disagreement under the declared nominal tropical-frame alignment, and the Solar comparison preset. The reviewed `codex/phase-5a-solar-models` branch remains available for reference.
 
 The Ptolemaic model uses the printed six-place mean daily motion, a fixed tropical apogee, and the Alexandria-noon Nabonassar epoch. Its exact geometry is checked against selected original solar-anomaly table rows and a source-worked off-epoch position, but the original complete table-interpolation algorithm is not implemented. Copernican solar calculations reuse the existing Earth model record and evaluator without a Mars-apogee policy. Solar longitudes at broad dates are mathematical continuations of historical rates. Neither historical equinox is calibrated to a modern frame. See [solar source audit](sun-almagest.md) and the [model census](epicycle_model_census.md).
 
-## Current public release
+## Phase 4C release record
 
-The [public `main` site](https://gantemur.github.io/epicycle/) includes the reviewed Phase 4C per-panel true-Sun-centred view of the Copernican Earth–Mars geometry. The same evaluator, parameters, policy and global clock serve both viewing centres. The Sun view translates each point by the true Sun, keeps the geocentric sight line and longitude angle at Earth, and samples its Mars trail against the moving Sun at every date. Ptolemaic geometry remains Earth-centred. The `codex/phase-4c-sun-centred` branch is retained for reference. Phase 4C release checks passed: 30 Python tests, 62 frontend tests, TypeScript typecheck, production build and `git diff --check`. See the [Copernican specification](copernicus-earth-mars.md) and [workspace architecture](workspace-architecture.md) for the contract.
+Phase 4C added the reviewed per-panel true-Sun-centred view of the Copernican Earth–Mars geometry. The same evaluator, parameters, policy and global clock serve both viewing centres. The Sun view translates each point by the true Sun, keeps the geocentric sight line and longitude angle at Earth, and samples its Mars trail against the moving Sun at every date. Ptolemaic geometry remains Earth-centred. The `codex/phase-4c-sun-centred` branch is retained for reference. Phase 4C release checks passed: 30 Python tests, 62 frontend tests, TypeScript typecheck, production build and `git diff --check`. See the [Copernican specification](copernicus-earth-mars.md) and [workspace architecture](workspace-architecture.md) for the contract.
 
 ## Phase 4B release record
 

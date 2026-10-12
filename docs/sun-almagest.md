@@ -124,6 +124,6 @@ tabular interpolation are separate numerical procedures. Tests should compare
 the first with the second at arcminute scale and should report their signed
 differences. This implementation does not claim complete reproduction of
 III.6 interpolation, modern frame alignment, or calibrated historical accuracy
-at arbitrary dates. A future Ptolemy–Copernicus longitude disagreement must
-declare the project's nominal historical tropical-frame alignment; the two
-authors' equinoxes are not thereby calibrated to one modern frame.
+at arbitrary dates. The displayed Ptolemy–Copernicus longitude disagreement
+requires the project's declared nominal historical tropical-frame alignment;
+the two authors' equinoxes are not thereby calibrated to one modern frame.
