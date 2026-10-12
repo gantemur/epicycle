@@ -159,6 +159,10 @@ class PtolemaicOuterPlanetTests(unittest.TestCase):
 
     def test_selected_original_anomaly_table_centre_rows(self):
         # XI.11 centre columns are rounded table arithmetic, not exact circles.
+        documented_table_minus_circle_minutes = {
+            "jupiter": {90: 0.423, 96: 0.641},
+            "saturn": {90: 0.530, 96: -0.651},
+        }
         for body, (_, evaluate_arguments) in BODIES.items():
             apogee = record(body)["parameters"]["apogee_longitude_epoch"]["value"]
             for row in source_cases(body)["anomaly_table_rows"]:
@@ -167,6 +171,13 @@ class PtolemaicOuterPlanetTests(unittest.TestCase):
                     result = evaluate_arguments(apogee + row["mean_centrum"], 0, apogee)
                     table_correction = -expected if row["mean_centrum"] <= 180 else expected
                     self.assertLess(abs(result["equation_of_center"] - table_correction) * 60, 1)
+                    if row["mean_centrum"] in documented_table_minus_circle_minutes[body]:
+                        measured = (expected - abs(result["equation_of_center"])) * 60
+                        self.assertAlmostEqual(
+                            measured,
+                            documented_table_minus_circle_minutes[body][row["mean_centrum"]],
+                            places=3,
+                        )
 
     def test_saturn_epoch_variants_remain_unused(self):
         saturn = record("saturn")
