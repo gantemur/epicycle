@@ -9,6 +9,8 @@ from pathlib import Path
 import json
 import math
 
+from .superior_geometry import evaluate_superior_geometry
+
 
 DATA_PATH = Path(__file__).resolve().parents[2] / "data" / "mars-almagest-v1.json"
 
@@ -33,61 +35,17 @@ def signed_difference(a, b):
     return (a - b + 180.0) % 360.0 - 180.0
 
 
-def _polar(length, degrees):
-    angle = math.radians(degrees)
-    return (length * math.cos(angle), length * math.sin(angle))
-
-
-def _angle(point):
-    return normalize(math.degrees(math.atan2(point[1], point[0])))
-
-
 def evaluate_mars_from_arguments(mean_longitude, mean_anomaly, apogee_longitude):
     """Evaluate Cartesian geometry for supplied historical angular arguments.
 
     This entry point permits direct checks of Almagest worked cases without
     imposing a possibly different time or epoch convention on their arguments.
     """
-    R = _value("deferent_radius")
-    e = _value("half_eccentricity")
-    r = _value("epicycle_radius")
-    theta = normalize(mean_longitude)
-    alpha = normalize(mean_anomaly)
-    apsis = normalize(apogee_longitude)
-    kappa = normalize(theta - apsis)
-
-    earth = (0.0, 0.0)
-    deferent_center = _polar(e, apsis)
-    equant = _polar(2.0 * e, apsis)
-    kappa_rad = math.radians(kappa)
-    ray_length = -e * math.cos(kappa_rad) + math.sqrt(R * R - e * e * math.sin(kappa_rad) ** 2)
-    ray = _polar(ray_length, theta)
-    epicycle_center = (equant[0] + ray[0], equant[1] + ray[1])
-    epicycle_offset = _polar(r, theta + alpha)
-    planet = (epicycle_center[0] + epicycle_offset[0], epicycle_center[1] + epicycle_offset[1])
-    center_longitude = _angle(epicycle_center)
-    longitude = _angle(planet)
-
-    return {
-        "earth": earth,
-        "deferent_center": deferent_center,
-        "equant": equant,
-        "deferent_radius": R,
-        "epicycle_radius": r,
-        "epicycle_center": epicycle_center,
-        "planet": planet,
-        "mean_longitude": theta,
-        "mean_anomaly": alpha,
-        "apogee_longitude": apsis,
-        "mean_centrum": kappa,
-        "epicycle_center_longitude": center_longitude,
-        "equation_of_center": signed_difference(center_longitude, theta),
-        "epicycle_equation": signed_difference(longitude, center_longitude),
-        "longitude": longitude,
-        "equant_to_epicycle_center": ray_length,
-        "earth_to_epicycle_center": math.hypot(*epicycle_center),
-        "earth_to_planet": math.hypot(*planet),
-    }
+    return evaluate_superior_geometry(
+        _value("deferent_radius"), _value("half_eccentricity"),
+        _value("epicycle_radius"), mean_longitude, mean_anomaly,
+        apogee_longitude,
+    )
 
 
 def evaluate_mars(days_since_epoch):

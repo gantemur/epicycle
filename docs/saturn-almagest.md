@@ -18,7 +18,7 @@ P1 denotes G. J. Toomer's translation of the *Almagest*; P2 denotes O. Neugebaue
 | Daily mean anomaly `nα` | `0;57,7,43,41,43,40°` | 0.952146738254…°/day | P1 IX.3 p.424; IX.4 p.429 |
 | Apogee motion | `1° per 100 Egyptian years` | `1/36500°`/day | P1 IX.5–6 pp.443–445 |
 
-The selected epoch longitude is deliberately **296;43°**. P1 IX.4 p.427 prints it in the table and P1 XI.8 p.544 note says the manuscript tradition supports it. Ptolemy's stated back-computation instead yields `296;44°`; a more accurate calculation gives `296;45°`, used in the later *Handy Tables* (P2 p.182 n.15). Those are recorded as unused alternatives, not averaged or silently substituted. An epoch evaluation with the two alternatives shifts the geometry and geocentric longitude by nearly, but not identically, 1′ and 2′: the equant direction changes while the printed anomaly and apogee remain fixed. This matters for later variant comparisons.
+The selected epoch longitude is deliberately **296;43°**. P1 IX.4 p.427 prints it in the table and P1 XI.8 p.544 note says the manuscript tradition supports it. Ptolemy's stated back-computation instead yields `296;44°`; a more accurate calculation gives `296;45°`, used in the later *Handy Tables* (P2 p.182 n.15). Those are recorded as unused alternatives, not averaged or silently substituted. The exact circle's selected epoch longitude is `294.229375°`; substituting `296;44` or `296;45` for the mean longitude alone would shift it by `+0.967′` or `+1.934′`. The equant direction changes while the printed anomaly and apogee remain fixed. This matters for later variant comparisons.
 
 ## Solar coupling, epoch and frame
 
@@ -42,5 +42,7 @@ P1 IX.6 pp.443–444 specifies the epicycle diameter rotating with equant mean l
 ## Source diagnostics and limits
 
 The literal cases in [`saturn-source-cases.json`](../tests/fixtures/saturn-source-cases.json) include IX.4 epoch and mean-motion entries, a XI.7 ancient-observation derivation, and selected XI.11 p.549 correction rows. P1 XI.7 pp.541–543 gives apogee Scorpio `19;20`, mean centrum `283;33`, and epicyclic anomaly `183;17` for the old observation at approximately Virgo `9;30`. Toomer's p.543 note gets `183;16` from more accurate arithmetic. The observation helped infer the anomaly motion, so it is a source diagnostic, **not** an independent predictive test. The printed XI.11 rows independently check the correction-table quantities but do not imply that the complete historical interpolation algorithm is implemented.
+
+At those printed rounded arguments the exact circle gives Virgo `9;28.843`, **1.157′ below** the source-derived position. For XI.11 mean-centrum `90°`, the printed centre correction is `6;31°` and exact geometry gives `6;30.530°`, a `0.530′` difference. At `96°`, the table has `6;30°` and exact geometry gives `6;30.651°`, a `0.651′` difference. These discrepancies are between rounded source arithmetic and exact circles, not evidence of modern observational accuracy.
 
 Only geocentric tropical longitude is implemented. There is no latitude, modern apparent-place correction, physical distance, calibrated frame, or demonstrated arbitrary-date observational accuracy. Distant dates continue printed historical rates mathematically. Validation remains partial even when source and cross-language tests pass.
