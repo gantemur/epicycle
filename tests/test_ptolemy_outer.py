@@ -32,6 +32,22 @@ def source_cases(body):
                        f"{body}-source-cases.json").read_text())
 
 
+def assert_fixture_close(test_case, actual, expected):
+    """Compare generated fixture structure exactly and floats with portability margin."""
+    if isinstance(actual, dict):
+        test_case.assertEqual(actual.keys(), expected.keys())
+        for key in actual:
+            assert_fixture_close(test_case, actual[key], expected[key])
+    elif isinstance(actual, (list, tuple)):
+        test_case.assertEqual(len(actual), len(expected))
+        for first, second in zip(actual, expected):
+            assert_fixture_close(test_case, first, second)
+    elif isinstance(actual, float):
+        test_case.assertLessEqual(abs(actual - expected), 3e-8)
+    else:
+        test_case.assertEqual(actual, expected)
+
+
 def sexagesimal(text):
     """Parse source sexagesimal notation exactly, including a zodiac sign."""
     sign = -1 if text.startswith("-") else 1
@@ -165,6 +181,18 @@ class PtolemaicOuterPlanetTests(unittest.TestCase):
         two_minutes = evaluate_saturn_from_arguments(296 + 45 / 60, anomaly, apogee)["longitude"]
         self.assertAlmostEqual(signed_difference(one_minute, base) * 60, 0.9670082117, places=7)
         self.assertAlmostEqual(signed_difference(two_minutes, base) * 60, 1.9340438681, places=7)
+
+    def test_generated_cross_language_fixtures_follow_python(self):
+        for body, (evaluate_days, evaluate_arguments) in BODIES.items():
+            fixture = json.loads((ROOT / "tests" / "fixtures" /
+                                  f"{body}-cross-language.json").read_text())
+            for case in fixture["argument_cases"]:
+                with self.subTest(body=body, arguments=case["arguments"]):
+                    assert_fixture_close(self, evaluate_arguments(*case["arguments"]),
+                                         case["result"])
+            for case in fixture["date_cases"]:
+                with self.subTest(body=body, days=case["days"]):
+                    assert_fixture_close(self, evaluate_days(case["days"]), case["result"])
 
     def test_shared_kernel_matches_mars_public_wrapper(self):
         # Existing Mars source and generated fixtures also guard this refactor.

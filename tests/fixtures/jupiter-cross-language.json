@@ -1,0 +1,898 @@
+{
+  "generator": "scripts/generate_outer_cross_language.py; Python geometry, not original table transcription",
+  "body": "jupiter",
+  "argument_cases": [
+    {
+      "arguments": [
+        0,
+        0,
+        0
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          2.75,
+          0.0
+        ],
+        "equant": [
+          5.5,
+          0.0
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          62.75,
+          0.0
+        ],
+        "planet": [
+          74.25,
+          0.0
+        ],
+        "mean_longitude": 0.0,
+        "mean_anomaly": 0.0,
+        "apogee_longitude": 0.0,
+        "mean_centrum": 0.0,
+        "epicycle_center_longitude": 0.0,
+        "equation_of_center": 0.0,
+        "epicycle_equation": 0.0,
+        "longitude": 0.0,
+        "equant_to_epicycle_center": 57.25,
+        "earth_to_epicycle_center": 62.75,
+        "earth_to_planet": 74.25,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical"
+      }
+    },
+    {
+      "arguments": [
+        359.9,
+        359.9,
+        147.2
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.311558159613132,
+          1.4896975782775346
+        ],
+        "equant": [
+          -4.623116319226264,
+          2.979395156555069
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          57.67254739370512,
+          2.870668602004449
+        ],
+        "planet": [
+          69.17247733176971,
+          2.830526110729373
+        ],
+        "mean_longitude": 359.9,
+        "mean_anomaly": 359.9,
+        "apogee_longitude": 147.2,
+        "mean_centrum": 212.7,
+        "epicycle_center_longitude": 2.849563077823801,
+        "equation_of_center": 2.949563077823825,
+        "epicycle_equation": -0.506336714299124,
+        "longitude": 2.343226363524681,
+        "equant_to_epicycle_center": 62.29575859477354,
+        "earth_to_epicycle_center": 57.743947397988805,
+        "earth_to_planet": 69.23036543510163,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical"
+      }
+    },
+    {
+      "arguments": [
+        152.15,
+        0,
+        152.15
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.431477508130641,
+          1.2846856142476293
+        ],
+        "equant": [
+          -4.862955016261282,
+          2.5693712284952586
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          -55.481895867344626,
+          29.314189925104998
+        ],
+        "planet": [
+          -65.6498927195273,
+          34.686511584685995
+        ],
+        "mean_longitude": 152.15,
+        "mean_anomaly": 0.0,
+        "apogee_longitude": 152.15,
+        "mean_centrum": 0.0,
+        "epicycle_center_longitude": 152.15,
+        "equation_of_center": 0.0,
+        "epicycle_equation": 0.0,
+        "longitude": 152.15,
+        "equant_to_epicycle_center": 57.25,
+        "earth_to_epicycle_center": 62.75000000000001,
+        "earth_to_planet": 74.25,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical"
+      }
+    },
+    {
+      "arguments": [
+        242.15,
+        90,
+        152.15
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.431477508130641,
+          1.2846856142476293
+        ],
+        "equant": [
+          -4.862955016261282,
+          2.5693712284952586
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          -32.86300313737917,
+          -50.425296476992656
+        ],
+        "planet": [
+          -22.695006285196484,
+          -55.797618136573654
+        ],
+        "mean_longitude": 242.15,
+        "mean_anomaly": 90.0,
+        "apogee_longitude": 152.15,
+        "mean_centrum": 90.0,
+        "epicycle_center_longitude": 236.90704477270765,
+        "equation_of_center": -5.242955227292356,
+        "epicycle_equation": 10.959516168424017,
+        "longitude": 247.86656094113167,
+        "equant_to_epicycle_center": 59.93694603497913,
+        "earth_to_epicycle_center": 60.18876556301849,
+        "earth_to_planet": 60.23651301328789,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical"
+      }
+    },
+    {
+      "arguments": [
+        248.15,
+        180,
+        152.15
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.431477508130641,
+          1.2846856142476293
+        ],
+        "equant": [
+          -4.862955016261282,
+          2.5693712284952586
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          -27.277405079651825,
+          -53.329230955713946
+        ],
+        "planet": [
+          -22.997358645706292,
+          -42.65537492692706
+        ],
+        "mean_longitude": 248.15,
+        "mean_anomaly": 180.0,
+        "apogee_longitude": 152.15,
+        "mean_centrum": 96.0,
+        "epicycle_center_longitude": 242.91067883004823,
+        "equation_of_center": -5.239321169951779,
+        "epicycle_equation": -1.241707038489693,
+        "longitude": 241.66897179155853,
+        "equant_to_epicycle_center": 60.2250886075953,
+        "earth_to_epicycle_center": 59.900448263825986,
+        "earth_to_planet": 48.459875307680676,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical"
+      }
+    },
+    {
+      "arguments": [
+        332.15,
+        270,
+        152.15
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.431477508130641,
+          1.2846856142476293
+        ],
+        "equant": [
+          -4.862955016261282,
+          2.5693712284952586
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          50.618940851083345,
+          -26.74481869660974
+        ],
+        "planet": [
+          45.24661919150234,
+          -36.912815548792416
+        ],
+        "mean_longitude": 332.15,
+        "mean_anomaly": 270.0,
+        "apogee_longitude": 152.15,
+        "mean_centrum": 179.99999999999997,
+        "epicycle_center_longitude": 332.15,
+        "equation_of_center": 0.0,
+        "epicycle_equation": -11.358039750299781,
+        "longitude": 320.7919602497002,
+        "equant_to_epicycle_center": 62.75,
+        "earth_to_epicycle_center": 57.25000000000001,
+        "earth_to_planet": 58.393599820528266,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical"
+      }
+    },
+    {
+      "arguments": [
+        422.15,
+        359,
+        152.15
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.431477508130641,
+          1.2846856142476293
+        ],
+        "equant": [
+          -4.862955016261282,
+          2.5693712284952586
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          23.137093104856618,
+          55.56403893398316
+        ],
+        "planet": [
+          28.686052547544755,
+          65.63672720988062
+        ],
+        "mean_longitude": 62.14999999999998,
+        "mean_anomaly": 359.0,
+        "apogee_longitude": 152.15,
+        "mean_centrum": 270.0,
+        "epicycle_center_longitude": 67.39295522729233,
+        "equation_of_center": 5.242955227292356,
+        "epicycle_equation": -1.0003373544794556,
+        "longitude": 66.39261787281288,
+        "equant_to_epicycle_center": 59.93694603497913,
+        "earth_to_epicycle_center": 60.18876556301849,
+        "earth_to_planet": 71.63148448541871,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical"
+      }
+    },
+    {
+      "arguments": [
+        152.14000000000001,
+        179.99,
+        152.15
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.431477508130641,
+          1.2846856142476293
+        ],
+        "equant": [
+          -4.862955016261282,
+          2.5693712284952586
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          -55.477227280289625,
+          29.323024208206704
+        ],
+        "planet": [
+          -45.31110634156737,
+          23.947153575530276
+        ],
+        "mean_longitude": 152.14000000000001,
+        "mean_anomaly": 179.99,
+        "apogee_longitude": 152.15,
+        "mean_centrum": 359.99,
+        "epicycle_center_longitude": 152.14087649402,
+        "equation_of_center": 0.0008764940199910143,
+        "epicycle_equation": 0.002440579121724795,
+        "longitude": 152.14331707314173,
+        "equant_to_epicycle_center": 57.25000003996517,
+        "earth_to_epicycle_center": 62.749999963537746,
+        "earth_to_planet": 51.250000217237655,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical"
+      }
+    },
+    {
+      "arguments": [
+        366.01,
+        45.2,
+        -5.0
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          2.7395354197523,
+          -0.23967829255606038
+        ],
+        "equant": [
+          5.4790708395046,
+          -0.47935658511212076
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          62.46245669323216,
+          5.519894136168704
+        ],
+        "planet": [
+          69.66683618262911,
+          14.48353827082491
+        ],
+        "mean_longitude": 6.009999999999991,
+        "mean_anomaly": 45.2,
+        "apogee_longitude": 355.0,
+        "mean_centrum": 11.009999999999991,
+        "epicycle_center_longitude": 5.050188470693165,
+        "equation_of_center": -0.959811529306819,
+        "epicycle_equation": 6.694147735574688,
+        "longitude": 11.744336206267855,
+        "equant_to_epicycle_center": 57.298318235106926,
+        "earth_to_epicycle_center": 62.705882717879135,
+        "earth_to_planet": 71.15645399076412,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical"
+      }
+    },
+    {
+      "arguments": [
+        442.90000000000003,
+        77.03333333333333,
+        157.21666666666667
+      ],
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.535433549823683,
+          1.064930380085233
+        ],
+        "equant": [
+          -5.070867099647366,
+          2.129860760170466
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          2.2461147178502765,
+          60.87410021351383
+        ],
+        "planet": [
+          -8.555766584192948,
+          64.81990308955426
+        ],
+        "mean_longitude": 82.90000000000003,
+        "mean_anomaly": 77.03333333333333,
+        "apogee_longitude": 157.21666666666667,
+        "mean_centrum": 285.6833333333334,
+        "epicycle_center_longitude": 87.88687572777732,
+        "equation_of_center": 4.986875727777289,
+        "epicycle_equation": 9.632294414178432,
+        "longitude": 97.51917014195577,
+        "equant_to_epicycle_center": 59.19817473427144,
+        "earth_to_epicycle_center": 60.915524360631316,
+        "earth_to_planet": 65.38211512625145,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical"
+      }
+    }
+  ],
+  "date_cases": [
+    {
+      "days": 0,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.431477508130641,
+          1.2846856142476293
+        ],
+        "equant": [
+          -4.862955016261282,
+          2.5693712284952586
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          -62.333731588234336,
+          -2.13875653112317
+        ],
+        "planet": [
+          -52.30002750689717,
+          -7.757900808338157
+        ],
+        "mean_longitude": 184.68333333333334,
+        "mean_anomaly": 146.06666666666666,
+        "apogee_longitude": 152.15,
+        "mean_centrum": 32.53333333333333,
+        "epicycle_center_longitude": 181.9651265083223,
+        "equation_of_center": -2.7182068250110376,
+        "epicycle_equation": 6.472292646157314,
+        "longitude": 188.4374191544796,
+        "equant_to_epicycle_center": 57.663303987774896,
+        "earth_to_epicycle_center": 62.37041264264223,
+        "earth_to_planet": 52.87227914677232,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical",
+        "days_since_epoch": 0
+      }
+    },
+    {
+      "days": -0.5,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.4314772009799714,
+          1.2846861955803075
+        ],
+        "equant": [
+          -4.862954401959943,
+          2.569372391160615
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          -62.33610403574589,
+          -2.0969825917852707
+        ],
+        "planet": [
+          -52.351102405727374,
+          -7.802220750576497
+        ],
+        "mean_longitude": 184.64177211515133,
+        "mean_anomaly": 145.61541024562757,
+        "apogee_longitude": 152.14998630136986,
+        "mean_centrum": 32.49178581378146,
+        "epicycle_center_longitude": 181.9266998329623,
+        "equation_of_center": -2.715072282189027,
+        "epicycle_equation": 6.550063817125249,
+        "longitude": 188.47676365008755,
+        "equant_to_epicycle_center": 57.662273608091574,
+        "earth_to_epicycle_center": 62.37136524356018,
+        "earth_to_planet": 52.9293167510755,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical",
+        "days_since_epoch": -0.5
+      }
+    },
+    {
+      "days": 0.5,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.4314778152811725,
+          1.2846850329148765
+        ],
+        "equant": [
+          -4.862955630562345,
+          2.569370065829753
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          -62.331329966006166,
+          -2.1805295811149805
+        ],
+        "planet": [
+          -52.24966574424409,
+          -7.713164262678772
+        ],
+        "mean_longitude": 184.72489455151535,
+        "mean_anomaly": 146.51792308770575,
+        "apogee_longitude": 152.15001369863015,
+        "mean_centrum": 32.5748808528852,
+        "epicycle_center_longitude": 182.00355446073482,
+        "equation_of_center": -2.7213400907805294,
+        "epicycle_equation": 6.393875156378101,
+        "longitude": 188.39742961711292,
+        "equant_to_epicycle_center": 57.66433555859933,
+        "earth_to_epicycle_center": 62.369458908870264,
+        "earth_to_planet": 52.815911175783945,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical",
+        "days_since_epoch": 0.5
+      }
+    },
+    {
+      "days": 365,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.431701691034199,
+          1.2842612218008522
+        ],
+        "equant": [
+          -4.863403382068398,
+          2.5685224436017045
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          -52.93060816201605,
+          -31.117288821908897
+        ],
+        "planet": [
+          -42.92083807382326,
+          -36.778958432679296
+        ],
+        "mean_longitude": 215.02302260620286,
+        "mean_anomaly": 115.48385402520574,
+        "apogee_longitude": 152.16,
+        "mean_centrum": 62.86302260620286,
+        "epicycle_center_longitude": 210.45077512793438,
+        "equation_of_center": -4.57224747826848,
+        "epicycle_equation": 10.14256818104866,
+        "longitude": 220.59334330898304,
+        "equant_to_epicycle_center": 58.69574137851079,
+        "earth_to_epicycle_center": 61.39979596079271,
+        "earth_to_planet": 56.52335910357866,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical",
+        "days_since_epoch": 365
+      }
+    },
+    {
+      "days": 36500,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.453528037813008,
+          1.242054816691055
+        ],
+        "equant": [
+          -4.907056075626016,
+          2.48410963338211
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          53.52521483307471,
+          -20.353786139267033
+        ],
+        "planet": [
+          60.35561513021593,
+          -29.605576873001404
+        ],
+        "mean_longitude": 338.6522606202848,
+        "mean_anomaly": 327.7854025205743,
+        "apogee_longitude": 153.15,
+        "mean_centrum": 185.50226062028477,
+        "epicycle_center_longitude": 339.17992360298194,
+        "equation_of_center": 0.5276629826971657,
+        "epicycle_equation": -5.30875250134477,
+        "longitude": 333.8711711016372,
+        "equant_to_epicycle_center": 62.7367497314786,
+        "earth_to_epicycle_center": 57.26451984544897,
+        "earth_to_planet": 67.22566816127562,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical",
+        "days_since_epoch": 36500
+      }
+    },
+    {
+      "days": 164162.0,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.5247314794372353,
+          1.0900600702432275
+        ],
+        "equant": [
+          -5.049462958874471,
+          2.180120140486455
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          -54.757576653967455,
+          30.61513221195957
+        ],
+        "planet": [
+          -62.83356281184917,
+          38.80222251179766
+        ],
+        "mean_longitude": 150.22873172457912,
+        "mean_anomaly": 344.3798479063844,
+        "apogee_longitude": 156.6475890410959,
+        "mean_centrum": 353.5811426834832,
+        "epicycle_center_longitude": 150.7903079606173,
+        "equation_of_center": 0.561576236038178,
+        "epicycle_equation": -2.487286789553565,
+        "longitude": 148.30302117106373,
+        "equant_to_epicycle_center": 57.26645159802651,
+        "earth_to_epicycle_center": 62.73498642201882,
+        "earth_to_planet": 73.84896131622742,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical",
+        "days_since_epoch": 164162.0
+      }
+    },
+    {
+      "days": 185006.5,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.535470806224865,
+          1.0648416740442828
+        ],
+        "equant": [
+          -5.07094161244973,
+          2.1296833480885655
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          2.2724877626237134,
+          60.87189422138384
+        ],
+        "planet": [
+          -8.512060559696238,
+          64.86482766479934
+        ],
+        "mean_longitude": 82.87435651452142,
+        "mean_anomaly": 76.80878460520762,
+        "apogee_longitude": 157.21867123287672,
+        "mean_centrum": 285.6556852816447,
+        "epicycle_center_longitude": 87.86200969188373,
+        "equation_of_center": 4.98765317736229,
+        "epicycle_equation": 9.614063175935769,
+        "longitude": 97.47607286781951,
+        "equant_to_epicycle_center": 59.19943659587802,
+        "earth_to_epicycle_center": 60.91429804841075,
+        "earth_to_planet": 65.42095262953646,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical",
+        "days_since_epoch": 185006.5
+      }
+    },
+    {
+      "days": 189202.5,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.5376022117416026,
+          1.0597523366164976
+        ],
+        "equant": [
+          -5.075204423483205,
+          2.119504673232995
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          13.723022313927325,
+          58.81433734971493
+        ],
+        "planet": [
+          24.179970159666926,
+          54.028708681349414
+        ],
+        "mean_longitude": 71.65609949797363,
+        "mean_anomaly": 263.75266996529535,
+        "apogee_longitude": 157.3336301369863,
+        "mean_centrum": 274.3224693609873,
+        "epicycle_center_longitude": 76.86627616983492,
+        "equation_of_center": 5.210176671861291,
+        "epicycle_equation": -10.976667810353831,
+        "longitude": 65.8896083594811,
+        "equant_to_epicycle_center": 59.730037507818295,
+        "earth_to_epicycle_center": 60.39410252097982,
+        "earth_to_planet": 59.19267115696423,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical",
+        "days_since_epoch": 189202.5
+      }
+    },
+    {
+      "days": 824677.75,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.7384367937442344,
+          0.25192047687275637
+        ],
+        "equant": [
+          -5.476873587488469,
+          0.5038409537455127
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          50.709103111125565,
+          -27.012717391937276
+        ],
+        "planet": [
+          53.145958205411816,
+          -38.25156685482497
+        ],
+        "mean_longitude": 333.9071285365353,
+        "mean_anomaly": 308.32661781308707,
+        "apogee_longitude": 174.7439109589041,
+        "mean_centrum": 159.1632175776312,
+        "epicycle_center_longitude": 331.95579109049646,
+        "equation_of_center": -1.951337446038849,
+        "epicycle_equation": -7.700075645232289,
+        "longitude": 324.2557154452642,
+        "equant_to_epicycle_center": 62.562168766504286,
+        "earth_to_epicycle_center": 57.455200280143785,
+        "earth_to_planet": 65.4803423969402,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical",
+        "days_since_epoch": 824677.75
+      }
+    },
+    {
+      "days": 1012700.5,
+      "result": {
+        "earth": [
+          0.0,
+          0.0
+        ],
+        "deferent_center": [
+          -2.7499954014499894,
+          0.005029115619151371
+        ],
+        "equant": [
+          -5.499990802899979,
+          0.010058231238302741
+        ],
+        "deferent_radius": 60,
+        "epicycle_radius": 11.5,
+        "epicycle_center": [
+          -37.1826888590435,
+          49.14146794929326
+        ],
+        "planet": [
+          -47.68115897785278,
+          44.44762888468222
+        ],
+        "mean_longitude": 122.81620040071721,
+        "mean_anomaly": 81.27309566992335,
+        "apogee_longitude": 179.8952191780822,
+        "mean_centrum": 302.920981222635,
+        "epicycle_center_longitude": 127.11282071668226,
+        "equation_of_center": 4.296620315965072,
+        "epicycle_equation": 9.897317621656498,
+        "longitude": 137.01013833833875,
+        "equant_to_epicycle_center": 58.461002189495055,
+        "earth_to_epicycle_center": 61.62334154360549,
+        "earth_to_planet": 65.1850031444481,
+        "half_eccentricity": 2.75,
+        "double_eccentricity": 5.5,
+        "model_id": "almagest-jupiter-longitude",
+        "frame": "ptolemy-almagest-tropical",
+        "days_since_epoch": 1012700.5
+      }
+    }
+  ]
+}
