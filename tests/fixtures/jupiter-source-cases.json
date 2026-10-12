@@ -1,0 +1,26 @@
+{
+  "provenance": "Literal selected P1 Toomer Almagest readings, transcribed independently of the evaluator; P2 is interpretive only.",
+  "epoch": {
+    "locator": "P1 IX.4 p.430; XI.4 p.525",
+    "mean_longitude": "184;41",
+    "mean_anomaly": "146;04",
+    "apogee": "Virgo 2;09"
+  },
+  "mean_motion_rows": [
+    {"locator": "P1 IX.4 p.431, one Egyptian year", "days": 365, "longitude_increment": "30;20,22,52,52,58,35", "anomaly_increment": "329;25,1,52,28,10,0"},
+    {"locator": "P1 IX.4 p.432, one Egyptian day", "days": 1, "longitude_increment": "0;4,59,14,26,46,31", "anomaly_increment": "0;54,9,2,46,26,0"}
+  ],
+  "ancient_derived_case": {
+    "locator": "P1 XI.3 pp.522–525; parameters inferred from this observation",
+    "apogee": "Virgo 7;13",
+    "mean_centrum": "285;41",
+    "mean_anomaly": "77;02",
+    "observed_longitude": "Cancer 7;33",
+    "interpretation": "Source-derived observation and rounded geometric reconstruction, not independent predictive validation. P1 p.524 note obtains anomaly 77;00 with more accurate intermediate arithmetic."
+  },
+  "anomaly_table_rows": [
+    {"locator": "P1 XI.11 p.550", "mean_centrum": 90, "c3": "5;14", "c4": "+0;01", "c5": "0;26", "c6": "10;51", "c7": "0;31", "c8_sixtieths": "-4;40"},
+    {"locator": "P1 XI.11 p.550", "mean_centrum": 96, "c3": "5;16", "c4": "-0;01", "c5": "0;27", "c6": "11;00", "c7": "0;32", "c8_sixtieths": "+1;52"},
+    {"locator": "P1 XI.11 p.550", "mean_centrum": 180, "c3": "0;00", "c4": "0;00", "c5": "0;00", "c6": "0;00", "c7": "0;00", "c8_sixtieths": "+60;00"}
+  ]
+}

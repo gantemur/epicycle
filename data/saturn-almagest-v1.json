@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "model_id": "almagest-saturn-longitude",
+  "body": "Saturn",
+  "model_status": "source-checked parameters; partial historical numerical validation",
+  "source_edition": "P1 G. J. Toomer, Ptolemy's Almagest; P2 O. Neugebauer, A History of Ancient Mathematical Astronomy (HAMA)",
+  "epoch": {
+    "description": "Nabonassar year 1, Egyptian Thoth 1, Alexandria mean local noon",
+    "local_julian_day": 1448638,
+    "astronomical_julian_date": "-0746-02-26",
+    "calendar": "Egyptian years of exactly 365 days; proleptic Julian correlation",
+    "time_scale": "historical local mean days, not UT1 or TT",
+    "source": "P1 XI.8 pp.543–544; IX.4 p.427; P2 HAMA pp.182, 1066",
+    "status": "explicit epoch; civil-date correlation scholarly"
+  },
+  "frame": {
+    "id": "ptolemy-almagest-tropical",
+    "origin": "Earth",
+    "x_axis": "Ptolemy's tropical vernal equinox",
+    "orientation": "eastward ecliptic longitude, planar",
+    "source": "P1 IX.5–6 pp.443–445"
+  },
+  "units": {
+    "length": "deferent-radius units, R=60; not physical distance",
+    "time": "Alexandria mean local Egyptian day from Nabonassar epoch",
+    "angle": "degree"
+  },
+  "parameters": {
+    "deferent_radius": {"sexagesimal": "60", "value": 60, "unit": "deferent units", "status": "explicit normalization", "source": "P1 XI.6 pp.539–540; XI.10 p.546"},
+    "half_eccentricity": {"sexagesimal": "3;25", "value": 3.4166666666666665, "unit": "deferent units", "status": "historical geometric derivation", "source": "P1 XI.5 pp.526–537; XI.6 p.540"},
+    "double_eccentricity": {"sexagesimal": "6;50", "value": 6.833333333333333, "unit": "deferent units", "status": "derived as 2e", "source": "P1 IX.6 pp.443–444; XI.6 p.540"},
+    "epicycle_radius": {"sexagesimal": "6;30", "value": 6.5, "unit": "deferent units", "status": "printed final value", "source": "P1 XI.6 p.540; XI.10 p.546"},
+    "mean_longitude_epoch": {"sexagesimal": "296;43", "value": 296.71666666666664, "unit": "tropical degree", "status": "Almagest manuscript and IX.4 table reading", "source": "P1 IX.4 p.427; XI.8 p.544 note; P2 HAMA p.182 n.15"},
+    "mean_anomaly_epoch": {"sexagesimal": "34;02", "value": 34.03333333333333, "unit": "degree from mean epicycle apogee", "status": "Almagest table reading", "source": "P1 IX.4 p.427; XI.8 p.544"},
+    "apogee_longitude_epoch": {"sexagesimal": "Scorpio 14;10", "value": 224.16666666666666, "unit": "tropical degree", "status": "Almagest table reading", "source": "P1 IX.4 p.427; XI.8 p.544"},
+    "mean_longitude_daily_motion": {"sexagesimal": "0;2,0,33,31,28,51", "value": 0.0334885401877572, "unit": "degree per Egyptian day", "status": "printed six-place mean motion", "source": "P1 IX.3 p.426; IX.4 p.429"},
+    "mean_anomaly_daily_motion": {"sexagesimal": "0;57,7,43,41,43,40", "value": 0.9521467382544582, "unit": "degree per Egyptian day", "status": "printed six-place mean motion", "source": "P1 IX.3 p.424; IX.4 p.429"},
+    "apogee_motion": {"sexagesimal": "1 degree per 100 Egyptian years", "value": 0.000027397260273972603, "unit": "degree per Egyptian day", "status": "explicit rate; derived daily conversion", "source": "P1 IX.5–6 pp.443–445; XI.8 p.544"}
+  },
+  "source_examples": "tests/fixtures/saturn-source-cases.json",
+  "unused_source_alternatives": [
+    {"sexagesimal": "296;44", "meaning": "epoch mean longitude from Ptolemy's stated back-computation", "source": "P1 XI.8 p.544 note; P2 HAMA p.182 n.15", "status": "unused computational alternative"},
+    {"sexagesimal": "296;45", "meaning": "later Handy Tables epoch mean longitude", "source": "P2 HAMA p.182 n.15", "status": "unused later tradition"}
+  ],
+  "source_discrepancies": [
+    "P1 XI.8 p.544 note and P2 HAMA p.182 n.15 distinguish the Almagest manuscripts/IX.4 296;43, the stated calculation 296;44, and later Handy Tables 296;45. The Almagest model keeps 296;43.",
+    "P1 XI.7 p.543 note reconstructs the derived ancient anomaly as 183;16 rather than printed 183;17; the observation was used to infer a motion, not to test an independent prediction."
+  ],
+  "limitations": [
+    "Exact continuous equant and epicycle geometry, not full original XI.11–12 correction-table interpolation.",
+    "Source-derived observations used to infer parameters are diagnostics, not independent predictive validation.",
+    "No latitude, physical distance, modern frame calibration or arbitrary-date observational accuracy claim."
+  ]
+}
