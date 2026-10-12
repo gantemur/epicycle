@@ -7,7 +7,7 @@
 - Validate equations and parameters against primary passages, historical tables, and independent numerical fixtures. An animation is never proof of correctness. Do not promote SOL or CALTIB outputs to historical authority.
 - Define chronology and coordinates explicitly: calendar, astronomical/BCE year convention, day boundary, TT/UT1/UTC, ecliptic/equinox, and geometric versus apparent position. Never use Python `datetime` for BCE dates.
 - Keep historical evaluation independent of rendering and of modern reference ephemerides. Share versioned parameter definitions and fixtures between Python and browser code; use Python research calculations as the numerical validation path.
-- Treat variants as body-specific. Display at most two historical models at once. Distinguish original geometry, coordinate re-centring, and any distance-dependent reconstruction.
+- Treat variants as body-specific. The managed workspace supports up to four independent panels and four plot traces; a model-disagreement curve requires two compatible theories of the same body. Distinguish original geometry, coordinate re-centring, and any distance-dependent reconstruction.
 - Design every interface string, unit, graph label, tooltip, and error for English and Mongolian translation. Test phone widths around 360–390 CSS pixels.
 - Keep dependencies modest. Document any downloaded reference dataset with version, source, checksum, coverage, and validation range. Preserve reproducible commands and configurations for eventual paper figures.
 

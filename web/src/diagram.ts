@@ -1,5 +1,8 @@
 import { message, type Language } from './i18n.ts';
-import { evaluateDays, type MarsResult, type Point } from './model.ts';
+import { evaluateDays, type Point } from './model.ts';
+import type { SuperiorGeometryResult } from './superior-geometry.ts';
+import { evaluatePtolemyJupiterDays } from './ptolemy-jupiter.ts';
+import { evaluatePtolemySaturnDays } from './ptolemy-saturn.ts';
 
 const size = 640;
 const origin = size / 2;
@@ -35,14 +38,28 @@ export function trailPoints(day: number, span: number, samples = 160): Point[] {
     evaluateDays(beginning + (day - beginning) * index / samples).planet);
 }
 
-export function renderDiagram(result: MarsResult, trail: readonly Point[], language: Language,
-  instanceId = ''): string {
+export function outerTrailPoints(body: 'Jupiter' | 'Saturn', day: number,
+  span: number, samples = 160): Point[] {
+  // The computational clock permits dates before Nabonassar; a trail must
+  // follow the requested historical interval rather than jump to epoch zero.
+  const beginning = day - span;
+  const evaluate = body === 'Jupiter' ? evaluatePtolemyJupiterDays : evaluatePtolemySaturnDays;
+  return Array.from({ length: samples + 1 }, (_, index) =>
+    evaluate(beginning + (day - beginning) * index / samples).planet);
+}
+
+export function renderDiagram(result: SuperiorGeometryResult, trail: readonly Point[], language: Language,
+  instanceId = '', body: 'Mars' | 'Jupiter' | 'Saturn' = 'Mars'): string {
   const { earth: O, deferentCenter: D, equant: Q, epicycleCenter: C, planet: P } = result;
   const trailPath = trail.length > 1 ? `<polyline class="mars-trail" points="${trail.map(p => xy(screenPoint(p))).join(' ')}"/>` : '';
   const angle = result.longitude * Math.PI / 180;
   const arcEnd = { x: origin + 47 * Math.cos(angle), y: origin - 47 * Math.sin(angle) };
   const arc = `<path class="longitude-arc" d="M ${origin + 47},${origin} A 47,47 0 ${result.longitude > 180 ? 1 : 0} 0 ${xy(arcEnd)}"/>`;
-  return `<svg class="sky-diagram" viewBox="0 0 ${size} ${size}" role="img" aria-label="${message(language, 'diagramAccessible')}">
+  const accessible = body === 'Mars' ? 'diagramAccessible'
+    : body === 'Jupiter' ? 'jupiterDiagramAccessible' : 'saturnDiagramAccessible';
+  const description = body === 'Mars' ? 'marsDescription'
+    : body === 'Jupiter' ? 'jupiterDescription' : 'saturnDescription';
+  return `<svg class="sky-diagram" viewBox="0 0 ${size} ${size}" role="img" aria-label="${message(language, accessible)}">
     <defs><radialGradient id="space-glow${instanceId}"><stop offset="0" stop-color="#183743"/><stop offset="1" stop-color="#091924"/></radialGradient></defs>
     <circle cx="320" cy="320" r="319" fill="url(#space-glow${instanceId})"/>
     <circle class="guide-ring" cx="320" cy="320" r="280"/>
@@ -59,9 +76,9 @@ export function renderDiagram(result: MarsResult, trail: readonly Point[], langu
     ${arc}
     ${dot(D, 'D', 'deferent-dot', -77, 0, message(language, 'deferentDescription'))}
     ${dot(Q, 'Q', 'equant-dot', -28, -45, message(language, 'equantDescription'))}
-    ${dot(C, 'C', 'center-dot', 13, 28, message(language, 'epicycleDescription'))}
+    ${dot(C, 'C', 'center-dot', 13, body === 'Mars' ? 28 : 40, message(language, 'epicycleDescription'))}
     ${dot(O, 'O', 'earth-dot', -45, 58, message(language, 'earthDescription'))}
-    ${dot(P, 'P', 'mars-dot', 14, -14, message(language, 'marsDescription'))}
+    ${dot(P, 'P', 'mars-dot', 14, body === 'Mars' ? -14 : -36, message(language, description))}
     <text class="angle-label" x="${origin + 56}" y="${origin - 13}">λ</text>
   </svg>`;
 }

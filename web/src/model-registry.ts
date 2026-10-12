@@ -3,6 +3,8 @@ import { apsisPolicy, earthRecord, exploratoryApsisPolicy, marsRecord,
   type ApsisPolicy } from './copernicus.ts';
 import { comparisonUt1Domain } from './comparison-time.ts';
 import { sunRecord } from './sun-almagest.ts';
+import { jupiterRecord } from './ptolemy-jupiter.ts';
+import { saturnRecord } from './ptolemy-saturn.ts';
 import type { MessageKey } from './i18n.ts';
 
 /** Body-specific historical models retain their existing Mars identifiers. */
@@ -33,25 +35,53 @@ export const models = {
     source: earthRecord.source_edition, label: 'copernicusSunModelPanel' as MessageKey,
     dependencies: [] as readonly string[], datePolicies: ['mathematical-continuation'],
   },
+  'ptolemy-jupiter': {
+    id: 'ptolemy-jupiter', recordId: jupiterRecord.model_id,
+    schemaVersion: jupiterRecord.schema_version, body: 'Jupiter',
+    observables: ['geocentric tropical longitude'], source: jupiterRecord.source_edition,
+    label: 'ptolemyJupiterPanel' as MessageKey, dependencies: [] as readonly string[],
+    datePolicies: ['mathematical-continuation'],
+  },
+  'ptolemy-saturn': {
+    id: 'ptolemy-saturn', recordId: saturnRecord.model_id,
+    schemaVersion: saturnRecord.schema_version, body: 'Saturn',
+    observables: ['geocentric tropical longitude'], source: saturnRecord.source_edition,
+    label: 'ptolemySaturnPanel' as MessageKey, dependencies: [] as readonly string[],
+    datePolicies: ['mathematical-continuation'],
+  },
 } as const;
 
 export type ModelId = keyof typeof models;
 export const modelIds = Object.keys(models) as ModelId[];
-export type HistoricalBody = 'Mars' | 'Sun';
-export const historicalBodies: readonly HistoricalBody[] = ['Mars', 'Sun'];
+export type HistoricalBody = 'Mars' | 'Sun' | 'Jupiter' | 'Saturn';
+export const historicalBodies: readonly HistoricalBody[] = ['Mars', 'Sun', 'Jupiter', 'Saturn'];
+export const bodyMessageKey: Readonly<Record<HistoricalBody, MessageKey>> = {
+  Mars: 'mars', Sun: 'sun', Jupiter: 'jupiter', Saturn: 'saturn',
+};
+export function bodyLabelKey(body: string): MessageKey {
+  if (!historicalBodies.includes(body as HistoricalBody)) throw new RangeError(`Unknown body: ${body}`);
+  return bodyMessageKey[body as HistoricalBody];
+}
 
 export function modelIdsForBody(body: string): ModelId[] {
   return modelIds.filter(id => models[id].body === body);
 }
 
 export function firstModelForBody(body: HistoricalBody): ModelId {
-  return body === 'Sun' ? 'ptolemy-sun' : 'ptolemy';
+  const first: Record<HistoricalBody, ModelId> = {
+    Mars: 'ptolemy', Sun: 'ptolemy-sun',
+    Jupiter: 'ptolemy-jupiter', Saturn: 'ptolemy-saturn',
+  };
+  return first[body];
 }
 
 export function correspondingModelForBody(modelId: ModelId,
   body: HistoricalBody): ModelId {
-  if (body === 'Sun') return modelId.startsWith('copernicus') ? 'copernicus-sun' : 'ptolemy-sun';
-  return modelId.startsWith('copernicus') ? 'copernicus' : 'ptolemy';
+  if (body === 'Sun') return modelId === 'copernicus' || modelId === 'copernicus-sun'
+    ? 'copernicus-sun' : 'ptolemy-sun';
+  if (body === 'Mars') return modelId === 'copernicus' || modelId === 'copernicus-sun'
+    ? 'copernicus' : 'ptolemy';
+  return firstModelForBody(body);
 }
 
 export function defaultPolicyForModel(modelId: ModelId,
@@ -121,6 +151,20 @@ export const modelCapabilities: CapabilityRegistry = {
       { id: 'geocentric-tropical-longitude', frame: 'copernican-tropical' },
     ],
     viewCenters: ['earth', 'true-sun'], renderedViewCenters: ['earth', 'true-sun'],
+    policies: { 'mathematical-continuation': null },
+  },
+  'ptolemy-jupiter': {
+    ...models['ptolemy-jupiter'], sourceStatus: 'source-checked',
+    validationStatus: jupiterRecord.model_status,
+    observables: [{ id: 'geocentric-tropical-longitude', frame: 'ptolemaic-tropical' }],
+    viewCenters: ['earth'], renderedViewCenters: ['earth'],
+    policies: { 'mathematical-continuation': null },
+  },
+  'ptolemy-saturn': {
+    ...models['ptolemy-saturn'], sourceStatus: 'source-checked',
+    validationStatus: saturnRecord.model_status,
+    observables: [{ id: 'geocentric-tropical-longitude', frame: 'ptolemaic-tropical' }],
+    viewCenters: ['earth'], renderedViewCenters: ['earth'],
     policies: { 'mathematical-continuation': null },
   },
 };

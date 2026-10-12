@@ -1,5 +1,11 @@
 # Status — Phase 5A deployed
 
+## Phase 5B development — not deployed
+
+The `codex/phase-5b-ptolemy-outer-planets` branch implements Ptolemy’s *Almagest* XI Jupiter and Saturn geocentric tropical longitude theories in Python and TypeScript. Separate versioned records preserve the IX.4 epoch readings, six-place mean rates, apsidal motion, and Saturn’s 296;43° manuscript/table reading alongside its 296;44° and later 296;45° alternatives. The shared superior-planet kernel retains accepted Mars results. Source-transcribed cases, independent triangle calculations, and generated cross-language fixtures check the mathematics; the original XI.11–12 complete table procedure, latitude, and independent predictive validation remain open.
+
+The local workspace adds body-specific geometry, longitude traces, bilingual source information, and an optional Jupiter and Saturn overlay preset. Different-body traces may share a plot but cannot form a model-disagreement residual. The public site remains the Phase 5A release until separate approval. See [Jupiter](jupiter-almagest.md), [Saturn](saturn-almagest.md), and [workspace architecture](workspace-architecture.md).
+
 ## Current public release — Phase 5A
 
 The [public `main` site](https://gantemur.github.io/epicycle/) includes Ptolemy's *Almagest* III eccentric Sun and Copernicus's 1543 Earth/Sun double-eccentric construction as independently selectable geocentric Sun predictions. Their model identities are distinct from the Mars models. One clock drives independently configurable solar and Martian geometry and longitude panels, solar longitude overlays, signed same-body historical model disagreement under the declared nominal tropical-frame alignment, and the Solar comparison preset. The reviewed `codex/phase-5a-solar-models` branch remains available for reference.

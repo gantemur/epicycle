@@ -71,7 +71,8 @@ root.innerHTML = [
   '</option><option value="compare-longitudes" data-option-i18n="comparePreset">', t('comparePreset'),
   '</option><option value="desktop-explore" data-option-i18n="desktopPreset">', t('desktopPreset'),
   '</option><option value="detailed-comparison" data-option-i18n="detailedPreset">', t('detailedPreset'),
-  '</option><option value="solar-comparison" data-option-i18n="solarPreset">', t('solarPreset'), '</option></select></label>',
+  '</option><option value="solar-comparison" data-option-i18n="solarPreset">', t('solarPreset'),
+  '</option><option value="outer-planets" data-option-i18n="outerPreset">', t('outerPreset'), '</option></select></label>',
   '<button type="button" data-workspace="preset">', tr('replaceLayout'), '</button></details>',
   '<label>', tr('addDisplay'), '<select data-add-kind><option value="geometry" data-option-i18n="addGeometry">',
   t('addGeometry'), '</option><option value="time-series" data-option-i18n="addPlot">', t('addPlot'), '</option></select></label>',
@@ -341,10 +342,13 @@ root.addEventListener('change', event => {
         startUt1: state.clock.ut1Jd - span / 2, endUt1: state.clock.ut1Jd + span / 2 } }, panel);
     } else if (!['window-start', 'window-end', 'window-preset'].includes(input.dataset.setting)) {
       const setting = input.dataset.setting;
-      const errorKey: MessageKey = setting === 'frame-alignment' ||
-        (setting === 'analysis' && display.frameAlignment === 'native')
-        ? 'disagreementFrameIncompatible' : setting === 'first-trace' || setting === 'second-trace'
-          ? 'disagreementPairIncompatible' : 'invalidDisplay';
+      const differentBodies = display.traces.length >= 2 &&
+        display.traces[0].body !== display.traces[1].body;
+      const errorKey: MessageKey = setting === 'first-trace' || setting === 'second-trace' ||
+        (setting === 'analysis' && differentBodies) ? 'disagreementPairIncompatible'
+        : setting === 'frame-alignment' ||
+          (setting === 'analysis' && display.frameAlignment === 'native')
+          ? 'disagreementFrameIncompatible' : 'invalidDisplay';
       updatePanel(changePlot(display, setting,
         input instanceof HTMLInputElement && input.type === 'checkbox' ? input.checked : input.value),
         panel, errorKey);

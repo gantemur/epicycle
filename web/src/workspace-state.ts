@@ -10,7 +10,7 @@ import { maxWorkspacePanels, workspaceSchemaVersion,
 
 export type DisplayDraft = Omit<GeometryDisplay, 'id'> | Omit<TimeSeriesDisplay, 'id'>;
 export type WorkspacePreset = 'explore-one' | 'compare-longitudes' | 'desktop-explore' |
-  'detailed-comparison' | 'solar-comparison';
+  'detailed-comparison' | 'solar-comparison' | 'outer-planets';
 
 export const initialClock: WorkspaceClock = {
   ut1Jd: example1512Ut1, playing: false, speedDaysPerSecond: 12, direction: 1,
@@ -234,6 +234,24 @@ const solarLongitudePlot: DisplayDraft = {
       observableId: 'geocentric-tropical-longitude', policyId: 'mathematical-continuation' },
   ],
 };
+const jupiterGeometry: DisplayDraft = {
+  ...ptolemyGeometry, body: 'Jupiter', modelId: 'ptolemy-jupiter',
+  trail: { enabled: true, days: 720 },
+};
+const saturnGeometry: DisplayDraft = {
+  ...ptolemyGeometry, body: 'Saturn', modelId: 'ptolemy-saturn',
+  trail: { enabled: true, days: 720 },
+};
+const outerLongitudePlot: DisplayDraft = {
+  ...longitudePlot,
+  frameAlignment: 'native',
+  traces: [
+    { id: 'trace-1', body: 'Jupiter', modelId: 'ptolemy-jupiter',
+      observableId: 'geocentric-tropical-longitude', policyId: 'mathematical-continuation' },
+    { id: 'trace-2', body: 'Saturn', modelId: 'ptolemy-saturn',
+      observableId: 'geocentric-tropical-longitude', policyId: 'mathematical-continuation' },
+  ],
+};
 
 export const workspacePresets: Readonly<Record<WorkspacePreset, readonly DisplayDraft[]>> = {
   'explore-one': [ptolemyGeometry],
@@ -241,6 +259,7 @@ export const workspacePresets: Readonly<Record<WorkspacePreset, readonly Display
   'desktop-explore': [longitudePlot, ptolemyGeometry],
   'detailed-comparison': [longitudePlot, ptolemyGeometry, copernicusGeometry],
   'solar-comparison': [solarLongitudePlot, solarGeometry],
+  'outer-planets': [outerLongitudePlot, jupiterGeometry, saturnGeometry],
 };
 
 /** Applying a layout is deliberate; a viewport change never calls this function. */

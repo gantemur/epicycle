@@ -1,6 +1,6 @@
 # Source inventory and extraction map
 
-Inventory checked locally in Phase 0. All 20 PDFs are in `private/sources/` (about 574 MB); `private/source/` does not exist. The IDs are local working identifiers, not source authority. Phase 1 verified exact P1/P2/P8 locators for the Mars longitude parameters and examples in [mars-almagest.md](mars-almagest.md); other edition details and rights remain to be checked. Never copy these PDFs, page images, or substantial text into the public repository. Web-first research tools and digital editions are catalogued in [online-resources.md](online-resources.md).
+Inventory checked locally in Phase 0. All 20 PDFs are in `private/sources/` (about 574 MB); `private/source/` does not exist. The IDs are local working identifiers, not source authority. Phase 1 verified exact P1/P2/P8 locators for the Mars longitude parameters and examples in [mars-almagest.md](mars-almagest.md); other edition details and rights remain to be checked. Phase 5B checked P1 IX.3–6 and XI.1–12 against P2 pp.181–188 for the Jupiter and Saturn records; see [Jupiter](jupiter-almagest.md) and [Saturn](saturn-almagest.md). Never copy these PDFs, page images, or substantial text into the public repository. Web-first research tools and digital editions are catalogued in [online-resources.md](online-resources.md).
 
 | ID | Local file | Identification / first use |
 | --- | --- | --- |

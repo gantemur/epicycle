@@ -62,8 +62,9 @@ export function addTrace(display: TimeSeriesDisplay): TimeSeriesDisplay | null {
   let number = 1;
   const ids = new Set(display.traces.map(trace => trace.id));
   while (ids.has(`trace-${number}`)) number += 1;
-  const body: HistoricalBody = display.traces.length > 0 &&
-    display.traces.every(trace => trace.body === 'Sun') ? 'Sun' : 'Mars';
+  const firstBody = display.traces[0]?.body as HistoricalBody | undefined;
+  const body: HistoricalBody = firstBody && display.traces.every(trace => trace.body === firstBody)
+    ? firstBody : 'Mars';
   const modelId = firstModelForBody(body);
   const trace: PlotTrace = { id: `trace-${number}`, body, modelId,
     observableId: 'geocentric-tropical-longitude',

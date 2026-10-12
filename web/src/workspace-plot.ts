@@ -4,6 +4,8 @@ import type { ApsisPolicy } from './copernicus.ts';
 import { evaluateCopernicusSunDays } from './copernicus-sun.ts';
 import { angularDifference } from './model.ts';
 import { modelCapabilities } from './model-registry.ts';
+import { evaluatePtolemyJupiterDays } from './ptolemy-jupiter.ts';
+import { evaluatePtolemySaturnDays } from './ptolemy-saturn.ts';
 import { evaluatePtolemySunDays } from './sun-almagest.ts';
 import { validateDisplay } from './workspace-validation.ts';
 import type { PlotTrace, TimeSeriesDisplay } from './workspace-types.ts';
@@ -49,6 +51,12 @@ export function traceLongitudeAt(trace: PlotTrace, ut1Jd: number): number | null
   if (policyRange && (ut1Jd < policyRange.start || ut1Jd > policyRange.end)) return null;
   if (trace.modelId === 'ptolemy-sun') {
     return evaluatePtolemySunDays(modelDaysAtUt1(ut1Jd).ptolemy).longitude;
+  }
+  if (trace.modelId === 'ptolemy-jupiter') {
+    return evaluatePtolemyJupiterDays(modelDaysAtUt1(ut1Jd).ptolemy).longitude;
+  }
+  if (trace.modelId === 'ptolemy-saturn') {
+    return evaluatePtolemySaturnDays(modelDaysAtUt1(ut1Jd).ptolemy).longitude;
   }
   if (trace.modelId === 'copernicus-sun') {
     const result = evaluateCopernicusSunDays(modelDaysAtUt1(ut1Jd).copernicus);

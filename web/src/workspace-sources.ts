@@ -2,6 +2,8 @@ import { earthRecord, marsRecord } from './copernicus.ts';
 import { message, type Language, type MessageKey } from './i18n.ts';
 import { modelRecord } from './model.ts';
 import { sunRecord } from './sun-almagest.ts';
+import { jupiterRecord } from './ptolemy-jupiter.ts';
+import { saturnRecord } from './ptolemy-saturn.ts';
 
 const ptolemyParameters: readonly [keyof typeof modelRecord.parameters, MessageKey][] = [
   ['deferent_radius', 'radiusDeferent'], ['double_eccentricity', 'eccentricityDouble'],
@@ -37,6 +39,18 @@ const sunParameters: readonly [keyof typeof sunRecord.parameters, string, Messag
   ['tropical_year', 'T', 'tropicalYear'],
   ['mean_longitude_daily_motion', 'n☉', 'solarDailyMotion'],
 ];
+const outerParameters: readonly [keyof typeof jupiterRecord.parameters, string, MessageKey][] = [
+  ['deferent_radius', 'R', 'radiusDeferent'],
+  ['half_eccentricity', 'e', 'eccentricityHalf'],
+  ['double_eccentricity', '2e', 'eccentricityDouble'],
+  ['epicycle_radius', 'r', 'radiusEpicycle'],
+  ['mean_longitude_epoch', 'L₀', 'meanLongitudeEpoch'],
+  ['mean_anomaly_epoch', 'α₀', 'anomalyEpoch'],
+  ['apogee_longitude_epoch', 'A₀', 'apogeeEpoch'],
+  ['mean_longitude_daily_motion', 'nL', 'meanLongitudeRate'],
+  ['mean_anomaly_daily_motion', 'nα', 'anomalyRate'],
+  ['apogee_motion', 'nA', 'apogeeRate'],
+];
 
 export function renderWorkspaceSources(language: Language): string {
   const t = (key: MessageKey): string => message(language, key);
@@ -52,6 +66,7 @@ export function renderWorkspaceSources(language: Language): string {
     'degree from solar apogee': 'unitDegree',
     'mean day': 'unitMeanDays',
     'degree per mean day': 'unitMeanDay',
+    'degree from mean epicycle apogee': 'unitDegree',
   };
   const formattedValue = (parameter: { sexagesimal: string; unit: string }): string => {
     const unitKey = units[parameter.unit];
@@ -63,7 +78,8 @@ export function renderWorkspaceSources(language: Language): string {
       ? t('apogeeOriginal') : formattedValue(modelRecord.parameters[key])}</dd></div>`).join('');
   const sourceRows = <T extends { [key: string]: { sexagesimal: string; unit: string } }>(record: T,
     keys: readonly [keyof T, string, MessageKey][]): string => keys.map(([key, symbol, label]) =>
-    `<div><dt><span class="parameter-symbol">${symbol}</span> · ${t(label)}</dt><dd>${formattedValue(record[key])}</dd></div>`).join('');
+    `<div><dt><span class="parameter-symbol">${symbol}</span> · ${t(label)}</dt><dd>${String(key) === 'apogee_motion'
+      ? t('apogeeOriginal') : formattedValue(record[key])}</dd></div>`).join('');
   return `<details class="info-card" id="sources-ptolemy"><summary><span><span class="section-kicker">ALMAGEST</span><strong>${t('infoTitle')} · ${t('ptolemyPanel')}</strong></span><span class="summary-plus" aria-hidden="true">+</span></summary>
       <div class="info-content"><p class="info-lead">${t('infoIntro')}</p><p>${t('sourceText')}</p>
         <p>${t('deferentInfo')} ${t('equantInfo')} ${t('epicycleInfo')}</p>
@@ -87,5 +103,14 @@ export function renderWorkspaceSources(language: Language): string {
         <h3>${t('copernicusSunModelPanel')}</h3><p>${t('copernicusSunSourceIntro')}</p>
         <p>${t('copernicusSunSourceLine')}</p><p class="scientific-note">${t('solarFrameLimit')}</p>
         <p class="scientific-note">${t('solarContinuation')}</p>
+      </div></details>
+    <details class="info-card" id="sources-outer"><summary><span><span class="section-kicker">ALMAGEST IX / XI</span><strong>${t('outerSources')}</strong></span><span class="summary-plus" aria-hidden="true">+</span></summary>
+      <div class="info-content"><p class="info-lead">${t('outerSourceIntro')}</p>
+        <p>${t('outerSourceLine')}</p><p>${t('outerHistoricalExamples')}</p>
+        <p class="scientific-note">${t('outerValidationStatus')} ${t('outerSourceLimit')}</p>
+        <p class="scientific-note">${t('saturnReadingNote')}</p>
+        <div class="meta-row"><strong>${t('epoch')}</strong><span>${t('outerEpochNote')}</span></div>
+        <div class="info-columns"><div><h3>${t('jupiter')}</h3><dl class="parameters">${sourceRows(jupiterRecord.parameters, outerParameters)}</dl></div>
+          <div><h3>${t('saturn')}</h3><dl class="parameters">${sourceRows(saturnRecord.parameters, outerParameters)}</dl></div></div>
       </div></details>`;
 }

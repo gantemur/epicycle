@@ -4,9 +4,12 @@ import { comparisonUt1Domain, modelDaysAtUt1 } from './comparison-time.ts';
 import { copernicusTrail, renderCopernicusDiagram } from './copernicus-diagram.ts';
 import type { ApsisPolicy } from './copernicus.ts';
 import { evaluateCopernicusSunDays } from './copernicus-sun.ts';
-import { renderDiagram, trailPoints } from './diagram.ts';
+import { outerTrailPoints, renderDiagram, trailPoints } from './diagram.ts';
 import { message, type Language, type MessageKey } from './i18n.ts';
-import { historicalBodies, modelCapabilities, modelIdsForBody, models, type ModelId } from './model-registry.ts';
+import { bodyLabelKey, historicalBodies, modelCapabilities, modelIdsForBody, models,
+  type ModelId } from './model-registry.ts';
+import { evaluatePtolemyJupiterDays } from './ptolemy-jupiter.ts';
+import { evaluatePtolemySaturnDays } from './ptolemy-saturn.ts';
 import { copernicusSunTrail, ptolemySunTrail, renderCopernicusSunDiagram,
   renderPtolemySunDiagram } from './sun-diagram.ts';
 import { evaluatePtolemySunDays } from './sun-almagest.ts';
@@ -33,7 +36,7 @@ export function geometryPanelTitle(display: GeometryDisplay, language: Language)
   const model = t(language, models[display.modelId as ModelId].label);
   const centre = (display.modelId === 'copernicus' || display.modelId === 'copernicus-sun')
     ? ` · ${t(language, display.viewCenter === 'true-sun' ? 'trueSunCentred' : 'earthCentred')}` : '';
-  return `${t(language, 'geometryPanel')} · ${t(language, display.body === 'Sun' ? 'sun' : 'mars')} · ${model}${centre}`;
+  return `${t(language, 'geometryPanel')} · ${t(language, bodyLabelKey(display.body))} · ${model}${centre}`;
 }
 
 /** Settings are replaced on configuration/language changes, never on animation frames. */
@@ -45,14 +48,14 @@ export function renderGeometryStatic(panel: HTMLElement, display: GeometryDispla
   const wasOpen = settings instanceof HTMLDetailsElement ? settings.open : false;
   settings.innerHTML = `<summary>${t(language, 'panelSettings')}</summary>
     <div class="panel-settings-grid">
-      <label>${t(language, 'bodySetting')}<select data-setting="body">${historicalBodies.map(body => `<option value="${body}" ${display.body === body ? 'selected' : ''}>${t(language, body === 'Sun' ? 'sun' : 'mars')}</option>`).join('')}</select></label>
+      <label>${t(language, 'bodySetting')}<select data-setting="body">${historicalBodies.map(body => `<option value="${body}" ${display.body === body ? 'selected' : ''}>${t(language, bodyLabelKey(body))}</option>`).join('')}</select></label>
       <label>${t(language, 'modelSetting')}<select data-setting="model">${modelOptions(display.body, display.modelId, language)}</select></label>
       ${display.modelId === 'copernicus' || display.modelId === 'copernicus-sun'
         ? `<label>${t(language, 'viewingCentre')}<select data-setting="view-center">
             <option value="earth" ${display.viewCenter === 'earth' ? 'selected' : ''}>${t(language, 'earthCentred')}</option>
             <option value="true-sun" ${display.viewCenter === 'true-sun' ? 'selected' : ''}>${t(language, 'trueSunCentred')}</option>
           </select></label>`
-        : `<span class="panel-static-field">${t(language, display.body === 'Sun' ? 'sun' : 'mars')} · ${t(language, 'earthCentred')}</span>`}
+        : `<span class="panel-static-field">${t(language, bodyLabelKey(display.body))} · ${t(language, 'earthCentred')}</span>`}
       ${display.modelId === 'copernicus' ? `<label>${t(language, 'policySetting')}<select data-setting="policy">${policyOptions(display.policyId, language)}</select></label>` : ''}
       <label class="panel-check"><input type="checkbox" data-setting="trail" ${checked(display.trail.enabled)}> ${t(language, 'trail')}</label>
       <label>${t(language, 'trailLength')}<input type="range" min="30" max="720" step="10" data-setting="trail-days" value="${display.trail.days}"><span data-trail-value>${display.trail.days} ${t(language, 'days')}</span></label>
@@ -62,14 +65,15 @@ export function renderGeometryStatic(panel: HTMLElement, display: GeometryDispla
     </div>`;
   if (settings instanceof HTMLDetailsElement) settings.open = wasOpen;
   const hint = panel.querySelector<HTMLElement>('[data-panel-hint]');
-  const hintKey: MessageKey = display.modelId === 'ptolemy-sun' ? 'ptolemySunPanelHint'
+  const hintKey: MessageKey = display.modelId === 'ptolemy-jupiter' || display.modelId === 'ptolemy-saturn'
+    ? 'outerPanelHint' : display.modelId === 'ptolemy-sun' ? 'ptolemySunPanelHint'
     : display.modelId === 'copernicus-sun'
       ? display.viewCenter === 'true-sun' ? 'copernicusSolarSunHint' : 'copernicusSolarEarthHint'
       : display.modelId === 'ptolemy' ? 'ptolemyPanelHint'
         : display.viewCenter === 'true-sun' ? 'copernicusSunPanelHint' : 'copernicusPanelHint';
   if (hint) hint.textContent = t(language, hintKey);
-  const labels = display.modelId === 'ptolemy'
-    ? [['O', 'earth'], ['D', 'deferentCenter'], ['Q', 'equant'], ['C', 'epicycleCenter'], ['P', 'mars']]
+  const labels = display.modelId === 'ptolemy' || display.modelId === 'ptolemy-jupiter' || display.modelId === 'ptolemy-saturn'
+    ? [['O', 'earth'], ['D', 'deferentCenter'], ['Q', 'equant'], ['C', 'epicycleCenter'], ['P', bodyLabelKey(display.body)]]
     : display.modelId === 'ptolemy-sun'
       ? [['O', 'earth'], ['D', 'solarEccentricCenter'], ['P', 'sun']]
     : display.modelId === 'copernicus-sun'
@@ -177,6 +181,23 @@ export function renderGeometryDynamic(panel: HTMLElement, display: GeometryDispl
     setValue(panel, '[data-solar-equation]', formatAngle(result.solarEquation));
     setValue(panel, '[data-solar-distance]', Math.hypot(result.earthToSun.x,
       result.earthToSun.y).toFixed(3));
+    return;
+  }
+  if (display.modelId === 'ptolemy-jupiter' || display.modelId === 'ptolemy-saturn') {
+    const days = modelDaysAtUt1(ut1Jd).ptolemy;
+    const body = display.modelId === 'ptolemy-jupiter' ? 'Jupiter' : 'Saturn';
+    const result = body === 'Jupiter' ? evaluatePtolemyJupiterDays(days)
+      : evaluatePtolemySaturnDays(days);
+    const trail = display.trail.enabled ? outerTrailPoints(body, days, display.trail.days) : [];
+    frame.innerHTML = renderDiagram(result, trail, language, `-${display.id}`, body);
+    setValue(panel, '[data-tropical]', formatAngle(result.longitude));
+    setValue(panel, '[data-mean-longitude]', formatAngle(result.meanLongitude));
+    setValue(panel, '[data-mean-anomaly]', formatAngle(result.meanAnomaly));
+    setValue(panel, '[data-centre-correction]', formatAngle(result.equationOfCenter));
+    const egyptian = daysToEgyptian(days);
+    const julian = daysToJulian(days);
+    setValue(panel, '[data-egyptian-date]', `${egyptian.year} · ${egyptian.month} · ${egyptian.day}`);
+    setValue(panel, '[data-julian-date]', `${yearLabel(julian.year, t(language, 'bce'), t(language, 'ce'))} · ${julian.month} · ${julian.day}`);
     return;
   }
   const evaluation = evaluateSelectedModel(display.modelId as MarsModelId, ut1Jd,

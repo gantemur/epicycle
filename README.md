@@ -1,8 +1,10 @@
 # Epicycle Atlas
 
-Epicycle Atlas is an English–Mongolian atlas of pre-Keplerian planetary constructions. Its workspace pairs historical Mars and Sun geometry with longitude plots, backed by independent Python research calculations. The project is independent of [SOL](https://github.com/gantemur/sol); SOL's animations remain a read-only legacy reference.
+Epicycle Atlas is an English–Mongolian atlas of pre-Keplerian planetary constructions. Its workspace pairs historical Sun and planetary geometry with longitude plots, backed by independent Python research calculations. The project is independent of [SOL](https://github.com/gantemur/sol); SOL's animations remain a read-only legacy reference.
 
 **Status:** The [public `main` site](https://gantemur.github.io/epicycle/) runs the Phase 5A clock-synchronized workspace. It includes Ptolemy's *Almagest* III eccentric Sun, Copernicus's 1543 Earth/Sun double eccentric, solar longitude overlays and signed historical model disagreement, and the Solar comparison preset. Independently configurable Sun and Mars displays share one clock; Explore one model retains the earlier single-model experience. See the [solar specification](docs/sun-almagest.md), [Copernican specification](docs/copernicus-earth-mars.md), [comparison conventions](docs/comparison-conventions.md), and [status](docs/status.md).
+
+**Phase 5B development:** `codex/phase-5b-ptolemy-outer-planets` adds Ptolemaic Jupiter and Saturn longitude, Earth-centred equant diagrams, mixed-body overlays, bilingual source cards, and a Jupiter and Saturn preset. This work is on a development branch for scientific and visual review; the public `main` site remains Phase 5A. See the [Jupiter](docs/jupiter-almagest.md) and [Saturn](docs/saturn-almagest.md) specifications. Only Ptolemaic outer-planet longitude is implemented; dates beyond the source examples are mathematical continuations.
 
 ## Run locally
 
@@ -13,7 +15,7 @@ npm ci
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173/epicycle/`. One assumed-UT1 clock drives independently configurable geometry and time-series panels. Presets replace the arrangement; adding, moving, or editing a panel does not change the others. A geometry panel can select Mars or Sun. The Solar comparison preset shows solar longitudes and Copernicus's Earth/Sun construction; Ptolemy's solar eccentric is also selectable. Plots can mix clearly labelled Mars and Sun traces, or show signed disagreement (B − A) between two models of the **same body** under the explicit nominal historical tropical-frame alignment. This is model disagreement, not observational error.
+Open `http://127.0.0.1:5173/epicycle/`. One assumed-UT1 clock drives independently configurable geometry and time-series panels. Presets replace the arrangement; adding, moving, or editing a panel does not change the others. On the Phase 5B branch, geometry panels select Sun, Mars, Jupiter, or Saturn. The Solar comparison preset shows solar longitudes and Copernicus's Earth/Sun construction; the Jupiter and Saturn preset shows a mixed-body longitude overlay and one Earth-centred geometry panel per outer planet. Plots can mix labelled bodies, or show signed disagreement (B − A) between two models of the **same body** under an appropriate declared frame convention. This is model disagreement, not observational error.
 
 Copernican **Mars** geometry defaults to the source-limited 1473–1523 reconstruction. Comparison plots can explicitly select exploratory Mars continuation; dashed portions show dates outside that reference interval, without an accuracy claim. The solar models have no Mars-apogee guard; their broad-date results are mathematical continuations, not claims of observational accuracy. The original Nabonassar and 1473/1512 jumps remain available. The global clock is independent of panel date policies. Use the header toggle for English or Mongolian.
 
@@ -29,7 +31,7 @@ npm run build
 git diff --check
 ```
 
-`npm run build` produces `dist/` with the `/epicycle/` asset base. `web/` is the only Vite root, `publicDir` is disabled, and only public JSON definitions and fixtures are imported. `private/` is ignored and must not be copied into a build or deployment. The shared numerical fixtures can be regenerated with `PYTHONPATH=src python3 scripts/generate_mars_cross_language.py`, `PYTHONPATH=src python3 scripts/generate_copernicus_cross_language.py`, and `PYTHONPATH=src python3 scripts/generate_sun_cross_language.py`. The manually transcribed source cases remain separate from generated fixtures.
+`npm run build` produces `dist/` with the `/epicycle/` asset base. `web/` is the only Vite root, `publicDir` is disabled, and only public JSON definitions and fixtures are imported. `private/` is ignored and must not be copied into a build or deployment. The shared numerical fixtures can be regenerated with `PYTHONPATH=src python3 scripts/generate_mars_cross_language.py`, `PYTHONPATH=src python3 scripts/generate_copernicus_cross_language.py`, , `PYTHONPATH=src python3 scripts/generate_sun_cross_language.py`, and `PYTHONPATH=src python3 scripts/generate_outer_cross_language.py`. The manually transcribed source cases remain separate from generated fixtures.
 
 ## Maintain the GitHub Pages site
 
