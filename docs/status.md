@@ -1,4 +1,8 @@
-# Status — Phase 4B workspace deployed
+# Status — Phase 4C development; Phase 4B deployed
+
+## Phase 4C development branch
+
+`codex/phase-4c-sun-centred` adds a per-panel true-Sun-centred view of the existing Copernican Earth–Mars geometry. The same evaluator, parameters, policy and global clock serve both viewing centres. The Sun view translates each point by the true Sun, keeps the geocentric sight line and longitude angle at Earth, and samples its Mars trail against the moving Sun at every date. Ptolemaic geometry remains Earth-centred. This branch is for scientific and visual review; it has not been merged or deployed. See the [Copernican specification](copernicus-earth-mars.md) and [workspace architecture](workspace-architecture.md) for the contract.
 
 ## Current public release
 

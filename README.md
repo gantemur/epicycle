@@ -4,6 +4,8 @@ Epicycle Atlas is an English–Mongolian atlas of pre-Keplerian planetary constr
 
 **Status:** The [public `main` site](https://gantemur.github.io/epicycle/) now runs the Phase 4B clock-synchronized workspace. The earlier single-model experience remains available through the Explore one model preset. The reviewed development branch, `codex/phase-4b-displays`, is retained. See the [Copernican specification](docs/copernicus-earth-mars.md), [comparison conventions](docs/comparison-conventions.md), and [status](docs/status.md).
 
+Phase 4C is in development on `codex/phase-4c-sun-centred` and is **not deployed**. A Copernican geometry panel on that branch can show either Earth-centred or true-Sun-centred coordinates while keeping the same geocentric predictions.
+
 ## Run locally
 
 Requires Node.js 22.18+ (for built-in TypeScript test execution) and Python 3.10+. From the repository root:

@@ -112,6 +112,7 @@ function mountPanel(display: DisplayConfig): HTMLElement {
     '<p data-panel-error class="error" role="alert" hidden></p>',
     display.kind === 'geometry'
       ? '<p class="diagram-hint" data-panel-hint></p><div class="diagram-frame" data-geometry-frame></div>' +
+        '<p class="scientific-note" data-geometry-provenance hidden></p>' +
         '<p class="scientific-note" data-unavailable hidden></p><ul class="legend" data-panel-legend></ul>' +
         '<dl class="comparison-readouts" data-panel-readouts></dl>'
       : '<p class="plot-frame-note" data-frame-note></p><div class="workspace-plot-legend" data-plot-legend></div>' +

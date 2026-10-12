@@ -63,7 +63,7 @@ export const modelCapabilities: CapabilityRegistry = {
       { id: 'geocentric-sidereal-longitude', frame: 'copernican-sidereal' },
       { id: 'geocentric-tropical-longitude', frame: 'copernican-tropical' },
     ],
-    viewCenters: ['earth', 'true-sun'], renderedViewCenters: ['earth'],
+    viewCenters: ['earth', 'true-sun'], renderedViewCenters: ['earth', 'true-sun'],
     policies: {
       [apsisPolicy]: comparisonUt1Domain,
       [exploratoryApsisPolicy]: null,

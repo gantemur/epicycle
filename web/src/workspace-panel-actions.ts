@@ -10,7 +10,12 @@ export function changeGeometry(display: GeometryDisplay, setting: string, value:
   let next: GeometryDisplay = display;
   if (setting === 'model' && typeof value === 'string' && modelCapabilities[value]) {
     next = { ...display, modelId: value,
-      policyId: value === 'ptolemy' ? 'mathematical-continuation' : sourcePolicy };
+      policyId: value === 'ptolemy' ? 'mathematical-continuation' : sourcePolicy,
+      // A newly selected model starts with its supported Earth-centred view.
+      viewCenter: 'earth' };
+  } else if (setting === 'view-center') {
+    if (value !== 'earth' && value !== 'true-sun') return null;
+    next = { ...display, viewCenter: value };
   } else if (setting === 'policy' && typeof value === 'string') next = { ...display, policyId: value };
   else if (setting === 'trail') next = { ...display, trail: { ...display.trail, enabled: Boolean(value) } };
   else if (setting === 'trail-days' && typeof value === 'string') {

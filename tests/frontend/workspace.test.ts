@@ -164,12 +164,11 @@ test('unsupported model, observable, policy, and physical view centre are reject
   assert.ok(validateDisplay({ ...plot, traces: [badTrace] }).some(
     item => item.code === 'unsupported-observable'));
   assert.deepEqual(modelCapabilities.copernicus.viewCenters, ['earth', 'true-sun']);
-  assert.deepEqual(modelCapabilities.copernicus.renderedViewCenters, ['earth']);
+  assert.deepEqual(modelCapabilities.copernicus.renderedViewCenters, ['earth', 'true-sun']);
   const copernicus = applyWorkspacePreset(emptyWorkspace(), 'detailed-comparison').displays[2] as GeometryDisplay;
   const sunView = { ...copernicus, viewCenter: 'true-sun' as const };
   assert.deepEqual(validateDisplay(sunView), []);
-  assert.ok(displayAvailabilityAt(sunView, example1512Ut1).issues.some(
-    item => item.code === 'renderer-unavailable'));
+  assert.equal(displayAvailabilityAt(sunView, example1512Ut1).status, 'available');
   assert.equal(modelCapabilities.copernicus.sourceStatus, 'source-checked');
   assert.match(modelCapabilities.copernicus.validationStatus, /partially numerically validated/);
 });

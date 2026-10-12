@@ -1,5 +1,6 @@
 import { daysToEgyptian, daysToJulian, yearLabel } from './chronology.ts';
 import { evaluateSelectedModel } from './comparison.ts';
+import { comparisonUt1Domain } from './comparison-time.ts';
 import { copernicusTrail, renderCopernicusDiagram } from './copernicus-diagram.ts';
 import type { ApsisPolicy } from './copernicus.ts';
 import { renderDiagram, trailPoints } from './diagram.ts';
@@ -24,17 +25,29 @@ function policyOptions(selected: string, language: Language): string {
 
 function checked(value: boolean): string { return value ? 'checked' : ''; }
 
+export function geometryPanelTitle(display: GeometryDisplay, language: Language): string {
+  const model = t(language, models[display.modelId as ModelId].label);
+  const centre = display.modelId === 'copernicus'
+    ? ` · ${t(language, display.viewCenter === 'true-sun' ? 'trueSunCentred' : 'earthCentred')}` : '';
+  return `${t(language, 'geometryPanel')} · ${model}${centre}`;
+}
+
 /** Settings are replaced on configuration/language changes, never on animation frames. */
 export function renderGeometryStatic(panel: HTMLElement, display: GeometryDisplay, language: Language): void {
   const title = panel.querySelector<HTMLElement>('[data-panel-title]');
-  if (title) title.textContent = `${t(language, 'geometryPanel')} · ${t(language, models[display.modelId as ModelId].label)}`;
+  if (title) title.textContent = geometryPanelTitle(display, language);
   const settings = panel.querySelector<HTMLElement>('[data-panel-settings]');
   if (!settings) return;
   const wasOpen = settings instanceof HTMLDetailsElement ? settings.open : false;
   settings.innerHTML = `<summary>${t(language, 'panelSettings')}</summary>
     <div class="panel-settings-grid">
       <label>${t(language, 'modelSetting')}<select data-setting="model">${modelOptions(display.modelId, language)}</select></label>
-      <span class="panel-static-field">${t(language, 'mars')} · ${t(language, 'earthCentred')}</span>
+      ${display.modelId === 'copernicus'
+        ? `<label>${t(language, 'viewingCentre')}<select data-setting="view-center">
+            <option value="earth" ${display.viewCenter === 'earth' ? 'selected' : ''}>${t(language, 'earthCentred')}</option>
+            <option value="true-sun" ${display.viewCenter === 'true-sun' ? 'selected' : ''}>${t(language, 'trueSunCentred')}</option>
+          </select></label>`
+        : `<span class="panel-static-field">${t(language, 'mars')} · ${t(language, 'earthCentred')}</span>`}
       ${display.modelId === 'copernicus' ? `<label>${t(language, 'policySetting')}<select data-setting="policy">${policyOptions(display.policyId, language)}</select></label>` : ''}
       <label class="panel-check"><input type="checkbox" data-setting="trail" ${checked(display.trail.enabled)}> ${t(language, 'trail')}</label>
       <label>${t(language, 'trailLength')}<input type="range" min="30" max="720" step="10" data-setting="trail-days" value="${display.trail.days}"><span data-trail-value>${display.trail.days} ${t(language, 'days')}</span></label>
@@ -44,7 +57,8 @@ export function renderGeometryStatic(panel: HTMLElement, display: GeometryDispla
     </div>`;
   if (settings instanceof HTMLDetailsElement) settings.open = wasOpen;
   const hint = panel.querySelector<HTMLElement>('[data-panel-hint]');
-  if (hint) hint.textContent = t(language, display.modelId === 'ptolemy' ? 'ptolemyPanelHint' : 'copernicusPanelHint');
+  if (hint) hint.textContent = t(language, display.modelId === 'ptolemy' ? 'ptolemyPanelHint'
+    : display.viewCenter === 'true-sun' ? 'copernicusSunPanelHint' : 'copernicusPanelHint');
   const labels = display.modelId === 'ptolemy'
     ? [['O', 'earth'], ['D', 'deferentCenter'], ['Q', 'equant'], ['C', 'epicycleCenter'], ['P', 'mars']]
     : [['S', 'trueSun'], ['G', 'meanSun'], ['E', 'earth'], ['P', 'mars']];
@@ -86,6 +100,17 @@ export function renderGeometryDynamic(panel: HTMLElement, display: GeometryDispl
   const readouts = panel.querySelector<HTMLElement>('[data-panel-readouts]');
   const availability = displayAvailabilityAt(display, ut1Jd);
   const unavailable = panel.querySelector<HTMLElement>('[data-unavailable]');
+  const provenance = panel.querySelector<HTMLElement>('[data-geometry-provenance]');
+  if (provenance) {
+    const outsideGuard = ut1Jd < comparisonUt1Domain.start || ut1Jd > comparisonUt1Domain.end;
+    const exploratoryOutside = display.modelId === 'copernicus' &&
+      display.policyId === 'sn-uniform-exploratory' && outsideGuard;
+    provenance.hidden = !exploratoryOutside;
+    if (exploratoryOutside) {
+      const note = t(language, 'geometryExploratoryNote');
+      if (provenance.textContent !== note) provenance.textContent = note;
+    }
+  }
   if (availability.status !== 'available') {
     if (unavailable) {
       unavailable.hidden = false;
@@ -115,8 +140,10 @@ export function renderGeometryDynamic(panel: HTMLElement, display: GeometryDispl
     setValue(panel, '[data-julian-date]', `${yearLabel(julian.year, t(language, 'bce'), t(language, 'ce'))} · ${julian.month} · ${julian.day}`);
   } else {
     const trail = display.trail.enabled
-      ? copernicusTrail(evaluation.days, display.trail.days, 48, display.policyId as ApsisPolicy) : [];
-    frame.innerHTML = renderCopernicusDiagram(evaluation.result, language, trail, `-${display.id}`);
+      ? copernicusTrail(evaluation.days, display.trail.days, 48,
+        display.policyId as ApsisPolicy, display.viewCenter) : [];
+    frame.innerHTML = renderCopernicusDiagram(evaluation.result, language, trail,
+      `-${display.id}`, display.viewCenter);
     setValue(panel, '[data-sidereal]', formatAngle(evaluation.result.geocentricSiderealLongitude));
     setValue(panel, '[data-precession]', formatAngle(evaluation.result.truePrecession));
     setValue(panel, '[data-apogee]', formatAngle(evaluation.result.marsApogee));
