@@ -1,8 +1,8 @@
 # Epicycle Atlas
 
-Epicycle Atlas is an English–Mongolian atlas of pre-Keplerian planetary constructions. Its development workspace pairs historical Mars geometry with longitude plots, backed by independent Python research calculations. The project is independent of [SOL](https://github.com/gantemur/sol); SOL's animations remain a read-only legacy reference.
+Epicycle Atlas is an English–Mongolian atlas of pre-Keplerian planetary constructions. Its workspace pairs historical Mars geometry with longitude plots, backed by independent Python research calculations. The project is independent of [SOL](https://github.com/gantemur/sol); SOL's animations remain a read-only legacy reference.
 
-**Status:** The deployed `main` site at [gantemur.github.io/epicycle](https://gantemur.github.io/epicycle/) remains the accepted single-model Ptolemaic prototype. Phase 4B is committed on `codex/phase-4b-displays` for final review; it has not been merged or deployed. The development branch uses the accepted historical evaluators and public source records. See the [Copernican specification](docs/copernicus-earth-mars.md), [comparison conventions](docs/comparison-conventions.md), and [status](docs/status.md).
+**Status:** The [public `main` site](https://gantemur.github.io/epicycle/) now runs the Phase 4B clock-synchronized workspace. The earlier single-model experience remains available through the Explore one model preset. The reviewed development branch, `codex/phase-4b-displays`, is retained. See the [Copernican specification](docs/copernicus-earth-mars.md), [comparison conventions](docs/comparison-conventions.md), and [status](docs/status.md).
 
 ## Run locally
 
@@ -15,7 +15,11 @@ npm run dev
 
 Open `http://127.0.0.1:5173/epicycle/`. One assumed-UT1 clock drives independently configurable geometry and time-series panels. Presets replace the arrangement; adding, moving, or editing a panel does not change the others. The plot offers longitude overlays or signed model disagreement (B − A), with its own date window, pan/zoom, and explicit nominal historical tropical-frame alignment. This difference is between models, not observational error.
 
-Copernican geometry defaults to the source-limited 1473–1523 reconstruction. Comparison plots can explicitly select exploratory continuation; dashed portions show dates outside that reference interval, without an accuracy claim. The original Nabonassar and 1473/1512 jumps remain available. The global clock is independent of panel date policies. Use the header toggle for English or Mongolian. To verify or build:
+Copernican geometry defaults to the source-limited 1473–1523 reconstruction. Comparison plots can explicitly select exploratory continuation; dashed portions show dates outside that reference interval, without an accuracy claim. The original Nabonassar and 1473/1512 jumps remain available. The global clock is independent of panel date policies. Use the header toggle for English or Mongolian.
+
+Scientific limits remain visible in the workspace: Alexandria's 30° E meridian is provisional; the nominal historical tropical-frame alignment does not calibrate either historical equinox to a modern frame; Copernicus supplied no complete arbitrary-date Mars-apogee law; and historical numerical validation is partial.
+
+To verify or build:
 
 ```sh
 PYTHONPATH=src python3 -m unittest discover -s tests -v

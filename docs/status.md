@@ -1,26 +1,30 @@
-# Status — Phase 4B managed displays awaiting review
+# Status — Phase 4B workspace deployed
 
-## Local Phase 4B branch
+## Current public release
 
-The accepted Phase 4A work was verified and saved as local checkpoint `5cbe0c2` on `codex/phase-4a-workspace`. The `codex/phase-4b-displays` development branch contains the browser migration for review. The live local page now uses one assumed-UT1 `WorkspaceState.clock`, stable managed geometry and longitude panels, independent trace/policy/window settings, panel controls, bilingual text, and responsive plot-first mobile layout. The original Single and Compare behavior is available through the Explore one model and Compare longitudes presets, with the Nabonassar/1473/1512 jumps retained. The former dual-clock controller has been removed. See [workspace architecture](workspace-architecture.md) for the current contracts and deferred interactions.
+The [public `main` site](https://gantemur.github.io/epicycle/) now runs the reviewed Phase 4B workspace. One assumed-UT1 clock drives independently configurable geometry and longitude panels, including longitude overlays and signed historical model disagreement. The Explore one model and Compare longitudes presets retain the earlier experiences, with the Nabonassar/1473/1512 jumps. The reviewed `codex/phase-4b-displays` development branch is retained. See [workspace architecture](workspace-architecture.md) for state contracts and deferred interactions.
 
-Phase 4B remains unmerged and undeployed; the public `main` site remains the earlier accepted prototype. Final scientific and visual review is required before merging or deployment. The existing Pages workflow and all historical parameters, equations, source records, and fixtures are unchanged.
+The Pages workflow deploys only generated `dist/`. Its first Linux run exposed a platform-rounding difference in a Python cross-language fixture assertion; that test now tolerates sub-nanodegree float differences while retaining exact structure and nonfloat checks. Historical parameters, equations, source records, fixtures, and the Pages workflow are unchanged. The public workspace was checked after the successful Actions deployment. Browser-specific Safari playback verification remains open.
 
-The managed plot accepts year, date, or full Julian date-time boundaries without changing the strict shared-clock parser. Its new comparison traces explicitly select Copernican exploratory continuation; source-limited traces still leave genuine gaps. The plot marks the exploratory portions with dashed strokes outside the project-chosen 1473–1523 guard, with a visible provenance explanation. Geometry defaults remain source-limited. This guard is not an interval of established observational accuracy.
+The managed plot accepts year, date, or full Julian date-time boundaries without changing the strict shared-clock parser. Comparison traces can explicitly select Copernican exploratory continuation; source-limited traces leave genuine gaps. Dashed strokes mark exploratory portions outside the chosen 1473–1523 guard. Geometry defaults remain source-limited. The guard is not an interval of established observational accuracy. Alexandria's 30° E meridian is provisional, the nominal historical frame alignment is not a modern calibration, Copernicus supplied no complete arbitrary-date Mars-apogee law, and historical numerical validation remains partial.
 
 Final local Phase 4B audit: 30 Python tests, 55 frontend tests, TypeScript typecheck, production build, and `git diff --check` pass. Safari showed the 1512 disagreement as +7.731° (Copernicus minus Ptolemy) and −7.731° after reversing the pair. Its 1500–1600 plot showed a solid 1473–1523 segment, dashed exploratory continuation, and a genuine later gap under the source-limited policy. A four-panel workspace held two geometry panels and two plots on the shared clock; the Copernican panel now explains its unavailable date and explicit exploratory option in English and Mongolian. The ordinary longitude overlay and disagreement view both rendered in Safari. A synthetic frontend test checks separation at the ±180° branch cut; that cut was not naturally reached in the inspected historical Safari window.
 
 On an Apple M3 Pro MacBook Pro with 36 GB RAM, median isolated sampling plus SVG generation took 21 ms for a 100-year two-trace plot, 36 ms for four traces, and 52 ms for two century plots together. Cached policy and analysis changes took 6 and 4 ms respectively; two geometry SVGs took 0.09 ms per playback frame. Safari controls stayed responsive during plot changes, but the automation session did not advance the displayed clock during waits, and its native pointer-drag endpoint failed. Held-pointer Pause and animation cadence with four panels therefore remain for manual foreground Safari review. The built `dist/` contains only `index.html`, JavaScript, and CSS. Geometry tap-to-play is deferred.
 
-## Local Phase 4A branch
+## Earlier development checkpoints
+
+The following sections record earlier branch and deployed-baseline audits; their deployment statements describe those checkpoints, not the current public release.
+
+### Local Phase 4A branch
 
 `codex/phase-4a-workspace` was created from the clean, committed Phase 3C branch at `d394608`. Phase 4A added typed pure workspace state, model capability metadata, per-display validation and date availability, presets, and tests. It was checkpointed locally at `5cbe0c2` before the Phase 4B branch was created.
 
 Phase 4A checkpoint verification: 30 Python tests, 32 frontend tests, TypeScript type checking, production build, and `git diff --check` passed. The checkpoint was not pushed.
 
-## Local Phase 3C branch
+### Local Phase 3C branch
 
-The `codex/phase-3c-comparison` branch contains committed review-pending model selection and Compare mode. The deployed `main` site still has the accepted Ptolemaic single-model experience. Phase 3C has not been merged or deployed. The GitHub Pages workflow is unchanged.
+At this checkpoint, `codex/phase-3c-comparison` contained committed review-pending model selection and Compare mode, while the deployed `main` site still had the accepted Ptolemaic single-model experience. Phase 3C had not yet been merged or deployed. The GitHub Pages workflow was unchanged.
 
 The browser ports the accepted Phase 3B Earth and Mars geometries from the existing public JSON records. Its small registry supports Ptolemy or Copernicus alone and independent Model A/B choices. The selected evaluators use one assumed UT1 instant, the documented 19°40′ E Frauenburg meridian, and a visibly provisional 30° E Alexandria choice. The original Ptolemaic Nabonassar controls remain available in Single mode.
 
@@ -30,7 +34,7 @@ Native historical longitudes remain labelled. The Model B minus Model A differen
 
 The Python-generated `copernicus-cross-language.json` fixture covers both policies, including 2026, and is checked against the TypeScript Earth/Mars points, lengths, longitudes, corrections and precession. Across 847 numeric fixture fields, the maximum absolute Python/TypeScript difference is 3.0923×10⁻¹¹, unchanged from the earlier 634-field fixture maximum. The accepted historical parameters and equations are unchanged. Current verification: 30 Python tests, 19 frontend tests and a successful production build. Browser-based desktop, mobile and Safari checks remain unverified: the local preview URL was rejected by browser security policy, which forbade switching to another browser route for that URL. Scientific and visual review remain required before any commit or deployment.
 
-## Deployed baseline on `main`
+### Phase 2 deployed baseline on `main`
 
 Git `main` tracks `origin/main` at `gantemur/epicycle`. The GitHub Pages workflow builds and deploys only `dist/`; `private/` remains ignored and outside the Vite root and build import graph. The public target is [gantemur.github.io/epicycle](https://gantemur.github.io/epicycle/).
 
@@ -42,7 +46,7 @@ The Neugebauer Table 15 discrepancy is now independently reconstructed from a li
 
 Run the commands in [README.md](../README.md). Phase 2 verification includes Python tests, TypeScript tests, a production build, and local browser checks at desktop, 360 px, and 390 px in both languages. The geometry, playback, trail toggle, example jump, and source panel were inspected. No horizontal overflow was observed at either phone width. The built `dist/` contains only HTML, CSS, and JS assets; no private paths.
 
-The [comparison conventions](comparison-conventions.md) now specify explicit civil/JD/UT1/LMT/TT boundaries, an uncertain ancient ΔT, metadata-checked geocentric longitude residuals, and the source work needed for a coupled Copernican Earth + Mars model. A coupled Copernican Earth–Mars Python evaluator is now implemented; no modern adapter is present. Open work: the complete XI.11–12 table remains unimplemented; row 3's rounding path is unresolved; Alexandria's historical meridian and any ancient ΔT choice must be sourced before physical-instant comparisons. The deployed `main` UI remains the accepted one-model Phase 2 prototype, with no latitude or modern prediction.
+The [comparison conventions](comparison-conventions.md) specify explicit civil/JD/UT1/LMT/TT boundaries, an uncertain ancient ΔT, metadata-checked geocentric longitude residuals, and the source work needed for a coupled Copernican Earth + Mars model. A coupled Copernican Earth–Mars Python evaluator was implemented; no modern adapter was present. Open work: the complete XI.11–12 table remains unimplemented; row 3's rounding path is unresolved; Alexandria's historical meridian and any ancient ΔT choice must be sourced before physical-instant comparisons. At this checkpoint, the deployed `main` UI was the one-model Phase 2 prototype, with no latitude or modern prediction.
 
 
 ## Phase 3B
