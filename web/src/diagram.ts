@@ -33,7 +33,9 @@ function dot(point: Point, code: string, className: string, dx: number, dy: numb
 }
 
 export function trailPoints(day: number, span: number, samples = 160): Point[] {
-  const beginning = Math.max(0, day - span);
+  // Retain the original epoch clamp for nonnegative dates. Before the epoch,
+  // follow the requested interval of mathematically continued mean motions.
+  const beginning = day < 0 ? day - span : Math.max(0, day - span);
   return Array.from({ length: samples + 1 }, (_, index) =>
     evaluateDays(beginning + (day - beginning) * index / samples).planet);
 }

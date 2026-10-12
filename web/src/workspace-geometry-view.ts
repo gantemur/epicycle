@@ -112,6 +112,19 @@ function setValue(panel: HTMLElement, selector: string, value: string): void {
   if (node && node.textContent !== value) node.textContent = value;
 }
 
+/** A negative elapsed day has a Julian date, but no Nabonassar calendar date. */
+export function formatPtolemaicDates(days: number, language: Language):
+  { egyptian: string; julian: string } {
+  const julianDate = daysToJulian(days);
+  const julian = `${yearLabel(julianDate.year, t(language, 'bce'), t(language, 'ce'))} · ${julianDate.month} · ${julianDate.day}`;
+  if (days < 0) {
+    return { egyptian: t(language, 'beforeNabonassarEpoch'), julian };
+  }
+  const egyptianDate = daysToEgyptian(days);
+  const egyptian = `${egyptianDate.year} · ${egyptianDate.month} · ${egyptianDate.day}`;
+  return { egyptian, julian };
+}
+
 export function geometryUnavailableMessageKey(display: GeometryDisplay,
   availability: Availability): MessageKey {
   if (availability.issues.some(item => item.code === 'renderer-unavailable')) return 'rendererUnavailable';
@@ -194,10 +207,9 @@ export function renderGeometryDynamic(panel: HTMLElement, display: GeometryDispl
     setValue(panel, '[data-mean-longitude]', formatAngle(result.meanLongitude));
     setValue(panel, '[data-mean-anomaly]', formatAngle(result.meanAnomaly));
     setValue(panel, '[data-centre-correction]', formatAngle(result.equationOfCenter));
-    const egyptian = daysToEgyptian(days);
-    const julian = daysToJulian(days);
-    setValue(panel, '[data-egyptian-date]', `${egyptian.year} · ${egyptian.month} · ${egyptian.day}`);
-    setValue(panel, '[data-julian-date]', `${yearLabel(julian.year, t(language, 'bce'), t(language, 'ce'))} · ${julian.month} · ${julian.day}`);
+    const dates = formatPtolemaicDates(days, language);
+    setValue(panel, '[data-egyptian-date]', dates.egyptian);
+    setValue(panel, '[data-julian-date]', dates.julian);
     return;
   }
   const evaluation = evaluateSelectedModel(display.modelId as MarsModelId, ut1Jd,
@@ -209,10 +221,9 @@ export function renderGeometryDynamic(panel: HTMLElement, display: GeometryDispl
     setValue(panel, '[data-mean-longitude]', formatAngle(evaluation.result.meanLongitude));
     setValue(panel, '[data-mean-anomaly]', formatAngle(evaluation.result.meanAnomaly));
     setValue(panel, '[data-centre-correction]', formatAngle(evaluation.result.equationOfCenter));
-    const egyptian = daysToEgyptian(evaluation.days);
-    const julian = daysToJulian(evaluation.days);
-    setValue(panel, '[data-egyptian-date]', `${egyptian.year} · ${egyptian.month} · ${egyptian.day}`);
-    setValue(panel, '[data-julian-date]', `${yearLabel(julian.year, t(language, 'bce'), t(language, 'ce'))} · ${julian.month} · ${julian.day}`);
+    const dates = formatPtolemaicDates(evaluation.days, language);
+    setValue(panel, '[data-egyptian-date]', dates.egyptian);
+    setValue(panel, '[data-julian-date]', dates.julian);
   } else {
     const trail = display.trail.enabled
       ? copernicusTrail(evaluation.days, display.trail.days, 48,
