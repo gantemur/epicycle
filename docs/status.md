@@ -1,12 +1,12 @@
-# Status — Phase 4C development; Phase 4B deployed
-
-## Phase 4C development branch
-
-`codex/phase-4c-sun-centred` adds a per-panel true-Sun-centred view of the existing Copernican Earth–Mars geometry. The same evaluator, parameters, policy and global clock serve both viewing centres. The Sun view translates each point by the true Sun, keeps the geocentric sight line and longitude angle at Earth, and samples its Mars trail against the moving Sun at every date. Ptolemaic geometry remains Earth-centred. This branch is for scientific and visual review; it has not been merged or deployed. See the [Copernican specification](copernicus-earth-mars.md) and [workspace architecture](workspace-architecture.md) for the contract.
+# Status — Phase 4C deployed
 
 ## Current public release
 
-The [public `main` site](https://gantemur.github.io/epicycle/) now runs the reviewed Phase 4B workspace. One assumed-UT1 clock drives independently configurable geometry and longitude panels, including longitude overlays and signed historical model disagreement. The Explore one model and Compare longitudes presets retain the earlier experiences, with the Nabonassar/1473/1512 jumps. The reviewed `codex/phase-4b-displays` development branch is retained. See [workspace architecture](workspace-architecture.md) for state contracts and deferred interactions.
+The [public `main` site](https://gantemur.github.io/epicycle/) includes the reviewed Phase 4C per-panel true-Sun-centred view of the Copernican Earth–Mars geometry. The same evaluator, parameters, policy and global clock serve both viewing centres. The Sun view translates each point by the true Sun, keeps the geocentric sight line and longitude angle at Earth, and samples its Mars trail against the moving Sun at every date. Ptolemaic geometry remains Earth-centred. The `codex/phase-4c-sun-centred` branch is retained for reference. Phase 4C release checks passed: 30 Python tests, 62 frontend tests, TypeScript typecheck, production build and `git diff --check`. See the [Copernican specification](copernicus-earth-mars.md) and [workspace architecture](workspace-architecture.md) for the contract.
+
+## Phase 4B release record
+
+Phase 4B introduced the clock-synchronized workspace. One assumed-UT1 clock drives independently configurable geometry and longitude panels, including longitude overlays and signed historical model disagreement. The Explore one model and Compare longitudes presets retain the earlier experiences, with the Nabonassar/1473/1512 jumps. The reviewed `codex/phase-4b-displays` development branch is retained. See [workspace architecture](workspace-architecture.md) for state contracts and deferred interactions.
 
 The Pages workflow deploys only generated `dist/`. Its first Linux run exposed a platform-rounding difference in a Python cross-language fixture assertion; that test now tolerates sub-nanodegree float differences while retaining exact structure and nonfloat checks. Historical parameters, equations, source records, fixtures, and the Pages workflow are unchanged. The public workspace was checked after the successful Actions deployment. Browser-specific Safari playback verification remains open.
 

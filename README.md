@@ -2,9 +2,7 @@
 
 Epicycle Atlas is an English–Mongolian atlas of pre-Keplerian planetary constructions. Its workspace pairs historical Mars geometry with longitude plots, backed by independent Python research calculations. The project is independent of [SOL](https://github.com/gantemur/sol); SOL's animations remain a read-only legacy reference.
 
-**Status:** The [public `main` site](https://gantemur.github.io/epicycle/) now runs the Phase 4B clock-synchronized workspace. The earlier single-model experience remains available through the Explore one model preset. The reviewed development branch, `codex/phase-4b-displays`, is retained. See the [Copernican specification](docs/copernicus-earth-mars.md), [comparison conventions](docs/comparison-conventions.md), and [status](docs/status.md).
-
-Phase 4C is in development on `codex/phase-4c-sun-centred` and is **not deployed**. A Copernican geometry panel on that branch can show either Earth-centred or true-Sun-centred coordinates while keeping the same geocentric predictions.
+**Status:** The [public `main` site](https://gantemur.github.io/epicycle/) runs the Phase 4C clock-synchronized workspace. A Copernican geometry panel can show Earth-centred or true-Sun-centred coordinates with identical geocentric predictions. The earlier single-model experience remains available through the Explore one model preset. The reviewed development branches remain available for reference. See the [Copernican specification](docs/copernicus-earth-mars.md), [comparison conventions](docs/comparison-conventions.md), and [status](docs/status.md).
 
 ## Run locally
 
@@ -41,4 +39,4 @@ Scientific rule: historical constructions and numbers retain their own provenanc
 
 Start with [status](docs/status.md), then the [Mars specification](docs/mars-almagest.md), [online resources](docs/online-resources.md), [architecture](docs/architecture.md), [sources](docs/sources.md), [legacy audit](docs/legacy-audit.md), [model catalogue](docs/model-catalogue.md), and [roadmap](docs/roadmap.md). Future coding sessions should also read [AGENTS.md](AGENTS.md).
 
-The local `private/` tree contains research PDFs and legacy snapshots. It is ignored recursively and must not be published. The prototype does not import or copy its contents.
+The local `private/` tree contains research PDFs and legacy snapshots. It is ignored recursively and must not be published. The site does not import or copy its contents.

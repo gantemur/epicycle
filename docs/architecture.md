@@ -66,4 +66,4 @@ This branch has no modern reference adapter, no source-backed Alexandria meridia
 
 ## Phase 4A workspace foundation
 
-The review branch now also contains a pure, versioned workspace state and capability-aware registry, without changing the live Phase 3C interface. One assumed UT1 clock is authoritative for future managed displays; geometry and time-series panel configurations own independent model and presentation selections. See [workspace architecture](workspace-architecture.md) for invariants, availability rules, presets, and the Phase 4B migration contract.
+At the Phase 4A checkpoint, the review branch added pure, versioned workspace state and a capability-aware registry before the live interface migrated. One assumed UT1 clock is now authoritative for managed displays; geometry and time-series panel configurations own independent model and presentation selections. See [workspace architecture](workspace-architecture.md) for the current invariants, availability rules, and presets.

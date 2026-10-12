@@ -11,4 +11,4 @@ Gate each stage on source fidelity, time/frame documentation, and numerical vali
 
 ## Current workspace sequence
 
-Phase 4A is the local architecture/state foundation on `codex/phase-4a-workspace`; it adds no visible workspace UI or new science. Phase 4B will migrate the accepted Phase 3C Single and Compare experiences into managed panels using one clock, then expose the first workspace controls. Subsequent catalogue expansion still requires sourced models and validation. See [workspace architecture](workspace-architecture.md).
+Phases 4A–4C delivered the state foundation, clock-synchronized managed displays, and optional true-Sun-centred Copernican geometry. The Phase 4C workspace is deployed from `main`. Subsequent catalogue expansion still requires sourced models and validation. See [workspace architecture](workspace-architecture.md).
