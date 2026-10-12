@@ -1,8 +1,10 @@
 import { evaluateSelectedModel } from './comparison.ts';
-import { computationalUt1Domain } from './comparison-time.ts';
+import { computationalUt1Domain, modelDaysAtUt1 } from './comparison-time.ts';
 import type { ApsisPolicy } from './copernicus.ts';
+import { evaluateCopernicusSunDays } from './copernicus-sun.ts';
 import { angularDifference } from './model.ts';
-import { modelCapabilities, type ModelId } from './model-registry.ts';
+import { modelCapabilities } from './model-registry.ts';
+import { evaluatePtolemySunDays } from './sun-almagest.ts';
 import { validateDisplay } from './workspace-validation.ts';
 import type { PlotTrace, TimeSeriesDisplay } from './workspace-types.ts';
 
@@ -45,13 +47,22 @@ export function traceLongitudeAt(trace: PlotTrace, ut1Jd: number): number | null
       ut1Jd < computationalUt1Domain.start || ut1Jd > computationalUt1Domain.end) return null;
   const policyRange = model.policies[trace.policyId];
   if (policyRange && (ut1Jd < policyRange.start || ut1Jd > policyRange.end)) return null;
-  // Only these two registered evaluators exist. A future model needs an explicit dispatch.
-  if (trace.modelId !== 'ptolemy' && trace.modelId !== 'copernicus') return null;
-  const result = evaluateSelectedModel(trace.modelId as ModelId, ut1Jd, trace.policyId as ApsisPolicy);
-  if (trace.observableId === 'geocentric-sidereal-longitude' && result.model === 'copernicus') {
-    return result.result.geocentricSiderealLongitude;
+  if (trace.modelId === 'ptolemy-sun') {
+    return evaluatePtolemySunDays(modelDaysAtUt1(ut1Jd).ptolemy).longitude;
   }
-  return trace.observableId === 'geocentric-tropical-longitude' ? result.tropical : null;
+  if (trace.modelId === 'copernicus-sun') {
+    const result = evaluateCopernicusSunDays(modelDaysAtUt1(ut1Jd).copernicus);
+    return trace.observableId === 'geocentric-sidereal-longitude'
+      ? result.solarSiderealLongitude : result.solarTropicalLongitude;
+  }
+  if (trace.modelId === 'ptolemy' || trace.modelId === 'copernicus') {
+    const result = evaluateSelectedModel(trace.modelId, ut1Jd,
+      trace.policyId as ApsisPolicy);
+    if (trace.observableId === 'geocentric-sidereal-longitude' &&
+        result.model === 'copernicus') return result.result.geocentricSiderealLongitude;
+    return trace.observableId === 'geocentric-tropical-longitude' ? result.tropical : null;
+  }
+  return null;
 }
 
 function unwrapAvailable(values: readonly (number | null)[]): (number | null)[] {

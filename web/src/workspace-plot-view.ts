@@ -1,6 +1,7 @@
 import { formatFrauenburgInput } from './comparison-time.ts';
 import { message, type Language, type MessageKey } from './i18n.ts';
-import { modelCapabilities, modelIds, models, type ModelId } from './model-registry.ts';
+import { historicalBodies, modelCapabilities, modelIdsForBody, models,
+  type ModelId } from './model-registry.ts';
 import { modelDisagreementAt, sampleWorkspacePlot, styledPlotSegments,
   traceLongitudeAt, workspacePlotCacheKey, type PlotPoint, type WorkspacePlotSamples } from './workspace-plot.ts';
 import { nativeFrameForTrace, traceCoverage, validateDisplay } from './workspace-validation.ts';
@@ -23,7 +24,7 @@ function frameLabel(trace: PlotTrace, language: Language): string {
 
 function traceLabel(trace: PlotTrace, language: Language): string {
   const model = models[trace.modelId as ModelId];
-  return `${t(language, model.label)} · ${t(language, 'mars')} · ${t(language,
+  return `${t(language, trace.body === 'Sun' ? 'sun' : 'mars')} · ${t(language, model.label)} · ${t(language,
     trace.observableId === 'geocentric-sidereal-longitude' ? 'siderealObservable' : 'tropicalObservable')}`;
 }
 
@@ -35,7 +36,7 @@ function tracePolicyLabel(trace: PlotTrace, language: Language): string {
 }
 
 function traceSettings(trace: PlotTrace, index: number, language: Language): string {
-  const modelOptions = modelIds.map(id => `<option value="${id}" ${id === trace.modelId ? 'selected' : ''}>${t(language, models[id].label)}</option>`).join('');
+  const modelOptions = modelIdsForBody(trace.body).map(id => `<option value="${id}" ${id === trace.modelId ? 'selected' : ''}>${t(language, models[id].label)}</option>`).join('');
   const observables = modelCapabilities[trace.modelId].observables.map(item => {
     const key = item.id === 'geocentric-sidereal-longitude' ? 'siderealObservable' : 'tropicalObservable';
     return `<option value="${item.id}" ${item.id === trace.observableId ? 'selected' : ''}>${t(language, key)}</option>`;
@@ -44,7 +45,7 @@ function traceSettings(trace: PlotTrace, index: number, language: Language): str
     ? `<label>${t(language, 'policySetting')}<select data-trace-setting="policy" data-trace-id="${trace.id}">
        ${Object.keys(modelCapabilities.copernicus.policies).map(id => `<option value="${id}" ${id === trace.policyId ? 'selected' : ''}>${t(language, id === 'sn-uniform-exploratory' ? 'exploratoryPolicy' : 'sourceLimitedPolicy')}</option>`).join('')}</select></label>` : '';
   return `<fieldset class="trace-settings"><legend>${t(language, 'trace')} ${index + 1}</legend>
-    <label>${t(language, 'mars')}<select data-trace-setting="body" data-trace-id="${trace.id}"><option value="Mars">${t(language, 'mars')}</option></select></label>
+    <label>${t(language, 'bodySetting')}<select data-trace-setting="body" data-trace-id="${trace.id}">${historicalBodies.map(body => `<option value="${body}" ${trace.body === body ? 'selected' : ''}>${t(language, body === 'Sun' ? 'sun' : 'mars')}</option>`).join('')}</select></label>
     <label>${t(language, 'modelSetting')}<select data-trace-setting="model" data-trace-id="${trace.id}">${modelOptions}</select></label>
     <label>${t(language, 'observable')}<select data-trace-setting="observable" data-trace-id="${trace.id}">${observables}</select></label>
     ${policies}<button type="button" data-action="remove-trace" data-trace-id="${trace.id}">${t(language, 'removeTrace')}</button>
@@ -53,7 +54,7 @@ function traceSettings(trace: PlotTrace, index: number, language: Language): str
 }
 
 function tracePairOptions(display: TimeSeriesDisplay, selected: string, language: Language): string {
-  return display.traces.map((trace, index) => `<option value="${trace.id}" ${trace.id === selected ? 'selected' : ''}>${t(language, 'trace')} ${index + 1} · ${t(language, models[trace.modelId as ModelId].label)}</option>`).join('');
+  return display.traces.map((trace, index) => `<option value="${trace.id}" ${trace.id === selected ? 'selected' : ''}>${t(language, 'trace')} ${index + 1} · ${t(language, trace.body === 'Sun' ? 'sun' : 'mars')} · ${t(language, models[trace.modelId as ModelId].label)}</option>`).join('');
 }
 
 function disagreementLabel(first: PlotTrace, second: PlotTrace, language: Language): string {
@@ -85,7 +86,7 @@ export function renderPlotStatic(panel: HTMLElement, display: TimeSeriesDisplay,
   const title = panel.querySelector<HTMLElement>('[data-panel-title]');
   if (title) {
     const modelNames = [...new Set(display.traces.map(trace => trace.modelId))]
-      .map(id => t(language, models[id as ModelId].label)).join(' / ');
+      .map(id => `${t(language, models[id as ModelId].body === 'Sun' ? 'sun' : 'mars')} · ${t(language, models[id as ModelId].label)}`).join(' / ');
     title.textContent = `${t(language, display.analysis.kind === 'model-disagreement'
       ? 'disagreementPlotTitle' : 'plotPanel')} · ${modelNames}`;
   }

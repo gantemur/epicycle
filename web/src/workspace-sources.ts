@@ -1,6 +1,7 @@
 import { earthRecord, marsRecord } from './copernicus.ts';
 import { message, type Language, type MessageKey } from './i18n.ts';
 import { modelRecord } from './model.ts';
+import { sunRecord } from './sun-almagest.ts';
 
 const ptolemyParameters: readonly [keyof typeof modelRecord.parameters, MessageKey][] = [
   ['deferent_radius', 'radiusDeferent'], ['double_eccentricity', 'eccentricityDouble'],
@@ -27,6 +28,15 @@ const marsParameters: readonly [keyof typeof marsRecord.parameters, string, Mess
   ['mean_commutation_epoch', 'α₀', 'commutationEpoch'],
   ['mean_commutation_annual_motion', 'nα', 'commutationMotion'], ['apogee_1523', 'B', 'marsApogeeAnchor'],
 ];
+const sunParameters: readonly [keyof typeof sunRecord.parameters, string, MessageKey][] = [
+  ['eccentric_radius', 'R', 'solarEccentricRadius'],
+  ['eccentricity', 'e', 'solarEccentricity'],
+  ['apogee_longitude', 'A', 'solarApogeeSource'],
+  ['mean_longitude_epoch', 'L₀', 'solarMeanEpoch'],
+  ['mean_anomaly_epoch', 'κ₀', 'solarMeanAnomalyEpoch'],
+  ['tropical_year', 'T', 'tropicalYear'],
+  ['mean_longitude_daily_motion', 'n☉', 'solarDailyMotion'],
+];
 
 export function renderWorkspaceSources(language: Language): string {
   const t = (key: MessageKey): string => message(language, key);
@@ -36,6 +46,12 @@ export function renderWorkspaceSources(language: Language): string {
     'degree per 365-day Egyptian year': 'unitYearly',
     'Earth annual-radius units': 'unitEarthRadius',
     'Mars principal-radius units': 'unitMarsRadius',
+    'historical radius units': 'unitSolarRadius',
+    'tropical degree, fixed': 'unitDegree',
+    'tropical degree': 'unitDegree',
+    'degree from solar apogee': 'unitDegree',
+    'mean day': 'unitMeanDays',
+    'degree per mean day': 'unitMeanDay',
   };
   const formattedValue = (parameter: { sexagesimal: string; unit: string }): string => {
     const unitKey = units[parameter.unit];
@@ -61,5 +77,15 @@ export function renderWorkspaceSources(language: Language): string {
         <div class="info-columns"><div><h3>${t('earthParameters')}</h3><dl class="parameters">${sourceRows(earthRecord.parameters, earthParameters)}</dl></div>
           <div><h3>${t('marsParameters')}</h3><dl class="parameters">${sourceRows(marsRecord.parameters, marsParameters)}
             <div><dt>nB · ${t('marsApogee')}</dt><dd>${formattedValue(marsRecord.optional_reconstructions['sn-local-uniform-1473-1523'].annual_motion)}</dd></div></dl></div></div>
+      </div></details>
+    <details class="info-card" id="sources-sun"><summary><span><span class="section-kicker">ALMAGEST III / DE REVOLUTIONIBUS III</span><strong>${t('sunSources')}</strong></span><span class="summary-plus" aria-hidden="true">+</span></summary>
+      <div class="info-content"><p class="info-lead">${t('ptolemySunSourceIntro')}</p>
+        <p>${t('ptolemySunSourceLine')}</p><p class="scientific-note">${t('ptolemySunValidation')}</p>
+        <div class="meta-row"><strong>${t('epoch')}</strong><span>${t('ptolemySolarEpoch')}</span></div>
+        <h3>${t('parameterTitle')} · ${t('ptolemySunPanel')}</h3>
+        <dl class="parameters">${sourceRows(sunRecord.parameters, sunParameters)}</dl>
+        <h3>${t('copernicusSunModelPanel')}</h3><p>${t('copernicusSunSourceIntro')}</p>
+        <p>${t('copernicusSunSourceLine')}</p><p class="scientific-note">${t('solarFrameLimit')}</p>
+        <p class="scientific-note">${t('solarContinuation')}</p>
       </div></details>`;
 }

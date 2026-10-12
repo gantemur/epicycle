@@ -3,6 +3,8 @@ import { modelDaysAtUt1 } from './comparison-time.ts';
 import { angularDifference, evaluateDays, type MarsResult } from './model.ts';
 import type { ModelId } from './model-registry.ts';
 
+export type MarsModelId = Extract<ModelId, 'ptolemy' | 'copernicus'>;
+
 export type Comparison = Readonly<{
   instantUt1: number;
   ptolemyDays: number;
@@ -32,7 +34,7 @@ export type ModelEvaluation =
   | Readonly<{ model: 'ptolemy'; days: number; result: MarsResult; tropical: number }>
   | Readonly<{ model: 'copernicus'; days: number; result: CopernicusMarsResult; tropical: number }>;
 
-export function evaluateSelectedModel(model: ModelId, instantUt1: number,
+export function evaluateSelectedModel(model: MarsModelId, instantUt1: number,
   policy: ApsisPolicy): ModelEvaluation {
   const days = modelDaysAtUt1(instantUt1);
   if (model === 'ptolemy') {
@@ -68,7 +70,7 @@ export type SelectedPlotSamples = Readonly<{
 }>;
 
 export function selectedPlotCacheKey(startUt1: number, endUt1: number,
-  modelA: ModelId, modelB: ModelId, policy: ApsisPolicy,
+  modelA: MarsModelId, modelB: MarsModelId, policy: ApsisPolicy,
   mode: 'wrapped' | 'unwrapped', language: string): string {
   // The playback instant is deliberately absent: only the marker moves.
   return [startUt1, endUt1, modelA, modelB, policy, mode, language].join('|');
@@ -76,7 +78,7 @@ export function selectedPlotCacheKey(startUt1: number, endUt1: number,
 
 /** At most three historical days per segment resolves the Mars retrograde loops. */
 export function sampleSelectedPlot(startUt1: number, endUt1: number,
-  modelA: ModelId, modelB: ModelId, policy: ApsisPolicy,
+  modelA: MarsModelId, modelB: MarsModelId, policy: ApsisPolicy,
   mode: 'wrapped' | 'unwrapped'): SelectedPlotSamples {
   const span = endUt1 - startUt1;
   if (!Number.isFinite(span) || span <= 0 || span > 365 * 50) {

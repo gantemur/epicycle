@@ -1,4 +1,10 @@
-# Status — Phase 4C deployed
+# Status — Phase 5A development, Phase 4C deployed
+
+## Phase 5A development branch
+
+`codex/phase-5a-solar-models` adds Ptolemy's *Almagest* III solar eccentric and exposes Copernicus's accepted 1543 Earth construction as an independent geocentric Sun prediction. The two Sun models have distinct identities from their Mars counterparts. The shared workspace now supports solar geometry, Sun and Mars longitude traces, same-body solar model disagreement under the declared nominal historical tropical-frame alignment, and a Solar comparison preset. The public `main` site remains Phase 4C until scientific and visual review authorizes release.
+
+The Ptolemaic model uses the printed six-place mean daily motion, a fixed tropical apogee, and the Alexandria-noon Nabonassar epoch. Its exact geometry is checked against selected original solar-anomaly table rows and a source-worked off-epoch position, but the original complete table-interpolation algorithm is not implemented. Copernican solar calculations reuse the existing Earth model record and evaluator without a Mars-apogee policy. Solar longitudes at broad dates are mathematical continuations of historical rates. Neither historical equinox is calibrated to a modern frame. See [solar source audit](sun-almagest.md) and the [model census](epicycle_model_census.md).
 
 ## Current public release
 

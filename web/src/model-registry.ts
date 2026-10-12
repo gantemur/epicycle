@@ -2,9 +2,10 @@ import { modelRecord } from './model.ts';
 import { apsisPolicy, earthRecord, exploratoryApsisPolicy, marsRecord,
   type ApsisPolicy } from './copernicus.ts';
 import { comparisonUt1Domain } from './comparison-time.ts';
+import { sunRecord } from './sun-almagest.ts';
 import type { MessageKey } from './i18n.ts';
 
-/** Small catalogue of implemented, versioned Mars definitions. */
+/** Body-specific historical models retain their existing Mars identifiers. */
 export const models = {
   ptolemy: {
     id: 'ptolemy', recordId: modelRecord.model_id, schemaVersion: modelRecord.schema_version,
@@ -19,10 +20,45 @@ export const models = {
     dependencies: [earthRecord.model_id],
     datePolicies: Object.keys(marsRecord.optional_reconstructions).concat(Object.keys(marsRecord.exploratory_policies)) as ApsisPolicy[],
   },
+  'ptolemy-sun': {
+    id: 'ptolemy-sun', recordId: sunRecord.model_id, schemaVersion: sunRecord.schema_version,
+    body: 'Sun', observables: ['geocentric tropical longitude'],
+    source: sunRecord.source_edition, label: 'ptolemySunPanel' as MessageKey,
+    dependencies: [] as readonly string[], datePolicies: ['mathematical-continuation'],
+  },
+  'copernicus-sun': {
+    id: 'copernicus-sun', recordId: earthRecord.model_id,
+    schemaVersion: earthRecord.schema_version,
+    body: 'Sun', observables: ['geocentric sidereal longitude', 'geocentric tropical longitude'],
+    source: earthRecord.source_edition, label: 'copernicusSunModelPanel' as MessageKey,
+    dependencies: [] as readonly string[], datePolicies: ['mathematical-continuation'],
+  },
 } as const;
 
 export type ModelId = keyof typeof models;
 export const modelIds = Object.keys(models) as ModelId[];
+export type HistoricalBody = 'Mars' | 'Sun';
+export const historicalBodies: readonly HistoricalBody[] = ['Mars', 'Sun'];
+
+export function modelIdsForBody(body: string): ModelId[] {
+  return modelIds.filter(id => models[id].body === body);
+}
+
+export function firstModelForBody(body: HistoricalBody): ModelId {
+  return body === 'Sun' ? 'ptolemy-sun' : 'ptolemy';
+}
+
+export function correspondingModelForBody(modelId: ModelId,
+  body: HistoricalBody): ModelId {
+  if (body === 'Sun') return modelId.startsWith('copernicus') ? 'copernicus-sun' : 'ptolemy-sun';
+  return modelId.startsWith('copernicus') ? 'copernicus' : 'ptolemy';
+}
+
+export function defaultPolicyForModel(modelId: ModelId,
+  setting: 'geometry' | 'plot'): string {
+  if (modelId !== 'copernicus') return 'mathematical-continuation';
+  return setting === 'geometry' ? apsisPolicy : exploratoryApsisPolicy;
+}
 
 /** Capabilities describe the implemented mathematics, not an available renderer. */
 export type ObservableId = 'geocentric-tropical-longitude' | 'geocentric-sidereal-longitude';
@@ -69,6 +105,23 @@ export const modelCapabilities: CapabilityRegistry = {
       [exploratoryApsisPolicy]: null,
     },
     exploratoryReferenceRanges: { [exploratoryApsisPolicy]: comparisonUt1Domain },
+  },
+  'ptolemy-sun': {
+    ...models['ptolemy-sun'], sourceStatus: 'source-checked',
+    validationStatus: sunRecord.model_status,
+    observables: [{ id: 'geocentric-tropical-longitude', frame: 'ptolemaic-tropical' }],
+    viewCenters: ['earth'], renderedViewCenters: ['earth'],
+    policies: { 'mathematical-continuation': null },
+  },
+  'copernicus-sun': {
+    ...models['copernicus-sun'], sourceStatus: 'source-checked',
+    validationStatus: earthRecord.model_status,
+    observables: [
+      { id: 'geocentric-sidereal-longitude', frame: 'copernican-sidereal' },
+      { id: 'geocentric-tropical-longitude', frame: 'copernican-tropical' },
+    ],
+    viewCenters: ['earth', 'true-sun'], renderedViewCenters: ['earth', 'true-sun'],
+    policies: { 'mathematical-continuation': null },
   },
 };
 

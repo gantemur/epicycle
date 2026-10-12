@@ -272,6 +272,14 @@ h2 {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+.solar-trail {
+  fill: none;
+  stroke: #eac775;
+  stroke-width: 3;
+  opacity: .74;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .point-halo {
   fill: #fff;
   opacity: .13;

@@ -1,18 +1,20 @@
-import { modelCapabilities } from './model-registry.ts';
-import { exploratoryApsisPolicy } from './copernicus.ts';
+import { correspondingModelForBody, defaultPolicyForModel, historicalBodies,
+  modelCapabilities, type HistoricalBody, type ModelId } from './model-registry.ts';
 import { validateDisplay } from './workspace-validation.ts';
 import type { DisplayConfig, GeometryDisplay, PlotTrace, TimeSeriesDisplay } from './workspace-types.ts';
-
-const sourcePolicy = 'sn-local-uniform-1473-1523';
 
 /** Return a complete, validated replacement. Invalid edits leave the old panel intact. */
 export function changeGeometry(display: GeometryDisplay, setting: string, value: string | boolean): GeometryDisplay | null {
   let next: GeometryDisplay = display;
-  if (setting === 'model' && typeof value === 'string' && modelCapabilities[value]) {
-    next = { ...display, modelId: value,
-      policyId: value === 'ptolemy' ? 'mathematical-continuation' : sourcePolicy,
-      // A newly selected model starts with its supported Earth-centred view.
-      viewCenter: 'earth' };
+  if (setting === 'body' && historicalBodies.includes(value as HistoricalBody)) {
+    const body = value as HistoricalBody;
+    const modelId = correspondingModelForBody(display.modelId as ModelId, body);
+    next = { ...display, body, modelId,
+      policyId: defaultPolicyForModel(modelId, 'geometry'), viewCenter: 'earth' };
+  } else if (setting === 'model' && typeof value === 'string' && modelCapabilities[value]) {
+    const modelId = value as ModelId;
+    next = { ...display, body: modelCapabilities[modelId].body, modelId,
+      policyId: defaultPolicyForModel(modelId, 'geometry'), viewCenter: 'earth' };
   } else if (setting === 'view-center') {
     if (value !== 'earth' && value !== 'true-sun') return null;
     next = { ...display, viewCenter: value };
@@ -31,10 +33,17 @@ export function changeTrace(display: TimeSeriesDisplay, traceId: string,
   const old = display.traces.find(trace => trace.id === traceId);
   if (!old) return null;
   let replacement: PlotTrace = old;
-  if (setting === 'model' && modelCapabilities[value]) {
-    replacement = { ...old, modelId: value,
+  if (setting === 'body' && historicalBodies.includes(value as HistoricalBody)) {
+    const body = value as HistoricalBody;
+    const modelId = correspondingModelForBody(old.modelId as ModelId, body);
+    replacement = { ...old, body, modelId,
       observableId: 'geocentric-tropical-longitude',
-      policyId: value === 'ptolemy' ? 'mathematical-continuation' : exploratoryApsisPolicy };
+      policyId: defaultPolicyForModel(modelId, 'plot') };
+  } else if (setting === 'model' && modelCapabilities[value]) {
+    const modelId = value as ModelId;
+    replacement = { ...old, body: modelCapabilities[modelId].body, modelId,
+      observableId: 'geocentric-tropical-longitude',
+      policyId: defaultPolicyForModel(modelId, 'plot') };
   } else if (setting === 'policy') replacement = { ...old, policyId: value };
   else if (setting === 'observable') replacement = { ...old, observableId: value };
   const next: TimeSeriesDisplay = { ...display,
