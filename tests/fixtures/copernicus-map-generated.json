@@ -1,0 +1,102 @@
+{
+  "provenance": "Generated from existing Python Copernican evaluators; not a source table",
+  "mars_policy": "sn-uniform-exploratory",
+  "cases": [
+    {
+      "julian_frauenburg": [
+        1512,
+        1,
+        1,
+        6
+      ],
+      "ut1_jd": 2273315.6953703705,
+      "local_days": 551892.25,
+      "frame_id": "copernicus-1543-sidereal",
+      "length_unit": "historical Earth annual radius = 10000",
+      "mean_sun": [
+        -113.90818304083908,
+        -302.0452166619128
+      ],
+      "positions": {
+        "true-sun": [
+          0.0,
+          0.0
+        ],
+        "earth": [
+          1274.394875408099,
+          9601.11663286379
+        ],
+        "mars": [
+          -15110.476155370474,
+          6283.19425275596
+        ],
+        "jupiter": [
+          31218.80003219938,
+          -39427.80930271251
+        ],
+        "saturn": [
+          -94337.75716836692,
+          1862.235198138703
+        ]
+      },
+      "earth_to_planet_distances": {
+        "earth-mars": 16717.434241404015,
+        "earth-jupiter": 57450.004165276565,
+        "earth-saturn": 95924.83465871954
+      },
+      "planet_to_common_scales": {
+        "mars": 1.5197568389057752,
+        "jupiter": 5.219206680584551,
+        "saturn": 9.174311926605505
+      }
+    },
+    {
+      "julian_frauenburg": [
+        2026,
+        10,
+        13,
+        0
+      ],
+      "ut1_jd": 2461339.4453703705,
+      "local_days": 739916.0,
+      "frame_id": "copernicus-1543-sidereal",
+      "length_unit": "historical Earth annual radius = 10000",
+      "mean_sun": [
+        -56.61146154194044,
+        -328.3814159315731
+      ],
+      "positions": {
+        "true-sun": [
+          0.0,
+          0.0
+        ],
+        "earth": [
+          9943.301879104882,
+          -370.0128890463696
+        ],
+        "mars": [
+          6899.552248916962,
+          14028.888152527015
+        ],
+        "jupiter": [
+          -8331.019183477383,
+          52352.876470614785
+        ],
+        "saturn": [
+          84535.90733714044,
+          -35301.72416537733
+        ]
+      },
+      "earth_to_planet_distances": {
+        "earth-mars": 14717.090847592544,
+        "earth-jupiter": 55800.12430747273,
+        "earth-saturn": 82366.74839831365
+      },
+      "planet_to_common_scales": {
+        "mars": 1.5197568389057752,
+        "jupiter": 5.219206680584551,
+        "saturn": 9.174311926605505
+      }
+    }
+  ]
+}
