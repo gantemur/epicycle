@@ -4,6 +4,8 @@ import { modelRecord } from './model.ts';
 import { sunRecord } from './sun-almagest.ts';
 import { jupiterRecord } from './ptolemy-jupiter.ts';
 import { saturnRecord } from './ptolemy-saturn.ts';
+import { jupiterRecord as copernicusJupiterRecord,
+  saturnRecord as copernicusSaturnRecord } from './copernicus-superior.ts';
 
 const ptolemyParameters: readonly [keyof typeof modelRecord.parameters, MessageKey][] = [
   ['deferent_radius', 'radiusDeferent'], ['double_eccentricity', 'eccentricityDouble'],
@@ -51,6 +53,19 @@ const outerParameters: readonly [keyof typeof jupiterRecord.parameters, string, 
   ['mean_anomaly_daily_motion', 'nα', 'anomalyRate'],
   ['apogee_motion', 'nA', 'apogeeRate'],
 ];
+const copernicusOuterParameters: readonly [keyof typeof copernicusJupiterRecord.parameters, string, MessageKey][] = [
+  ['principal_radius', 'R', 'outerPrincipalRadius'],
+  ['reported_double_eccentricity', '2e', 'reportedDoubleEccentricity'],
+  ['eccentric_component', 'e₁', 'outerEccentricComponent'],
+  ['small_epicycle_radius', 'r′', 'smallEpicycleRadius'],
+  ['earth_annual_radius', 'r', 'outerEarthRadius'],
+  ['mean_commutation_epoch', 'α₀', 'commutationEpoch'],
+  ['mean_commutation_annual_motion', 'nα', 'commutationMotion'],
+  ['mean_proper_longitude_epoch', 'L₀', 'meanProperEpoch'],
+  ['mean_proper_longitude_annual_motion', 'nL', 'meanProperMotion'],
+  ['sidereal_apogee_epoch', 'B₀', 'siderealApogeeEpoch'],
+  ['sidereal_apogee_annual_motion', 'nB', 'siderealApogeeMotion'],
+];
 
 export function renderWorkspaceSources(language: Language): string {
   const t = (key: MessageKey): string => message(language, key);
@@ -60,6 +75,8 @@ export function renderWorkspaceSources(language: Language): string {
     'degree per 365-day Egyptian year': 'unitYearly',
     'Earth annual-radius units': 'unitEarthRadius',
     'Mars principal-radius units': 'unitMarsRadius',
+    'Jupiter principal-radius units': 'unitJupiterRadius',
+    'Saturn principal-radius units': 'unitSaturnRadius',
     'historical radius units': 'unitSolarRadius',
     'tropical degree, fixed': 'unitDegree',
     'tropical degree': 'unitDegree',
@@ -112,5 +129,17 @@ export function renderWorkspaceSources(language: Language): string {
         <div class="meta-row"><strong>${t('epoch')}</strong><span>${t('outerEpochNote')}</span></div>
         <div class="info-columns"><div><h3>${t('jupiter')}</h3><dl class="parameters">${sourceRows(jupiterRecord.parameters, outerParameters)}</dl></div>
           <div><h3>${t('saturn')}</h3><dl class="parameters">${sourceRows(saturnRecord.parameters, outerParameters)}</dl></div></div>
+      </div></details>
+    <details class="info-card" id="sources-copernicus-outer"><summary><span><span class="section-kicker">DE REVOLUTIONIBUS V</span><strong>${t('copernicusOuterSources')}</strong></span><span class="summary-plus" aria-hidden="true">+</span></summary>
+      <div class="info-content"><p class="info-lead">${t('copernicusOuterSourceIntro')}</p>
+        <p>${t('copernicusOuterSourceLine')}</p><p class="scientific-note">${t('copernicusOuterValidation')}</p>
+        <p class="scientific-note">${t('copernicusOuterContinuation')} ${t('copernicusFrameLimit')}</p>
+        <div class="meta-row"><strong>${t('epoch')}</strong><span>${copernicusJupiterRecord.epoch.astronomical_julian_date} · ${t('unitMeanDays')}</span></div>
+        <div class="info-columns"><div><h3>${t('copernicusJupiterPanel')}</h3>
+          <p class="scientific-note">${t('copernicusJupiterReading')}</p>
+          <dl class="parameters">${sourceRows(copernicusJupiterRecord.parameters, copernicusOuterParameters)}</dl></div>
+          <div><h3>${t('copernicusSaturnPanel')}</h3>
+          <p class="scientific-note">${t('copernicusSaturnReading')}</p>
+          <dl class="parameters">${sourceRows(copernicusSaturnRecord.parameters, copernicusOuterParameters)}</dl></div></div>
       </div></details>`;
 }

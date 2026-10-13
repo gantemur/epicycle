@@ -2,6 +2,7 @@ import { evaluateSelectedModel } from './comparison.ts';
 import { computationalUt1Domain, modelDaysAtUt1 } from './comparison-time.ts';
 import type { ApsisPolicy } from './copernicus.ts';
 import { evaluateCopernicusSunDays } from './copernicus-sun.ts';
+import { evaluateSuperiorDays } from './copernicus-superior.ts';
 import { angularDifference } from './model.ts';
 import { modelCapabilities } from './model-registry.ts';
 import { evaluatePtolemyJupiterDays } from './ptolemy-jupiter.ts';
@@ -62,6 +63,12 @@ export function traceLongitudeAt(trace: PlotTrace, ut1Jd: number): number | null
     const result = evaluateCopernicusSunDays(modelDaysAtUt1(ut1Jd).copernicus);
     return trace.observableId === 'geocentric-sidereal-longitude'
       ? result.solarSiderealLongitude : result.solarTropicalLongitude;
+  }
+  if (trace.modelId === 'copernicus-jupiter' || trace.modelId === 'copernicus-saturn') {
+    const body = trace.modelId === 'copernicus-jupiter' ? 'jupiter' : 'saturn';
+    const result = evaluateSuperiorDays(body, modelDaysAtUt1(ut1Jd).copernicus);
+    return trace.observableId === 'geocentric-sidereal-longitude'
+      ? result.geocentricSiderealLongitude : result.geocentricTropicalLongitude;
   }
   if (trace.modelId === 'ptolemy' || trace.modelId === 'copernicus') {
     const result = evaluateSelectedModel(trace.modelId, ut1Jd,

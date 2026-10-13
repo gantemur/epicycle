@@ -10,7 +10,8 @@ import { maxWorkspacePanels, workspaceSchemaVersion,
 
 export type DisplayDraft = Omit<GeometryDisplay, 'id'> | Omit<TimeSeriesDisplay, 'id'>;
 export type WorkspacePreset = 'explore-one' | 'compare-longitudes' | 'desktop-explore' |
-  'detailed-comparison' | 'solar-comparison' | 'outer-planets';
+  'detailed-comparison' | 'solar-comparison' | 'outer-planets' |
+  'jupiter-comparison' | 'saturn-comparison';
 
 export const initialClock: WorkspaceClock = {
   ut1Jd: example1512Ut1, playing: false, speedDaysPerSecond: 12, direction: 1,
@@ -242,6 +243,32 @@ const saturnGeometry: DisplayDraft = {
   ...ptolemyGeometry, body: 'Saturn', modelId: 'ptolemy-saturn',
   trail: { enabled: true, days: 720 },
 };
+const copernicusJupiterGeometry: DisplayDraft = {
+  ...jupiterGeometry, modelId: 'copernicus-jupiter', viewCenter: 'earth',
+  trail: { enabled: true, days: 720 },
+};
+const copernicusSaturnGeometry: DisplayDraft = {
+  ...saturnGeometry, modelId: 'copernicus-saturn', viewCenter: 'earth',
+  trail: { enabled: true, days: 720 },
+};
+const jupiterComparisonPlot: DisplayDraft = {
+  ...longitudePlot,
+  traces: [
+    { id: 'trace-1', body: 'Jupiter', modelId: 'ptolemy-jupiter',
+      observableId: 'geocentric-tropical-longitude', policyId: 'mathematical-continuation' },
+    { id: 'trace-2', body: 'Jupiter', modelId: 'copernicus-jupiter',
+      observableId: 'geocentric-tropical-longitude', policyId: 'mathematical-continuation' },
+  ],
+};
+const saturnComparisonPlot: DisplayDraft = {
+  ...longitudePlot,
+  traces: [
+    { id: 'trace-1', body: 'Saturn', modelId: 'ptolemy-saturn',
+      observableId: 'geocentric-tropical-longitude', policyId: 'mathematical-continuation' },
+    { id: 'trace-2', body: 'Saturn', modelId: 'copernicus-saturn',
+      observableId: 'geocentric-tropical-longitude', policyId: 'mathematical-continuation' },
+  ],
+};
 const outerLongitudePlot: DisplayDraft = {
   ...longitudePlot,
   frameAlignment: 'native',
@@ -260,6 +287,8 @@ export const workspacePresets: Readonly<Record<WorkspacePreset, readonly Display
   'detailed-comparison': [longitudePlot, ptolemyGeometry, copernicusGeometry],
   'solar-comparison': [solarLongitudePlot, solarGeometry],
   'outer-planets': [outerLongitudePlot, jupiterGeometry, saturnGeometry],
+  'jupiter-comparison': [jupiterComparisonPlot, jupiterGeometry, copernicusJupiterGeometry],
+  'saturn-comparison': [saturnComparisonPlot, saturnGeometry, copernicusSaturnGeometry],
 };
 
 /** Applying a layout is deliberate; a viewport change never calls this function. */

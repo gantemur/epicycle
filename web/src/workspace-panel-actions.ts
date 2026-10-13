@@ -9,8 +9,10 @@ export function changeGeometry(display: GeometryDisplay, setting: string, value:
   if (setting === 'body' && historicalBodies.includes(value as HistoricalBody)) {
     const body = value as HistoricalBody;
     const modelId = correspondingModelForBody(display.modelId as ModelId, body);
+    const viewCenter = modelCapabilities[modelId].renderedViewCenters.includes(display.viewCenter)
+      ? display.viewCenter : 'earth';
     next = { ...display, body, modelId,
-      policyId: defaultPolicyForModel(modelId, 'geometry'), viewCenter: 'earth' };
+      policyId: defaultPolicyForModel(modelId, 'geometry'), viewCenter };
   } else if (setting === 'model' && typeof value === 'string' && modelCapabilities[value]) {
     const modelId = value as ModelId;
     next = { ...display, body: modelCapabilities[modelId].body, modelId,

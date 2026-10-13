@@ -142,7 +142,9 @@ export function renderPlotStatic(panel: HTMLElement, display: TimeSeriesDisplay,
     const policies = new Set(sourceTraces.filter(trace => trace.modelId === 'copernicus')
       .map(trace => trace.policyId));
     const notes = [policies.has('sn-uniform-exploratory') ? t(language, 'exploratoryCurveNote') : '',
-      policies.has('sn-local-uniform-1473-1523') ? t(language, 'sourceLimitedCurveNote') : '']
+      policies.has('sn-local-uniform-1473-1523') ? t(language, 'sourceLimitedCurveNote') : '',
+      sourceTraces.some(trace => trace.modelId === 'copernicus-jupiter' ||
+        trace.modelId === 'copernicus-saturn') ? t(language, 'copernicusOuterContinuation') : '']
       .filter(Boolean);
     provenanceNote.textContent = notes.join(' ');
     provenanceNote.hidden = notes.length === 0;

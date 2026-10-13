@@ -16,8 +16,8 @@ import type { GeometryDisplay, TimeSeriesDisplay } from '../../web/src/workspace
 
 test('the four-body registry and outer preset preserve the original first visit', () => {
   assert.deepEqual(historicalBodies, ['Mars', 'Sun', 'Jupiter', 'Saturn']);
-  assert.deepEqual(modelIdsForBody('Jupiter'), ['ptolemy-jupiter']);
-  assert.deepEqual(modelIdsForBody('Saturn'), ['ptolemy-saturn']);
+  assert.deepEqual(modelIdsForBody('Jupiter'), ['ptolemy-jupiter', 'copernicus-jupiter']);
+  assert.deepEqual(modelIdsForBody('Saturn'), ['ptolemy-saturn', 'copernicus-saturn']);
   assert.deepEqual(applyWorkspacePreset(emptyWorkspace(), 'desktop-explore').displays.map(d => d.kind),
     ['time-series', 'geometry']);
   const state = applyWorkspacePreset(emptyWorkspace(), 'outer-planets');
@@ -28,19 +28,19 @@ test('the four-body registry and outer preset preserve the original first visit'
     (state.displays[2] as GeometryDisplay).trail);
 });
 
-test('body changes remove incompatible Mars policy and viewing centre', () => {
+test('body changes select compatible Copernican policy and retain a supported viewing centre', () => {
   const original = applyWorkspacePreset(emptyWorkspace(), 'detailed-comparison');
   const copernicus = { ...(original.displays[2] as GeometryDisplay), viewCenter: 'true-sun' as const };
   const jupiter = changeGeometry(copernicus, 'body', 'Jupiter')!;
   assert.deepEqual([jupiter.body, jupiter.modelId, jupiter.policyId, jupiter.viewCenter],
-    ['Jupiter', 'ptolemy-jupiter', 'mathematical-continuation', 'earth']);
-  assert.equal(changeGeometry(jupiter, 'view-center', 'true-sun'), null);
+    ['Jupiter', 'copernicus-jupiter', 'mathematical-continuation', 'true-sun']);
+  assert.equal(changeGeometry(jupiter, 'view-center', 'true-sun')?.viewCenter, 'true-sun');
   const state = updateDisplay(original, jupiter);
   assert.strictEqual(state.displays[0], original.displays[0]);
   const plot = original.displays[0] as TimeSeriesDisplay;
   const changed = changeTrace(plot, 'trace-2', 'body', 'Saturn')!;
   assert.deepEqual([changed.traces[1].body, changed.traces[1].modelId,
-    changed.traces[1].policyId], ['Saturn', 'ptolemy-saturn', 'mathematical-continuation']);
+    changed.traces[1].policyId], ['Saturn', 'copernicus-saturn', 'mathematical-continuation']);
   assert.equal(changed.analysis.kind, 'overlay');
 });
 
