@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "model_status": "source-checked continuous geometry; partial historical numerical validation",
+  "source_edition": "De revolutionibus, Nuremberg 1543 (N); C1 Rosen translation, C2 original printing, C3 Swerdlow-Neugebauer commentary",
+  "dependencies": [
+    {
+      "model_id": "copernicus-1543-earth-longitude",
+      "record": "earth-copernicus-1543-v1.json",
+      "required_schema_version": 1,
+      "relation": "same Christ epoch, local-day convention, sidereal origin, mean Sun and Earth geometry; scale the entire Earth construction by r/10000"
+    }
+  ],
+  "epoch": {
+    "description": "Christ epoch, Julian 1 January 1 CE at midnight, historical Frauenburg/Cracow mean local time",
+    "astronomical_julian_date": "0001-01-01",
+    "calendar": "julian",
+    "day_fraction": 0,
+    "status": "original shared epoch",
+    "source": "C1 III.19 f.90v; V.1 f.135v and V.8/V.13; C3 pp.165,545"
+  },
+  "frame": {
+    "id": "copernicus-1543-sidereal",
+    "origin": "true Sun for absolute points; planetary eccentricity referred to the mean Sun",
+    "x_axis": "first star of Aries in Copernicus catalogue",
+    "orientation": "eastward planar ecliptic longitude",
+    "tropical_conversion": "add the existing Earth model historical true precession; not a calibrated modern reference frame",
+    "source": "C1 III.12 ff.77v-78r; III.19 f.90v; V.2-4 ff.140r-143r; C3 pp.291-301"
+  },
+  "historical_table_parameters": {
+    "status": "complete original correction-table interpolation not implemented or presumed equal to the summary geometry",
+    "source": "C3 p.543 warning; pp.443-459",
+    "complete_transcription": null
+  },
+  "limitations": [
+    "No latitude, modern apparent place, calibrated cross-author frame, or modern physical astronomical unit.",
+    "Date evaluation continues original mean and uniform apsidal motions mathematically; arbitrary-date observational accuracy is unverified.",
+    "Original rounded correction-table procedure and full historical table interpolation are not implemented."
+  ],
+  "model_id": "copernicus-1543-saturn-longitude",
+  "body": "Saturn",
+  "units": {
+    "length": "Saturn principal radius R=10000; Earth annual radius r=1090",
+    "angle": "degree",
+    "time": "365-day Egyptian year"
+  },
+  "parameters": {
+    "principal_radius": {
+      "sexagesimal": "10000",
+      "value": 10000,
+      "unit": "Saturn principal-radius units",
+      "status": "explicit normalization",
+      "source": "C1/C2 V.5 f.144v and V.6 f.147r; C3 pp.324-326,545"
+    },
+    "reported_double_eccentricity": {
+      "sexagesimal": "1139",
+      "value": 1139,
+      "unit": "Saturn principal-radius units",
+      "status": "originally reported final reading",
+      "source": "C1/C2 V.5 f.144v and V.6 f.147r; C3 pp.324-326,545"
+    },
+    "eccentric_component": {
+      "sexagesimal": "854",
+      "value": 854,
+      "unit": "Saturn principal-radius units",
+      "status": "explicit final geometrical component",
+      "source": "C1/C2 V.5 f.144v and V.6 f.147r; C3 pp.324-326,545"
+    },
+    "small_epicycle_radius": {
+      "sexagesimal": "285",
+      "value": 285,
+      "unit": "Saturn principal-radius units",
+      "status": "explicit final geometrical component",
+      "source": "C1/C2 V.5 f.144v and V.6 f.147r; C3 pp.324-326,545"
+    },
+    "earth_annual_radius": {
+      "sexagesimal": "1090",
+      "value": 1090,
+      "unit": "Saturn principal-radius units",
+      "status": "source-derived from parallax observation, not an independent prediction",
+      "source": "C1/C2 V.9 f.149v; C3 pp.335-336,545"
+    },
+    "mean_commutation_epoch": {
+      "sexagesimal": "205;49",
+      "value": 205.81666666666666,
+      "unit": "degree",
+      "status": "source-derived original Christ-epoch argument",
+      "source": "C1 V.8 f.148v; C3 p.545"
+    },
+    "mean_proper_longitude_epoch": {
+      "sexagesimal": "66;42",
+      "value": 66.7,
+      "unit": "degree",
+      "status": "mean Sun minus commutation; C3 epoch summary",
+      "source": "C1 V.8 f.148v; C3 p.545"
+    },
+    "sidereal_apogee_epoch": {
+      "sexagesimal": "225;02",
+      "value": 225.03333333333333,
+      "unit": "degree",
+      "status": "source-derived original uniform-apsis epoch; C3 summary",
+      "source": "C1 V.8 f.148v; C3 p.545"
+    },
+    "mean_commutation_annual_motion": {
+      "sexagesimal": "347;32,3,9,40",
+      "value": 347.53421141975315,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "original Nuremberg/table reading",
+      "source": "C2 V.1 ff.134v-135r and original commutation table f.135v; C3 pp.545,554"
+    },
+    "mean_proper_longitude_annual_motion": {
+      "sexagesimal": "12;12,45,57,24",
+      "value": 12.212765740740739,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "paired original Nuremberg/table reading",
+      "source": "C2 V.1 ff.134v-135r and original commutation table f.135v; C3 pp.545,554"
+    },
+    "sidereal_apogee_annual_motion": {
+      "sexagesimal": "0;0,36",
+      "value": 0.01,
+      "unit": "degree per 365-day Egyptian year",
+      "status": "source-prescribed approximate uniform motion",
+      "source": "C1 V.7 f.148r (about one degree per 100 years); C3 p.545"
+    }
+  },
+  "derived": {
+    "eccentric_component_sum": "854 + 285 = 1139",
+    "mean_sun_epoch_identity": "66;42 + 205;49 = 272;31 (mod 360)",
+    "mean_sun_annual_identity": "12;12,45,57,24 + 347;32,3,9,40 = 359;44,49,7,4 (mod 360)",
+    "source": "exact rational sexagesimal arithmetic against Earth 1543 record"
+  },
+  "alternatives_not_used": {
+    "manuscript_C1_prose_rate_pair": {
+      "mean_commutation_annual_motion": {
+        "sexagesimal": "347;32,2,54,12",
+        "value": 347.5341398148148,
+        "unit": "degree per 365-day Egyptian year",
+        "status": "earlier manuscript/C1 prose variant",
+        "source": "C1 V.1 f.134v; C3 p.554 M version"
+      },
+      "mean_proper_longitude_annual_motion": {
+        "sexagesimal": "12;12,46,12,52",
+        "value": 12.212837345679011,
+        "unit": "degree per 365-day Egyptian year",
+        "status": "paired earlier manuscript/C1 prose variant",
+        "source": "C1 V.1 f.135r; C3 p.554 M version"
+      },
+      "reason": "both rates must be used as a pair; original Nuremberg/table pair is adopted"
+    }
+  },
+  "other_reported_epochs": {
+    "Alexander": {
+      "status": "source-rounded supplementary epoch, not an evaluator anchor",
+      "source": "C3 p.545; original V.8/V.13 epoch derivations",
+      "positions": {
+        "mean_commutation": {
+          "sexagesimal": "148;01",
+          "value": 148.01666666666668,
+          "unit": "degree",
+          "status": "source-rounded",
+          "source": "C3 p.545"
+        },
+        "mean_proper_longitude": {
+          "sexagesimal": "77;36",
+          "value": 77.6,
+          "unit": "degree",
+          "status": "source-rounded",
+          "source": "C3 p.545"
+        },
+        "sidereal_apogee": {
+          "sexagesimal": "221;48",
+          "value": 221.8,
+          "unit": "degree",
+          "status": "source-rounded",
+          "source": "C3 p.545"
+        }
+      }
+    },
+    "1500": {
+      "status": "source-rounded supplementary epoch, not an evaluator anchor",
+      "source": "C3 p.545; original V.8/V.13 epoch derivations",
+      "positions": {
+        "mean_commutation": {
+          "sexagesimal": "227;15,38",
+          "value": 227.26055555555556,
+          "unit": "degree",
+          "status": "source-rounded",
+          "source": "C3 p.545"
+        },
+        "mean_proper_longitude": {
+          "sexagesimal": "33;35,53",
+          "value": 33.59805555555556,
+          "unit": "degree",
+          "status": "source-rounded",
+          "source": "C3 p.545"
+        },
+        "sidereal_apogee": {
+          "sexagesimal": "240;02",
+          "value": 240.03333333333333,
+          "unit": "degree",
+          "status": "source-rounded",
+          "source": "C3 p.545"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "fixture_status": "independent source transcription; not generated from evaluator",
+  "source": "C1/C2 V.9 ff.148v-149v; C3 pp.335-336",
+  "body": "Saturn",
+  "original_commutation_table": {
+    "source": "C2 V.1 f.135v, visually transcribed",
+    "one_egyptian_year": "5,47;32,3,9",
+    "sixty_egyptian_years": "5,32;3,9,40",
+    "notation": "integer places before semicolon use base 60; printed entries omit low-order places when rounded"
+  },
+  "date_local_julian": [
+    1514,
+    2,
+    24,
+    5,
+    0
+  ],
+  "source_arguments": {
+    "mean_sun_sidereal": "315;41",
+    "mean_commutation": "116;31",
+    "mean_planet_sidereal": "199;10",
+    "sidereal_apogee_approximate": "240;20",
+    "equation_of_center": "4;06",
+    "reported_geocentric_sidereal_longitude": "209;00",
+    "intermediate_mean_sun_planet_distance": "10465"
+  },
+  "qualification": "Observation used to determine Earth annual radius; rounded source arithmetic is distinct from exact continuous geometry. C3 p.336 gives corrected distance 10455 against the printed 10465."
+}

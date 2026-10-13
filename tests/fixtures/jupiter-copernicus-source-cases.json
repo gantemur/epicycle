@@ -1,0 +1,28 @@
+{
+  "fixture_status": "independent source transcription; not generated from evaluator",
+  "source": "C1/C2 V.14 ff.154r-155r; C3 pp.348-349",
+  "body": "Jupiter",
+  "original_commutation_table": {
+    "source": "C2 V.1 f.136v, visually transcribed",
+    "one_egyptian_year": "5,29;25,8,15",
+    "sixty_egyptian_years": "5,25;8,15,6",
+    "notation": "integer places before semicolon use base 60; printed entries omit low-order places when rounded"
+  },
+  "date_local_julian": [
+    1520,
+    2,
+    18,
+    6,
+    0
+  ],
+  "source_arguments": {
+    "mean_sun_sidereal": "309;16",
+    "mean_commutation": "111;15",
+    "mean_planet_sidereal": "198;01",
+    "sidereal_apogee_approximate": "159;00",
+    "equation_of_center": "-3;11",
+    "reported_geocentric_sidereal_longitude": "205;09",
+    "intermediate_mean_sun_planet_distance": "10373"
+  },
+  "qualification": "Observation used to determine Earth annual radius; rounded source arithmetic is distinct from exact continuous geometry. C2's XII Kalends of March is Julian February 18 at 06:00; C1's February 19 differs. C3 p.348's proposed 10353 correction to the printed 10373 distance remains unexplained by the continuous 687/229 geometry."
+}
