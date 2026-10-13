@@ -1447,6 +1447,90 @@ footer span {
 .managed-panel.plot-panel {
   grid-column: 1/-1;
 }
+.managed-panel.map-panel {
+  grid-column: 1/-1;
+}
+.map-policy-note {
+  color: #f2c795;
+  font-size: .85rem;
+  margin: 12px 0 6px;
+}
+.map-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 12px 0;
+}
+.map-controls button {
+  background: #284450;
+  border: 1px solid #4d6d74;
+  border-radius: 5px;
+  color: #e6eeee;
+  cursor: pointer;
+  padding: 7px 10px;
+}
+.map-frame {
+  max-width: 700px;
+  margin: auto;
+}
+.map-frame svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: radial-gradient(circle at center,#1b3440,#101e28 75%);
+  border: 1px solid #38535e;
+  border-radius: 10px;
+}
+.map-grid circle,.map-grid path {
+  fill: none;
+  stroke: #63808a;
+  stroke-width: 1;
+  opacity: .35;
+}
+.map-grid path {
+  opacity: .25;
+}
+.map-scale,.map-body-label {
+  fill: #d5e4e6;
+  font-size: 16px;
+  paint-order: stroke;
+  stroke: #10232d;
+  stroke-width: 3px;
+}
+.map-trail {
+  fill: none;
+  stroke-width: 2.1;
+  opacity: .85;
+}
+.map-trail[data-provenance="dashed"] {
+  stroke-dasharray: 6 5;
+  opacity: .68;
+}
+.map-body circle:first-child {
+  stroke: #10232d;
+  stroke-width: 2;
+}
+.map-centre-ring {
+  fill: none;
+  stroke: #f7e8d1;
+  stroke-width: 2;
+}
+.map-body-settings {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+.map-body-settings strong {
+  color: #f2c795;
+}
+.map-readouts .map-key {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--map-color);
+  margin-right: 7px;
+}
 .managed-panel-header {
   display: flex;
   justify-content: space-between;
@@ -1585,6 +1669,9 @@ footer span {
   .managed-panel.plot-panel {
     grid-column: auto;
   }
+  .managed-panel.map-panel {
+    grid-column: auto;
+  }
   .workspace-bar {
     align-items: start;
     flex-direction: column;
@@ -1652,6 +1739,13 @@ footer span {
   .panel-actions button {
     min-height: 38px;
     padding: 5px 8px;
+  }
+  .map-controls button {
+    flex: 1 1 100px;
+    min-height: 38px;
+  }
+  .map-scale {
+    font-size: 13px;
   }
   .workspace-plot-frame svg {
     min-height: 195px;

@@ -11,4 +11,4 @@ Gate each stage on source fidelity, time/frame documentation, and numerical vali
 
 ## Current workspace sequence
 
-Phases 4A–4C delivered the state foundation, clock-synchronized managed displays, and optional true-Sun-centred Copernican geometry. The Phase 4C workspace is deployed from `main`. Subsequent catalogue expansion still requires sourced models and validation. See [workspace architecture](workspace-architecture.md).
+Phases 4A–5C delivered the clock-synchronized workspace and source-checked Sun, Mars, Jupiter and Saturn longitude constructions; Phase 5C is deployed from `main`. Phase 6A's review-pending development branch adds a common-scale Copernican [Planetary Map](planetary-map.md) as a new display of existing models. A later angular-only display could include traditions without historically compatible distances; it must remain distinct from this spatial Map. Further catalogue expansion still requires sourced models and validation. See [workspace architecture](workspace-architecture.md).

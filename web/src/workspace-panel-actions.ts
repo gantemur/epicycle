@@ -1,7 +1,31 @@
 import { correspondingModelForBody, defaultPolicyForModel, firstModelForBody, historicalBodies,
   modelCapabilities, type HistoricalBody, type ModelId } from './model-registry.ts';
 import { validateDisplay } from './workspace-validation.ts';
-import type { DisplayConfig, GeometryDisplay, PlotTrace, TimeSeriesDisplay } from './workspace-types.ts';
+import { mapBodies } from './copernicus-map.ts';
+import type { DisplayConfig, GeometryDisplay, PlanetaryMapDisplay, PlotTrace, TimeSeriesDisplay } from './workspace-types.ts';
+
+export function changeMap(display: PlanetaryMapDisplay, setting: string,
+  value: string | boolean): PlanetaryMapDisplay | null {
+  let next: PlanetaryMapDisplay = display;
+  if (setting === 'map-centre' && typeof value === 'string' && mapBodies.includes(value as typeof mapBodies[number])) {
+    next = { ...display, viewCenter: value as typeof mapBodies[number] };
+  } else if (setting === 'map-policy' && typeof value === 'string') {
+    next = { ...display, marsPolicyId: value as PlanetaryMapDisplay['marsPolicyId'] };
+  } else if (setting === 'map-duration' && typeof value === 'string') {
+    next = { ...display, trailDays: Number(value) };
+  } else if (setting === 'map-grid') next = { ...display, showGrid: Boolean(value) };
+  else if (setting === 'map-labels') next = { ...display, showLabels: Boolean(value) };
+  else if (setting.startsWith('visible:')) {
+    const body = setting.slice(8) as typeof mapBodies[number];
+    if (!mapBodies.includes(body)) return null;
+    next = { ...display, visibleBodies: { ...display.visibleBodies, [body]: Boolean(value) } };
+  } else if (setting.startsWith('trail:')) {
+    const body = setting.slice(6) as typeof mapBodies[number];
+    if (!mapBodies.includes(body)) return null;
+    next = { ...display, bodyTrails: { ...display.bodyTrails, [body]: Boolean(value) } };
+  } else return null;
+  return validateDisplay(next).length ? null : next;
+}
 
 /** Return a complete, validated replacement. Invalid edits leave the old panel intact. */
 export function changeGeometry(display: GeometryDisplay, setting: string, value: string | boolean): GeometryDisplay | null {

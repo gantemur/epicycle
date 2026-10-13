@@ -5,13 +5,14 @@ import { modelCapabilities, type CapabilityRegistry } from './model-registry.ts'
 import { exampleDay } from './historical-examples.ts';
 import { isValidWorkspace, validateDisplay } from './workspace-validation.ts';
 import { maxWorkspacePanels, workspaceSchemaVersion,
-  type DisplayConfig, type GeometryDisplay, type PlotTrace, type TimeSeriesDisplay,
+  type DisplayConfig, type GeometryDisplay, type PlanetaryMapDisplay, type PlotTrace, type TimeSeriesDisplay,
   type WorkspaceClock, type WorkspaceState } from './workspace-types.ts';
 
-export type DisplayDraft = Omit<GeometryDisplay, 'id'> | Omit<TimeSeriesDisplay, 'id'>;
+export type DisplayDraft = Omit<GeometryDisplay, 'id'> | Omit<TimeSeriesDisplay, 'id'> |
+  Omit<PlanetaryMapDisplay, 'id'>;
 export type WorkspacePreset = 'explore-one' | 'compare-longitudes' | 'desktop-explore' |
   'detailed-comparison' | 'solar-comparison' | 'outer-planets' |
-  'jupiter-comparison' | 'saturn-comparison';
+  'jupiter-comparison' | 'saturn-comparison' | 'copernican-map';
 
 export const initialClock: WorkspaceClock = {
   ut1Jd: example1512Ut1, playing: false, speedDaysPerSecond: 12, direction: 1,
@@ -21,11 +22,17 @@ export function emptyWorkspace(clock: WorkspaceClock = initialClock): WorkspaceS
   return { schemaVersion: workspaceSchemaVersion, clock: { ...clock }, displays: [], nextPanelNumber: 1 };
 }
 
-/** Copy only the nested configuration structures in the two implemented kinds. */
+/** Copy the small known nested settings so two panels never share mutable objects. */
 function copyDisplay(display: DisplayConfig): DisplayConfig {
   if (display.kind === 'geometry') return { ...display, trail: {
     enabled: display.trail.enabled, days: display.trail.days,
   } };
+  if (display.kind === 'planetary-map') return {
+    ...display,
+    visibleBodies: { ...display.visibleBodies }, bodyTrails: { ...display.bodyTrails },
+    camera: { offsetX: display.camera.offsetX, offsetY: display.camera.offsetY,
+      radiusUnits: display.camera.radiusUnits },
+  };
   const analysis = display.analysis.kind === 'overlay'
     ? { kind: 'overlay' as const }
     : { kind: 'model-disagreement' as const,
@@ -177,6 +184,43 @@ export function zoomPlotWindow(state: WorkspaceState, id: string, factor: number
   } });
 }
 
+export function zoomMap(state: WorkspaceState, id: string, factor: number): WorkspaceState {
+  const display = state.displays.find(panel => panel.id === id);
+  if (display?.kind !== 'planetary-map' || !Number.isFinite(factor) || factor <= 0) return state;
+  return updateDisplay(state, { ...display, camera: { ...display.camera,
+    radiusUnits: display.camera.radiusUnits * factor } });
+}
+
+export function panMap(state: WorkspaceState, id: string, xFraction: number, yFraction: number): WorkspaceState {
+  const display = state.displays.find(panel => panel.id === id);
+  if (display?.kind !== 'planetary-map' || !Number.isFinite(xFraction) || !Number.isFinite(yFraction)) return state;
+  return updateDisplay(state, { ...display, camera: { ...display.camera,
+    offsetX: display.camera.offsetX + xFraction * display.camera.radiusUnits,
+    offsetY: display.camera.offsetY + yFraction * display.camera.radiusUnits } });
+}
+
+/** Fit a deliberate set of visible positions, including trails supplied by the caller. */
+export function fitMap(state: WorkspaceState, id: string,
+  positions: readonly Readonly<{ x: number; y: number }>[]): WorkspaceState {
+  const display = state.displays.find(panel => panel.id === id);
+  if (display?.kind !== 'planetary-map' || positions.length === 0 ||
+      !positions.every(point => Number.isFinite(point.x) && Number.isFinite(point.y))) return state;
+  const minX = Math.min(0, ...positions.map(point => point.x));
+  const maxX = Math.max(0, ...positions.map(point => point.x));
+  const minY = Math.min(0, ...positions.map(point => point.y));
+  const maxY = Math.max(0, ...positions.map(point => point.y));
+  const offsetX = (minX + maxX) / 2;
+  const offsetY = (minY + maxY) / 2;
+  const radiusUnits = Math.max(500, Math.max(maxX - minX, maxY - minY) * 0.62);
+  return updateDisplay(state, { ...display, camera: { offsetX, offsetY, radiusUnits } });
+}
+
+export function resetMapCamera(state: WorkspaceState, id: string): WorkspaceState {
+  const display = state.displays.find(panel => panel.id === id);
+  return display?.kind === 'planetary-map'
+    ? updateDisplay(state, { ...display, camera: { offsetX: 0, offsetY: 0, radiusUnits: 120000 } }) : state;
+}
+
 /** Follow only after the marker leaves the central 60% of a plot window.
  *  This preserves the span and avoids resampling curves on every animation frame.
  */
@@ -280,6 +324,15 @@ const outerLongitudePlot: DisplayDraft = {
   ],
 };
 
+export const copernicanMap: DisplayDraft = {
+  kind: 'planetary-map', collapsed: false, systemId: 'copernicus-1543',
+  viewCenter: 'true-sun', marsPolicyId: exploratoryApsisPolicy,
+  visibleBodies: { 'true-sun': true, earth: true, mars: true, jupiter: true, saturn: true },
+  bodyTrails: { 'true-sun': false, earth: false, mars: false, jupiter: false, saturn: false },
+  trailDays: 365, camera: { offsetX: 0, offsetY: 0, radiusUnits: 120000 },
+  showLabels: true, showGrid: true,
+};
+
 export const workspacePresets: Readonly<Record<WorkspacePreset, readonly DisplayDraft[]>> = {
   'explore-one': [ptolemyGeometry],
   'compare-longitudes': [longitudePlot],
@@ -289,6 +342,7 @@ export const workspacePresets: Readonly<Record<WorkspacePreset, readonly Display
   'outer-planets': [outerLongitudePlot, jupiterGeometry, saturnGeometry],
   'jupiter-comparison': [jupiterComparisonPlot, jupiterGeometry, copernicusJupiterGeometry],
   'saturn-comparison': [saturnComparisonPlot, saturnGeometry, copernicusSaturnGeometry],
+  'copernican-map': [copernicanMap],
 };
 
 /** Applying a layout is deliberate; a viewport change never calls this function. */

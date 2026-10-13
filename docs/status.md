@@ -1,5 +1,9 @@
 # Status — Phase 5C deployed
 
+## Phase 6A development — review pending
+
+The `codex/phase-6a-planetary-map` branch adds a third managed display kind, Planetary Map, using the accepted Copernican 1543 Earth, Mars, Jupiter and Saturn evaluators in common historical Earth annual-radius units. It shows the true Sun and four bodies, allows translation to any displayed body, per-body visibility and past trails, panel-local Fit/zoom/pan, and explicit guarded or exploratory Mars policy. It remains a derived sidereal-plane display, not a new planetary theory or a calibrated sky prediction. The public `main` site remains Phase 5C until separate approval. See [Map specification](planetary-map.md) and [workspace architecture](workspace-architecture.md).
+
 ## Current public release — Phase 5C
 
 The [public `main` site](https://gantemur.github.io/epicycle/) includes Ptolemaic and Copernican longitude constructions for Sun / Earth, Mars, Jupiter and Saturn. Phase 5C adds Copernicus's 1543 Jupiter and Saturn longitude constructions in Python and TypeScript, Earth- and true-Sun-centred geometry, same-body Ptolemy–Copernicus plots, bilingual source cards and comparison presets. It also provides explicit conversion of Mars, Jupiter and Saturn coordinates into common historical Earth-annual-radius units. This normalization prepares a future multi-planet display; no Planetary Map is implemented. The reviewed `codex/phase-5c-copernicus-outer-planets` branch remains available for reference. The original Earth and Mars evaluators and their source-specific policies are retained.

@@ -1,4 +1,6 @@
 import type { ViewCenter } from './model-registry.ts';
+import type { ApsisPolicy } from './copernicus.ts';
+import type { MapBody } from './copernicus-map.ts';
 
 export const workspaceSchemaVersion = 1;
 export const maxWorkspacePanels = 4;
@@ -39,7 +41,17 @@ export type TimeSeriesDisplay = DisplayBase & Readonly<{
   analysis: PlotAnalysis;
 }>;
 
-export type DisplayConfig = GeometryDisplay | TimeSeriesDisplay;
+export type PlanetaryMapDisplay = DisplayBase & Readonly<{
+  kind: 'planetary-map'; systemId: 'copernicus-1543';
+  viewCenter: MapBody; marsPolicyId: ApsisPolicy;
+  visibleBodies: Readonly<Record<MapBody, boolean>>;
+  bodyTrails: Readonly<Record<MapBody, boolean>>;
+  trailDays: number;
+  camera: Readonly<{ offsetX: number; offsetY: number; radiusUnits: number }>;
+  showLabels: boolean; showGrid: boolean;
+}>;
+
+export type DisplayConfig = GeometryDisplay | TimeSeriesDisplay | PlanetaryMapDisplay;
 export type WorkspaceState = Readonly<{
   schemaVersion: typeof workspaceSchemaVersion;
   clock: WorkspaceClock;

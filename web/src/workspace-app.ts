@@ -3,16 +3,17 @@ import { formatFrauenburgInput, modelDaysAtUt1, parseFrauenburgInput,
 import { message, isLanguage, type Language, type MessageKey } from './i18n.ts';
 import { updatePlayButton } from './playback-view.ts';
 import { renderGeometryDynamic, renderGeometryStatic } from './workspace-geometry-view.ts';
-import { changeGeometry, changePlot, changeTrace, addTrace, removeTrace,
+import { changeGeometry, changeMap, changePlot, changeTrace, addTrace, removeTrace,
   validReplacement } from './workspace-panel-actions.ts';
+import { clearMapTrailCache, mapFitPositions, renderMapDynamic, renderMapStatic } from './workspace-map-view.ts';
 import { renderPlotDynamic, renderPlotStatic } from './workspace-plot-view.ts';
 import { applyPlotWindowInputs, type PlotWindowInputIssue } from './workspace-plot-window.ts';
 import { renderWorkspaceSources } from './workspace-sources.ts';
 import { addDisplay, applyWorkspacePreset, followWorkspaceClock, jumpToExample,
-  jumpToToday, moveDisplay, panPlotWindow, removeDisplay, setClockDirection,
+  jumpToToday, moveDisplay, panMap, panPlotWindow, removeDisplay, resetMapCamera, setClockDirection,
   setClockInstant, setClockPlaying, setClockSpeed, setDisplayCollapsed,
   stepClock, suggestedWorkspace, tickClock, updateDisplay, workspacePresets,
-  zoomPlotWindow, type WorkspacePreset } from './workspace-state.ts';
+  zoomMap, zoomPlotWindow, fitMap, type WorkspacePreset } from './workspace-state.ts';
 import type { DisplayConfig, WorkspaceState } from './workspace-types.ts';
 
 const root = document.querySelector<HTMLDivElement>('#app');
@@ -74,10 +75,12 @@ root.innerHTML = [
   '</option><option value="solar-comparison" data-option-i18n="solarPreset">', t('solarPreset'),
   '</option><option value="outer-planets" data-option-i18n="outerPreset">', t('outerPreset'),
   '</option><option value="jupiter-comparison" data-option-i18n="jupiterComparisonPreset">', t('jupiterComparisonPreset'),
-  '</option><option value="saturn-comparison" data-option-i18n="saturnComparisonPreset">', t('saturnComparisonPreset'), '</option></select></label>',
+  '</option><option value="saturn-comparison" data-option-i18n="saturnComparisonPreset">', t('saturnComparisonPreset'),
+  '</option><option value="copernican-map" data-option-i18n="mapPreset">', t('mapPreset'), '</option></select></label>',
   '<button type="button" data-workspace="preset">', tr('replaceLayout'), '</button></details>',
   '<label>', tr('addDisplay'), '<select data-add-kind><option value="geometry" data-option-i18n="addGeometry">',
-  t('addGeometry'), '</option><option value="time-series" data-option-i18n="addPlot">', t('addPlot'), '</option></select></label>',
+  t('addGeometry'), '</option><option value="time-series" data-option-i18n="addPlot">', t('addPlot'),
+  '</option><option value="planetary-map" data-option-i18n="addMap">', t('addMap'), '</option></select></label>',
   '<button type="button" data-workspace="add">＋ ', tr('addDisplay'), '</button></div></section>',
   '<p class="field-help" data-workspace-message role="status"></p>',
   '<p class="empty-workspace" data-empty-workspace hidden></p><div class="managed-workspace" data-panels></div>',
@@ -106,7 +109,8 @@ function showError(text: string): void { clockError.textContent = text; clockErr
 
 function mountPanel(display: DisplayConfig): HTMLElement {
   const panel = document.createElement('section');
-  panel.className = 'diagram-card managed-panel ' + (display.kind === 'time-series' ? 'plot-panel' : 'geometry-panel');
+  panel.className = 'diagram-card managed-panel ' + (display.kind === 'time-series' ? 'plot-panel'
+    : display.kind === 'planetary-map' ? 'map-panel' : 'geometry-panel');
   panel.dataset.panelId = display.id;
   panel.innerHTML = [
     '<div class="managed-panel-header"><h3 data-panel-title></h3><div class="panel-actions">',
@@ -114,7 +118,14 @@ function mountPanel(display: DisplayConfig): HTMLElement {
     '<button type="button" data-action="collapse"></button><button type="button" data-action="remove"></button>',
     '</div></div><div data-panel-body><details data-panel-settings></details>',
     '<p data-panel-error class="error" role="alert" hidden></p>',
-    display.kind === 'geometry'
+    display.kind === 'planetary-map'
+      ? '<p class="map-policy-note" data-map-policy-note></p><p class="scientific-note" data-map-science></p>' +
+        '<div class="map-controls" data-map-controls></div><p class="scientific-note" data-map-unavailable hidden></p>' +
+        '<div class="map-frame"><svg viewBox="0 0 680 680" role="img" aria-label="Planetary Map">' +
+        '<g data-map-grid></g><g data-map-trails></g><g data-map-endpoints></g><g data-map-markers></g></svg></div>' +
+        '<p class="scientific-note" data-map-continuation></p><p class="field-help" data-map-readout-heading></p>' +
+        '<dl class="comparison-readouts map-readouts" data-map-readouts></dl>'
+      : display.kind === 'geometry'
       ? '<p class="diagram-hint" data-panel-hint></p><div class="diagram-frame" data-geometry-frame></div>' +
         '<p class="scientific-note" data-geometry-provenance hidden></p>' +
         '<p class="scientific-note" data-unavailable hidden></p><ul class="legend" data-panel-legend></ul>' +
@@ -131,14 +142,15 @@ function mountPanel(display: DisplayConfig): HTMLElement {
 function syncPanels(force = false): void {
   const ids = new Set(state.displays.map(display => display.id));
   for (const [id, panel] of panelNodes) if (!ids.has(id)) {
-    panel.remove(); panelNodes.delete(id); renderedConfigs.delete(id);
+    panel.remove(); panelNodes.delete(id); renderedConfigs.delete(id); clearMapTrailCache(id);
   }
   state.displays.forEach((display, index) => {
     let panel = panelNodes.get(display.id);
     if (!panel) { panel = mountPanel(display); panelNodes.set(display.id, panel); }
     if (force || renderedConfigs.get(display.id) !== display) {
       if (display.kind === 'geometry') renderGeometryStatic(panel, display, language);
-      else renderPlotStatic(panel, display, language);
+      else if (display.kind === 'time-series') renderPlotStatic(panel, display, language);
+      else renderMapStatic(panel, display, language);
       renderedConfigs.set(display.id, display);
     }
     const body = panel.querySelector<HTMLElement>('[data-panel-body]')!;
@@ -184,7 +196,8 @@ function renderDynamic(): void {
     if (display.collapsed) continue;
     const panel = panelNodes.get(display.id)!;
     if (display.kind === 'geometry') renderGeometryDynamic(panel, display, state.clock.ut1Jd, language);
-    else renderPlotDynamic(panel, display, state.clock.ut1Jd, language);
+    else if (display.kind === 'time-series') renderPlotDynamic(panel, display, state.clock.ut1Jd, language);
+    else renderMapDynamic(panel, display, state.clock.ut1Jd, language);
   }
 }
 
@@ -228,6 +241,7 @@ function updatePanel(replacement: DisplayConfig | null, panel: HTMLElement,
     const current = state.displays.find(display => display.id === panel.dataset.panelId);
     if (current?.kind === 'geometry') renderGeometryStatic(panel, current, language);
     else if (current?.kind === 'time-series') renderPlotStatic(panel, current, language);
+    else if (current?.kind === 'planetary-map') renderMapStatic(panel, current, language);
     error.textContent = t(errorKey); error.hidden = false; return;
   }
   error.hidden = true;
@@ -283,6 +297,16 @@ function onPanelAction(action: string, panel: HTMLElement, button: HTMLElement):
     } else if (action === 'zoom-in' || action === 'zoom-out') {
       commit(zoomPlotWindow(state, id, action === 'zoom-in' ? 0.5 : 2));
     }
+  } else if (display.kind === 'planetary-map') {
+    if (action === 'map-fit') commit(fitMap(state, id, mapFitPositions(display, state.clock.ut1Jd)));
+    else if (action === 'map-reset') commit(resetMapCamera(state, id));
+    else if (action === 'map-zoom-in' || action === 'map-zoom-out') {
+      commit(zoomMap(state, id, action === 'map-zoom-in' ? 0.5 : 2));
+    } else if (action.startsWith('map-pan-')) {
+      const direction = action.slice('map-pan-'.length);
+      commit(panMap(state, id, direction === 'left' ? -0.25 : direction === 'right' ? 0.25 : 0,
+        direction === 'up' ? 0.25 : direction === 'down' ? -0.25 : 0));
+    }
   }
 }
 
@@ -304,7 +328,8 @@ root.addEventListener('click', event => {
     } else {
       const kind = root!.querySelector<HTMLSelectElement>('[data-add-kind]')!.value;
       const preset = kind === 'geometry' ? workspacePresets['explore-one'][0]
-        : workspacePresets['compare-longitudes'][0];
+        : kind === 'planetary-map' ? workspacePresets['copernican-map'][0]
+          : workspacePresets['compare-longitudes'][0];
       const next = addDisplay(state, preset);
       if (next === state) workspaceMessage.textContent = t('panelLimit');
       else { workspaceMessage.textContent = ''; commit(next); }
@@ -327,6 +352,11 @@ root.addEventListener('change', event => {
   if (!display) return;
   if (display.kind === 'geometry' && input.dataset.setting) {
     updatePanel(changeGeometry(display, input.dataset.setting,
+      input instanceof HTMLInputElement && input.type === 'checkbox' ? input.checked : input.value), panel);
+  } else if (display.kind === 'planetary-map') {
+    const setting = input.dataset.mapVisible ? 'visible:' + input.dataset.mapVisible
+      : input.dataset.mapTrail ? 'trail:' + input.dataset.mapTrail : input.dataset.setting;
+    if (setting) updatePanel(changeMap(display, setting,
       input instanceof HTMLInputElement && input.type === 'checkbox' ? input.checked : input.value), panel);
   } else if (display.kind === 'time-series' && input.dataset.traceSetting) {
     const errorKey: MessageKey = display.analysis.kind === 'model-disagreement'
