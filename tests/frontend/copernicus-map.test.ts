@@ -163,7 +163,9 @@ test('30-year Saturn trail retains a finite, resolved relative trajectory', () =
 });
 
 test('map panels validate, restore paused, copy settings, and retain one global clock', () => {
-  let state = addDisplay(addDisplay(emptyWorkspace(), copernicanMap), copernicanMap);
+  const linearMap = { ...copernicanMap, radialProjection: 'linear' as const,
+    camera: { offsetX: 0, offsetY: 0, radiusUnits: 120000 } };
+  let state = addDisplay(addDisplay(emptyWorkspace(), linearMap), linearMap);
   const first = state.displays[0] as PlanetaryMapDisplay;
   const second = state.displays[1] as PlanetaryMapDisplay;
   assert.notStrictEqual(first.camera, second.camera);

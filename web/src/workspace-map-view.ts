@@ -3,6 +3,7 @@ import { apsisPolicy, exploratoryApsisPolicy } from './copernicus.ts';
 import { evaluateCopernicusMap, mapBodies, mapView, sampleMapTrails,
   type MapBody, type MapSnapshot, type MapTrailSample } from './copernicus-map.ts';
 import { message, type Language, type MessageKey } from './i18n.ts';
+import { projectMapPoint, projectMapRadius } from './map-projection.ts';
 import type { Point } from './model.ts';
 import type { PlanetaryMapDisplay } from './workspace-types.ts';
 
@@ -57,9 +58,10 @@ function cachedTrails(display: PlanetaryMapDisplay, ut1Jd: number): CacheEntry {
 export function clearMapTrailCache(id: string): void { trailCache.delete(id); }
 
 function screen(point: Point, display: PlanetaryMapDisplay): Point {
+  const projected = projectMapPoint(point, display.radialProjection);
   const pixelsPerUnit = 270 / display.camera.radiusUnits;
-  return { x: 340 + (point.x - display.camera.offsetX) * pixelsPerUnit,
-    y: 340 - (point.y - display.camera.offsetY) * pixelsPerUnit };
+  return { x: 340 + (projected.x - display.camera.offsetX) * pixelsPerUnit,
+    y: 340 - (projected.y - display.camera.offsetY) * pixelsPerUnit };
 }
 const coordinate = (value: number): string => value.toFixed(2);
 
@@ -142,13 +144,16 @@ function renderTrailEndpoints(display: PlanetaryMapDisplay, trails: Trails,
   return lines.join('');
 }
 
-function gridSvg(display: PlanetaryMapDisplay, language: Language): string {
+export function renderMapGrid(display: PlanetaryMapDisplay, language: Language): string {
   if (!display.showGrid) return '';
   const origin = screen({ x: 0, y: 0 }, display);
-  const rings = [0.25, 0.5, 0.75, 1].map(fraction =>
-    `<circle cx="${coordinate(origin.x)}" cy="${coordinate(origin.y)}" r="${coordinate(270 * fraction)}"/>`).join('');
+  const rings = [10000, 30000, 60000, 100000].map(physicalRadius => {
+    const pixels = projectMapRadius(physicalRadius, display.radialProjection) *
+      270 / display.camera.radiusUnits;
+    return `<circle cx="${coordinate(origin.x)}" cy="${coordinate(origin.y)}" r="${coordinate(pixels)}"/>`;
+  }).join('');
   return `<g class="map-grid"><path d="M0 ${coordinate(origin.y)}H680 M${coordinate(origin.x)} 0V680"/>${rings}</g>
-    <text class="map-scale" x="18" y="665">${escapeHtml(t(language, 'mapScale'))}: ${Math.round(display.camera.radiusUnits).toLocaleString()} ${escapeHtml(t(language, 'mapUnits'))}</text>`;
+    <text class="map-scale" x="18" y="665">${escapeHtml(t(language, 'mapScale'))} · R=10000</text>`;
 }
 
 export function renderMapMarkers(display: PlanetaryMapDisplay,
@@ -199,7 +204,7 @@ export function mapFitPositions(display: PlanetaryMapDisplay, ut1Jd: number): re
       }
     }
   }
-  return points;
+  return points.map(point => projectMapPoint(point, display.radialProjection));
 }
 
 export function renderMapStatic(panel: HTMLElement, display: PlanetaryMapDisplay, language: Language): void {
@@ -212,6 +217,9 @@ export function renderMapStatic(panel: HTMLElement, display: PlanetaryMapDisplay
   settings.innerHTML = `<summary>${t(language, 'panelSettings')}</summary><div class="panel-settings-grid">
     <label>${t(language, 'mapCentre')}<select data-setting="map-centre">${mapBodies.map(body =>
       `<option value="${body}" ${body === display.viewCenter ? 'selected' : ''}>${t(language, labelKeys[body])}</option>`).join('')}</select></label>
+    <label>${t(language, 'mapRadialScale')}<select data-setting="map-projection">
+      <option value="linear" ${display.radialProjection === 'linear' ? 'selected' : ''}>${t(language, 'mapLinear')}</option>
+      <option value="asinh" ${display.radialProjection === 'asinh' ? 'selected' : ''}>${t(language, 'mapCompressed')}</option></select></label>
     <label>${t(language, 'apsisPolicyLabel')}<select data-setting="map-policy">
       <option value="${apsisPolicy}" ${display.marsPolicyId === apsisPolicy ? 'selected' : ''}>${t(language, 'mapSourceLimited')}</option>
       <option value="${exploratoryApsisPolicy}" ${display.marsPolicyId === exploratoryApsisPolicy ? 'selected' : ''}>${t(language, 'mapExploratory')}</option></select></label>
@@ -226,6 +234,11 @@ export function renderMapStatic(panel: HTMLElement, display: PlanetaryMapDisplay
   settings.open = open;
   setText(panel, '[data-map-policy-note]', t(language,
     display.marsPolicyId === apsisPolicy ? 'mapSourceLimited' : 'mapExploratory'));
+  setText(panel, '[data-map-projection-note]', t(language,
+    display.radialProjection === 'asinh' ? 'mapCompressedNotice' : 'mapLinearNotice'));
+  const ringNote = panel.querySelector<HTMLElement>('[data-map-ring-note]')!;
+  ringNote.hidden = !display.showGrid;
+  setText(panel, '[data-map-ring-note]', t(language, 'mapRingDistances'));
   setText(panel, '[data-map-science]', t(language, 'mapScientificNote'));
   const controls = panel.querySelector<HTMLElement>('[data-map-controls]')!;
   const actions: [string, MessageKey][] = [
@@ -235,7 +248,7 @@ export function renderMapStatic(panel: HTMLElement, display: PlanetaryMapDisplay
   ];
   controls.innerHTML = actions.map(([action, key]) =>
     `<button type="button" data-action="${action}">${t(language, key)}</button>`).join('');
-  panel.querySelector<HTMLElement>('[data-map-grid]')!.innerHTML = gridSvg(display, language);
+  panel.querySelector<HTMLElement>('[data-map-grid]')!.innerHTML = renderMapGrid(display, language);
 }
 
 export function renderMapDynamic(panel: HTMLElement, display: PlanetaryMapDisplay,
@@ -250,7 +263,7 @@ export function renderMapDynamic(panel: HTMLElement, display: PlanetaryMapDispla
   // Only the small endpoint group changes every frame. Long cached SVG paths
   // are rebuilt when their historical grid window or scientific choices change.
   const drawingKey = [entry.key, display.camera.offsetX, display.camera.offsetY,
-    display.camera.radiusUnits].join('|');
+    display.camera.radiusUnits, display.radialProjection].join('|');
   if (trailGroup.dataset.cacheKey !== drawingKey) {
     trailGroup.innerHTML = renderMapTrails(display, entry.trails);
     trailGroup.dataset.cacheKey = drawingKey;

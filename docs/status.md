@@ -2,7 +2,7 @@
 
 ## Phase 6A development — review pending
 
-The `codex/phase-6a-planetary-map` branch adds a third managed display kind, Planetary Map, using the accepted Copernican 1543 Earth, Mars, Jupiter and Saturn evaluators in common historical Earth annual-radius units. It shows the true Sun and four bodies, allows translation to any displayed body, per-body visibility and past trails, panel-local Fit/zoom/pan, and explicit guarded or exploratory Mars policy. It remains a derived sidereal-plane display, not a new planetary theory or a calibrated sky prediction. The public `main` site remains Phase 5C until separate approval. See [Map specification](planetary-map.md) and [workspace architecture](workspace-architecture.md).
+The `codex/phase-6a-planetary-map` branch adds a third managed display kind, Planetary Map, using the accepted Copernican 1543 Earth, Mars, Jupiter and Saturn evaluators in common historical Earth annual-radius units. It shows the true Sun and four bodies, allows translation to any displayed body, per-body visibility and past trails, panel-local Fit/zoom/pan, and explicit guarded or exploratory Mars policy. Its preset now uses a selectable asinh radial **display** compression to reveal inner and outer trajectories together; true linear scale remains available, and scientific distances and directions are unchanged. It remains a derived sidereal-plane display, not a new planetary theory or a calibrated sky prediction. The public `main` site remains Phase 5C until separate approval. See [Map specification](planetary-map.md) and [workspace architecture](workspace-architecture.md).
 
 ## Current public release — Phase 5C
 

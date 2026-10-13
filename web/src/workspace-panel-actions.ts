@@ -2,6 +2,7 @@ import { correspondingModelForBody, defaultPolicyForModel, firstModelForBody, hi
   modelCapabilities, type HistoricalBody, type ModelId } from './model-registry.ts';
 import { validateDisplay } from './workspace-validation.ts';
 import { mapBodies } from './copernicus-map.ts';
+import { projectMapPoint, projectMapRadius, unprojectMapPoint, unprojectMapRadius } from './map-projection.ts';
 import type { DisplayConfig, GeometryDisplay, PlanetaryMapDisplay, PlotTrace, TimeSeriesDisplay } from './workspace-types.ts';
 
 export function changeMap(display: PlanetaryMapDisplay, setting: string,
@@ -11,6 +12,17 @@ export function changeMap(display: PlanetaryMapDisplay, setting: string,
     next = { ...display, viewCenter: value as typeof mapBodies[number] };
   } else if (setting === 'map-policy' && typeof value === 'string') {
     next = { ...display, marsPolicyId: value as PlanetaryMapDisplay['marsPolicyId'] };
+  } else if (setting === 'map-projection' && (value === 'linear' || value === 'asinh')) {
+    // Camera offsets and radius are in display coordinates. Preserve their
+    // corresponding historical targets when the display projection changes.
+    const physicalTarget = unprojectMapPoint({ x: display.camera.offsetX,
+      y: display.camera.offsetY }, display.radialProjection);
+    const target = projectMapPoint(physicalTarget, value);
+    next = { ...display, radialProjection: value, camera: {
+      offsetX: target.x, offsetY: target.y,
+      radiusUnits: projectMapRadius(unprojectMapRadius(display.camera.radiusUnits,
+        display.radialProjection), value),
+    } };
   } else if (setting === 'map-duration' && typeof value === 'string') {
     next = { ...display, trailDays: Number(value) };
   } else if (setting === 'map-grid') next = { ...display, showGrid: Boolean(value) };

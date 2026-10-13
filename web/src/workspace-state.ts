@@ -3,6 +3,7 @@ import { computationalUt1Domain, example1473Ut1, example1512Ut1,
 import { exploratoryApsisPolicy } from './copernicus.ts';
 import { modelCapabilities, type CapabilityRegistry } from './model-registry.ts';
 import { exampleDay } from './historical-examples.ts';
+import { projectMapRadius } from './map-projection.ts';
 import { isValidWorkspace, validateDisplay } from './workspace-validation.ts';
 import { maxWorkspacePanels, workspaceSchemaVersion,
   type DisplayConfig, type GeometryDisplay, type PlanetaryMapDisplay, type PlotTrace, type TimeSeriesDisplay,
@@ -218,7 +219,8 @@ export function fitMap(state: WorkspaceState, id: string,
 export function resetMapCamera(state: WorkspaceState, id: string): WorkspaceState {
   const display = state.displays.find(panel => panel.id === id);
   return display?.kind === 'planetary-map'
-    ? updateDisplay(state, { ...display, camera: { offsetX: 0, offsetY: 0, radiusUnits: 120000 } }) : state;
+    ? updateDisplay(state, { ...display, camera: { offsetX: 0, offsetY: 0,
+      radiusUnits: projectMapRadius(120000, display.radialProjection) } }) : state;
 }
 
 /** Follow only after the marker leaves the central 60% of a plot window.
@@ -327,9 +329,11 @@ const outerLongitudePlot: DisplayDraft = {
 export const copernicanMap: DisplayDraft = {
   kind: 'planetary-map', collapsed: false, systemId: 'copernicus-1543',
   viewCenter: 'true-sun', marsPolicyId: exploratoryApsisPolicy,
+  radialProjection: 'asinh',
   visibleBodies: { 'true-sun': true, earth: true, mars: true, jupiter: true, saturn: true },
   bodyTrails: { 'true-sun': false, earth: false, mars: false, jupiter: false, saturn: false },
-  trailDays: 365, camera: { offsetX: 0, offsetY: 0, radiusUnits: 120000 },
+  trailDays: 365, camera: { offsetX: 0, offsetY: 0,
+    radiusUnits: projectMapRadius(120000, 'asinh') },
   showLabels: true, showGrid: true,
 };
 

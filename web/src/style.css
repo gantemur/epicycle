@@ -1455,6 +1455,11 @@ footer span {
   font-size: .85rem;
   margin: 12px 0 6px;
 }
+.map-projection-note {
+  color: #cbe9e6;
+  font-size: .85rem;
+  margin: 6px 0;
+}
 .map-controls {
   display: flex;
   flex-wrap: wrap;

@@ -75,6 +75,7 @@ export function validateDisplay(display: DisplayConfig,
     const validBodies = new Set<string>(mapBodies);
     const issueForMap = (): ValidationIssue[] => [issue('invalid-settings', display.id)];
     if (display.systemId !== 'copernicus-1543' || !validBodies.has(display.viewCenter) ||
+        (display.radialProjection !== 'linear' && display.radialProjection !== 'asinh') ||
         (display.marsPolicyId !== apsisPolicy && display.marsPolicyId !== exploratoryApsisPolicy) ||
         !Number.isFinite(display.trailDays) || display.trailDays < 1 || display.trailDays > 365 * 30 ||
         !Number.isFinite(display.camera.radiusUnits) || display.camera.radiusUnits < 500 ||
@@ -225,6 +226,7 @@ export function validateWorkspace(value: unknown,
     else largestPanelNumber = Math.max(largestPanelNumber, panelNumber);
     if (raw.kind === 'planetary-map' && raw.systemId === 'copernicus-1543' &&
         typeof raw.viewCenter === 'string' && typeof raw.marsPolicyId === 'string' &&
+        typeof raw.radialProjection === 'string' &&
         isRecord(raw.visibleBodies) && isRecord(raw.bodyTrails) &&
         typeof raw.trailDays === 'number' && isRecord(raw.camera) &&
         typeof raw.camera.offsetX === 'number' && typeof raw.camera.offsetY === 'number' &&

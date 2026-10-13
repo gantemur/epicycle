@@ -119,10 +119,11 @@ function mountPanel(display: DisplayConfig): HTMLElement {
     '</div></div><div data-panel-body><details data-panel-settings></details>',
     '<p data-panel-error class="error" role="alert" hidden></p>',
     display.kind === 'planetary-map'
-      ? '<p class="map-policy-note" data-map-policy-note></p><p class="scientific-note" data-map-science></p>' +
+      ? '<p class="map-policy-note" data-map-policy-note></p><p class="map-projection-note" data-map-projection-note></p><p class="scientific-note" data-map-science></p>' +
         '<div class="map-controls" data-map-controls></div><p class="scientific-note" data-map-unavailable hidden></p>' +
         '<div class="map-frame"><svg viewBox="0 0 680 680" role="img" aria-label="Planetary Map">' +
         '<g data-map-grid></g><g data-map-trails></g><g data-map-endpoints></g><g data-map-markers></g></svg></div>' +
+        '<p class="field-help" data-map-ring-note></p>' +
         '<p class="scientific-note" data-map-continuation></p><p class="field-help" data-map-readout-heading></p>' +
         '<dl class="comparison-readouts map-readouts" data-map-readouts></dl>'
       : display.kind === 'geometry'
