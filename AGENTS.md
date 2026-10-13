@@ -1,7 +1,7 @@
 # Standing project instructions
 
 - Read `docs/status.md` and the relevant architecture, source, catalogue, and audit documents before implementing a model.
-- Keep `private/` read-only and fully ignored. Never stage PDFs, licensed text or images, ephemeris kernels, or legacy snapshots. Check tracked paths before any eventual commit. The repository has a GitHub remote and the accepted Phase 5A scientific workspace is publicly deployed from `main` at https://gantemur.github.io/epicycle/.
+- Keep `private/` read-only and fully ignored. Never stage PDFs, licensed text or images, ephemeris kernels, or legacy snapshots. Check tracked paths before any eventual commit. The repository has a GitHub remote and the accepted Phase 5B scientific workspace is publicly deployed from `main` at https://gantemur.github.io/epicycle/.
 - Do not commit, push, create a remote, or deploy without the director's explicit approval. Stop after the assigned phase.
 - Preserve original historical numerical notation, units, epoch, frame, body, version, exact source locator, and evidence status. Distinguish explicit values, derivations, scholarly reconstructions, and modern fits. Mark unresolved readings openly.
 - Validate equations and parameters against primary passages, historical tables, and independent numerical fixtures. An animation is never proof of correctness. Do not promote SOL or CALTIB outputs to historical authority.

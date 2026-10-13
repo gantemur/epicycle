@@ -285,4 +285,4 @@ A 'model' can reasonably provide only one observable with partial validation, pr
 
 ### Bottom line
 
-This original census predates the Phase 5A public Sun release and the Phase 5B Jupiter/Saturn development branch. Current implementation status is maintained in [status.md](status.md) and the [model catalogue](model-catalogue.md). This census remains a source survey; candidate models require separate parameter records and numerical tests before they are offered in the atlas.
+This original census predates the Phase 5A Sun and Phase 5B Jupiter/Saturn public releases. Current implementation status is maintained in [status.md](status.md) and the [model catalogue](model-catalogue.md). This census remains a source survey; candidate models require separate parameter records and numerical tests before they are offered in the atlas.
