@@ -26,10 +26,28 @@ function circle(point: Point, radius: number, className: string): string {
   return `<circle class="${className}" cx="${f(p.x)}" cy="${f(p.y)}" r="${f(radius * scale)}"/>`;
 }
 
-function dot(point: Point, code: string, className: string, dx: number, dy: number, description: string): string {
+type LabelAnchor = 'start' | 'middle' | 'end';
+
+function dot(point: Point, code: string, className: string, dx: number, dy: number,
+  description: string, anchor: LabelAnchor = 'start', radialLeader = false): string {
   const p = screenPoint(point);
-  const leader = Math.hypot(dx, dy) > 33 ? `<line class="point-leader" x1="${f(p.x)}" y1="${f(p.y)}" x2="${f(p.x + dx + 6)}" y2="${f(p.y + dy - 6)}"/>` : '';
-  return `<g class="${className}"><title>${description}</title>${leader}<circle class="point-halo" cx="${f(p.x)}" cy="${f(p.y)}" r="14"/><circle class="point-core" cx="${f(p.x)}" cy="${f(p.y)}" r="8"/><text class="point-label" x="${f(p.x + dx)}" y="${f(p.y + dy)}">${code}</text></g>`;
+  const tip = radialLeader
+    ? { x: p.x + 0.78 * dx, y: p.y + 0.78 * (dy - 6) }
+    : { x: p.x + dx + 6, y: p.y + dy - 6 };
+  const leader = Math.hypot(dx, dy) > 33 ? `<line class="point-leader" x1="${f(p.x)}" y1="${f(p.y)}" x2="${f(tip.x)}" y2="${f(tip.y)}"/>` : '';
+  const anchorAttribute = anchor === 'start' ? '' : ` text-anchor="${anchor}"`;
+  return `<g class="${className}"><title>${description}</title>${leader}<circle class="point-halo" cx="${f(p.x)}" cy="${f(p.y)}" r="14"/><circle class="point-core" cx="${f(p.x)}" cy="${f(p.y)}" r="8"/><text class="point-label" x="${f(p.x + dx)}" y="${f(p.y + dy)}"${anchorAttribute}>${code}</text></g>`;
+}
+
+/** Put each outer-planet label away from the other epicycle dot at every phase. */
+function epicycleLabel(point: Point, other: Point): { dx: number; dy: number; anchor: LabelAnchor } {
+  const position = screenPoint(point);
+  const opposite = screenPoint(other);
+  const separation = Math.hypot(position.x - opposite.x, position.y - opposite.y);
+  const horizontal = (position.x - opposite.x) / separation;
+  const vertical = (position.y - opposite.y) / separation;
+  return { dx: 44 * horizontal, dy: 44 * vertical + 6,
+    anchor: horizontal > 0.3 ? 'start' : horizontal < -0.3 ? 'end' : 'middle' };
 }
 
 export function trailPoints(day: number, span: number, samples = 160): Point[] {
@@ -61,6 +79,8 @@ export function renderDiagram(result: SuperiorGeometryResult, trail: readonly Po
     : body === 'Jupiter' ? 'jupiterDiagramAccessible' : 'saturnDiagramAccessible';
   const description = body === 'Mars' ? 'marsDescription'
     : body === 'Jupiter' ? 'jupiterDescription' : 'saturnDescription';
+  const centerLabel = body === 'Mars' ? null : epicycleLabel(C, P);
+  const planetLabel = body === 'Mars' ? null : epicycleLabel(P, C);
   return `<svg class="sky-diagram" viewBox="0 0 ${size} ${size}" role="img" aria-label="${message(language, accessible)}">
     <defs><radialGradient id="space-glow${instanceId}"><stop offset="0" stop-color="#183743"/><stop offset="1" stop-color="#091924"/></radialGradient></defs>
     <circle cx="320" cy="320" r="319" fill="url(#space-glow${instanceId})"/>
@@ -78,9 +98,15 @@ export function renderDiagram(result: SuperiorGeometryResult, trail: readonly Po
     ${arc}
     ${dot(D, 'D', 'deferent-dot', -77, 0, message(language, 'deferentDescription'))}
     ${dot(Q, 'Q', 'equant-dot', -28, -45, message(language, 'equantDescription'))}
-    ${dot(C, 'C', 'center-dot', 13, body === 'Mars' ? 28 : 40, message(language, 'epicycleDescription'))}
+    ${centerLabel
+      ? dot(C, 'C', 'center-dot', centerLabel.dx, centerLabel.dy,
+        message(language, 'epicycleDescription'), centerLabel.anchor, true)
+      : dot(C, 'C', 'center-dot', 13, 28, message(language, 'epicycleDescription'))}
     ${dot(O, 'O', 'earth-dot', -45, 58, message(language, 'earthDescription'))}
-    ${dot(P, 'P', 'mars-dot', 14, body === 'Mars' ? -14 : -36, message(language, description))}
+    ${planetLabel
+      ? dot(P, 'P', 'mars-dot', planetLabel.dx, planetLabel.dy,
+        message(language, description), planetLabel.anchor, true)
+      : dot(P, 'P', 'mars-dot', 14, -14, message(language, description))}
     <text class="angle-label" x="${origin + 56}" y="${origin - 13}">λ</text>
   </svg>`;
 }

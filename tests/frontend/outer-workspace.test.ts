@@ -4,8 +4,8 @@ import { ptolemyDayToAssumedUt1, modelDaysAtUt1 } from '../../web/src/comparison
 import { outerTrailPoints, renderDiagram, screenPoint } from '../../web/src/diagram.ts';
 import { message } from '../../web/src/i18n.ts';
 import { historicalBodies, modelIdsForBody } from '../../web/src/model-registry.ts';
-import { evaluatePtolemyJupiterDays } from '../../web/src/ptolemy-jupiter.ts';
-import { evaluatePtolemySaturnDays } from '../../web/src/ptolemy-saturn.ts';
+import { evaluatePtolemyJupiterArguments, evaluatePtolemyJupiterDays } from '../../web/src/ptolemy-jupiter.ts';
+import { evaluatePtolemySaturnArguments, evaluatePtolemySaturnDays } from '../../web/src/ptolemy-saturn.ts';
 import { addTrace, changeGeometry, changePlot, changeTrace } from '../../web/src/workspace-panel-actions.ts';
 import { sampleWorkspacePlot, traceLongitudeAt, workspacePlotCacheKey } from '../../web/src/workspace-plot.ts';
 import { renderWorkspaceSources } from '../../web/src/workspace-sources.ts';
@@ -65,6 +65,43 @@ test('planet geometry, fixed scale, trail endpoint, and bilingual labels agree',
         body === 'Jupiter' ? 'jupiterDiagramAccessible' : 'saturnDiagramAccessible')));
       assert.match(svg, new RegExp(message(language,
         body === 'Jupiter' ? 'jupiterDescription' : 'saturnDescription')));
+    }
+  }
+});
+
+test('outer-planet P and C labels and leaders stay with their dots across epicycle phases', () => {
+  const labelledPoint = (svg: string, className: string) => {
+    const group = svg.match(new RegExp(`<g class="${className}">([\\s\\S]*?)<\\/g>`))?.[1];
+    assert.ok(group);
+    const dot = group.match(/<circle class="point-core" cx="([^"]+)" cy="([^"]+)"/);
+    const label = group.match(/<text class="point-label" x="([^"]+)" y="([^"]+)"/);
+    const leader = group.match(/<line class="point-leader" x1="[^"]+" y1="[^"]+" x2="([^"]+)" y2="([^"]+)"/);
+    assert.ok(dot && label && leader);
+    return { dot: { x: Number(dot[1]), y: Number(dot[2]) },
+      label: { x: Number(label[1]), y: Number(label[2]) },
+      leader: { x: Number(leader[1]), y: Number(leader[2]) } };
+  };
+  for (const [body, evaluate] of [
+    ['Jupiter', evaluatePtolemyJupiterArguments],
+    ['Saturn', evaluatePtolemySaturnArguments],
+  ] as const) for (const phase of [0, 45, 90, 135, 180, 225, 270, 315]) {
+    const result = evaluate(210, phase, 155);
+    const svg = renderDiagram(result, [], 'en', `-${body}-${phase}`, body);
+    const center = labelledPoint(svg, 'center-dot');
+    const planet = labelledPoint(svg, 'mars-dot');
+    const separation = { x: planet.dot.x - center.dot.x, y: planet.dot.y - center.dot.y };
+    const projection = (from: typeof center.dot, to: typeof center.dot) =>
+      (to.x - from.x) * separation.x + (to.y - from.y) * separation.y;
+    assert.ok(projection(center.dot, center.label) < 0, `${body} C label, phase ${phase}`);
+    assert.ok(projection(center.dot, center.leader) < 0, `${body} C leader, phase ${phase}`);
+    assert.ok(projection(planet.dot, planet.label) > 0, `${body} P label, phase ${phase}`);
+    assert.ok(projection(planet.dot, planet.leader) > 0, `${body} P leader, phase ${phase}`);
+    for (const [point, expected] of [
+      [center.dot, screenPoint(result.epicycleCenter)],
+      [planet.dot, screenPoint(result.planet)],
+    ] as const) {
+      assert.ok(Math.abs(point.x - expected.x) < 0.011);
+      assert.ok(Math.abs(point.y - expected.y) < 0.011);
     }
   }
 });
