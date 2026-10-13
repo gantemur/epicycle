@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
 import { modelDaysAtUt1 } from '../../web/src/comparison-time.ts';
 import { copernicusOuterTrail, renderCopernicusOuterDiagram,
   copernicusOuterViewOrigin } from '../../web/src/copernicus-outer-diagram.ts';
@@ -57,12 +58,28 @@ test('moving centre changes drawing positions, not the geocentric sight line or 
         assert.match(svg, /class="sight-line"/);
         assert.match(svg, /class="copernicus-principal-circle"/);
         assert.match(svg, /class="epicycle-circle"/);
-        assert.match(svg, /class="solar-mean-ray"/);
+        assert.match(svg, /class="solar-eccentric-offset"/);
+        assert.match(svg, /class="outer-planet-trail"/);
+        assert.match(svg, /class="outer-planet-dot"/);
+        assert.doesNotMatch(svg, /class="(?:mars-trail|mars-dot|sun-mars-ray|solar-mean-ray)"/);
         assert.ok(svg.includes(message(language, body === 'jupiter'
           ? 'copernicusJupiterDiagramAccessible' : 'copernicusSaturnDiagramAccessible')));
       }
       assert.match(sunSvg, /class="sun-earth-ray"/);
+      assert.match(sunSvg, /class="sun-outer-planet-ray"/);
+      assert.doesNotMatch(earthSvg, /class="sun-outer-planet-ray"/);
     }
+  }
+});
+
+test('outer-planet construction classes retain shared styling and line controls', () => {
+  const stylesheet = readFileSync(new URL('../../web/src/style.css', import.meta.url), 'utf8');
+  assert.match(stylesheet, /\.mars-trail, \.outer-planet-trail\s*\{/);
+  assert.match(stylesheet, /\.mars-dot \.point-core, \.outer-planet-dot \.point-core\s*\{/);
+  assert.match(stylesheet, /\.sun-mars-ray,\.sun-outer-planet-ray\s*\{/);
+  assert.match(stylesheet, /\.solar-mean-ray, \.solar-eccentric-offset\s*\{/);
+  for (const className of ['sun-outer-planet-ray', 'solar-eccentric-offset']) {
+    assert.match(stylesheet, new RegExp(`\\[data-geometry-frame\\]\\.hide-lines \\.${className}[^{}]*\\{\\s*opacity: 0;`));
   }
 });
 

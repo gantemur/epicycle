@@ -242,7 +242,7 @@ h2 {
   stroke-width: 1.6;
   opacity: .65;
 }
-.equant-ray, .solar-mean-ray {
+.equant-ray, .solar-mean-ray, .solar-eccentric-offset {
   stroke: #9bc4c1;
   stroke-width: 2;
   stroke-dasharray: 8 7;
@@ -264,7 +264,7 @@ h2 {
   stroke-width: 2;
   opacity: .75;
 }
-.mars-trail {
+.mars-trail, .outer-planet-trail {
   fill: none;
   stroke: #f1a879;
   stroke-width: 3;
@@ -301,7 +301,7 @@ h2 {
 .center-dot .point-core {
   fill: #f5e0ad;
 }
-.mars-dot .point-core {
+.mars-dot .point-core, .outer-planet-dot .point-core {
   fill: #fa947b;
 }
 .point-label,.angle-label {
@@ -931,7 +931,7 @@ footer span {
   stroke-width: 1.5;
   opacity: .65;
 }
-.sun-earth-ray,.sun-mars-ray {
+.sun-earth-ray,.sun-mars-ray,.sun-outer-planet-ray {
   stroke-width: 1.5;
   stroke-dasharray: 5 7;
   opacity: .58;
@@ -939,7 +939,7 @@ footer span {
 .sun-earth-ray {
   stroke: #d4bf83;
 }
-.sun-mars-ray {
+.sun-mars-ray,.sun-outer-planet-ray {
   stroke: #c5a8a0;
 }
 .sun-dot .point-core {
@@ -1572,7 +1572,7 @@ footer span {
 [data-geometry-frame].hide-circles .guide-ring, [data-geometry-frame].hide-circles .deferent-circle, [data-geometry-frame].hide-circles .epicycle-circle, [data-geometry-frame].hide-circles .copernicus-principal-circle {
   opacity: 0;
 }
-[data-geometry-frame].hide-lines .axis, [data-geometry-frame].hide-lines .apsidal-line, [data-geometry-frame].hide-lines .equant-ray, [data-geometry-frame].hide-lines .solar-mean-ray, [data-geometry-frame].hide-lines .epicycle-spoke, [data-geometry-frame].hide-lines .copernicus-earth-spoke, [data-geometry-frame].hide-lines .sun-earth-ray, [data-geometry-frame].hide-lines .sun-mars-ray {
+[data-geometry-frame].hide-lines .axis, [data-geometry-frame].hide-lines .apsidal-line, [data-geometry-frame].hide-lines .equant-ray, [data-geometry-frame].hide-lines .solar-mean-ray, [data-geometry-frame].hide-lines .solar-eccentric-offset, [data-geometry-frame].hide-lines .epicycle-spoke, [data-geometry-frame].hide-lines .copernicus-earth-spoke, [data-geometry-frame].hide-lines .sun-earth-ray, [data-geometry-frame].hide-lines .sun-mars-ray, [data-geometry-frame].hide-lines .sun-outer-planet-ray {
   opacity: 0;
 }
 [data-geometry-frame].hide-labels text {

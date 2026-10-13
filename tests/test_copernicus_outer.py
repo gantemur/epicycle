@@ -74,6 +74,31 @@ class CopernicanOuterTests(unittest.TestCase):
         self.assertEqual(delta, -sexagesimal("0;0,0,15,28"))
         self.assertAlmostEqual(float(1514 * delta), -0.10840987654320988)
 
+    def test_supplementary_1500_arguments_from_christ_rates(self):
+        # C3 pp.543–545 calls 1499 Dec 31 midnight "1500 Jan 0".
+        days = civil_to_local_jd(1499, 12, 31) - copernicus_earth.EPOCH_LOCAL_JD
+        self.assertEqual(days, 1500 * 365 + 8)
+        years = Fraction(int(days), 365)
+        printed = {
+            "saturn": (sexagesimal("227;15,38"), sexagesimal("33;35,53")),
+            "jupiter": (sexagesimal("313;55,29"), sexagesimal("306;56,02")),
+        }
+        for module, body in ((copernicus_saturn, "saturn"),
+                             (copernicus_jupiter, "jupiter")):
+            parameters = module.definition()["parameters"]
+            commutation = (sexagesimal(parameters["mean_commutation_epoch"]["sexagesimal"]) +
+                           years * sexagesimal(parameters["mean_commutation_annual_motion"]["sexagesimal"])) % 360
+            proper = (sexagesimal(parameters["mean_proper_longitude_epoch"]["sexagesimal"]) +
+                      years * sexagesimal(parameters["mean_proper_longitude_annual_motion"]["sexagesimal"])) % 360
+            difference = (printed[body][0] - commutation, printed[body][1] - proper)
+            self.assertAlmostEqual(float(sum(difference) * 3600), -31.1815768645, places=6)
+            if body == "saturn":
+                self.assertAlmostEqual(float(difference[0]), -7.4904289362, places=9)
+                self.assertAlmostEqual(float(difference[1]), 7.4817673871, places=9)
+            else:
+                self.assertAlmostEqual(float(difference[0] * 3600), -1.009625571, places=6)
+                self.assertAlmostEqual(float(difference[1] * 3600), -30.171951294, places=6)
+
     def test_source_cases_against_continuous_geometry(self):
         for module, body, call in (
                 (copernicus_jupiter, "jupiter", copernicus_jupiter.evaluate_jupiter_from_arguments),

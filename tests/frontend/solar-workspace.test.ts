@@ -154,7 +154,7 @@ test('solar diagrams and trails retain original lengths and moving viewing origi
   assert.match(original, /<line class="solar-mean-ray"/);
   assert.doesNotMatch(original, /class="equant-ray"/);
   const stylesheet = readFileSync(new URL('../../web/src/style.css', import.meta.url), 'utf8');
-  assert.match(stylesheet, /\.equant-ray, \.solar-mean-ray\s*\{/);
+  assert.match(stylesheet, /\.equant-ray, \.solar-mean-ray, \.solar-eccentric-offset\s*\{/);
   assert.match(stylesheet, /\[data-geometry-frame\]\.hide-lines \.solar-mean-ray[^{}]*\{\s*opacity: 0;/);
   const copernicus = evaluateCopernicusSunDays(days.copernicus);
   const earthTrail = copernicusSunTrail(days.copernicus, 180, 'true-sun');

@@ -61,9 +61,9 @@ export function renderCopernicusOuterDiagram(result: CopernicusSuperiorResult,
     y: earthOnPage.y - 45 * Math.sin(longitude) };
   const arc = `<path class="longitude-arc" d="M ${f(earthOnPage.x + 45)},${f(earthOnPage.y)} A 45,45 0 ${result.geocentricSiderealLongitude > 180 ? 1 : 0} 0 ${coordinates(arcEnd)}"/>`;
   const trailPath = trail.length > 1
-    ? `<polyline class="mars-trail" points="${trail.map(point => coordinates(onPage(point, { x: 0, y: 0 }))).join(' ')}"/>` : '';
+    ? `<polyline class="outer-planet-trail" points="${trail.map(point => coordinates(onPage(point, { x: 0, y: 0 }))).join(' ')}"/>` : '';
   const sunRays = viewCenter === 'true-sun'
-    ? `${line(S, E, centre, 'sun-earth-ray')}${line(S, P, centre, 'sun-mars-ray')}` : '';
+    ? `${line(S, E, centre, 'sun-earth-ray')}${line(S, P, centre, 'sun-outer-planet-ray')}` : '';
   const sunLabels = viewCenter === 'true-sun';
   const planetDescription = message(language, result.body === 'jupiter' ? 'jupiterDescription' : 'saturnDescription');
   const accessible = message(language, result.body === 'jupiter'
@@ -78,7 +78,7 @@ export function renderCopernicusOuterDiagram(result: CopernicusSuperiorResult,
     ${circle(G, centre, result.earthModel.annualRadius * result.earthToPlanetScale, 'deferent-circle')}
     ${circle(M, centre, result.planetGeometry.principalRadius, 'copernicus-principal-circle')}
     ${circle(C, centre, result.planetGeometry.smallEpicycleRadius, 'epicycle-circle')}
-    ${line(S, F, centre, 'apsidal-line')}${line(F, G, centre, 'solar-mean-ray')}
+    ${line(S, F, centre, 'apsidal-line')}${line(F, G, centre, 'solar-eccentric-offset')}
     ${line(G, E, centre, 'copernicus-earth-spoke')}${line(M, C, centre, 'apsidal-line')}${line(C, P, centre, 'epicycle-spoke')}
     ${trailPath}${line(E, P, centre, 'sight-line')}${arc}
     ${dot(S, centre, 'S', 'sun-dot', sunLabels ? -84 : -70, sunLabels ? -85 : -68, message(language, 'trueSunDescription'))}
@@ -87,7 +87,7 @@ export function renderCopernicusOuterDiagram(result: CopernicusSuperiorResult,
     ${dot(M, centre, 'M', 'deferent-dot', sunLabels ? -65 : -32, sunLabels ? 15 : -25, message(language, 'planetPrincipalCenterDescription'))}
     ${dot(C, centre, 'C', 'center-dot', 12, 30, message(language, 'planetEpicycleCenterDescription'))}
     ${dot(E, centre, 'E', 'earth-dot', sunLabels ? 47 : -42, sunLabels ? 35 : 43, message(language, 'earthDescription'))}
-    ${dot(P, centre, 'P', 'mars-dot', 13, -14, planetDescription)}
+    ${dot(P, centre, 'P', 'outer-planet-dot', 13, -14, planetDescription)}
     <text class="angle-label" x="${f(earthOnPage.x + 55)}" y="${f(earthOnPage.y - 13)}">λ</text>
   </svg>`;
 }
