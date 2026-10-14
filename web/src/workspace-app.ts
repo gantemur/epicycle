@@ -76,7 +76,11 @@ root.innerHTML = [
   '</option><option value="outer-planets" data-option-i18n="outerPreset">', t('outerPreset'),
   '</option><option value="jupiter-comparison" data-option-i18n="jupiterComparisonPreset">', t('jupiterComparisonPreset'),
   '</option><option value="saturn-comparison" data-option-i18n="saturnComparisonPreset">', t('saturnComparisonPreset'),
-  '</option><option value="copernican-map" data-option-i18n="mapPreset">', t('mapPreset'), '</option></select></label>',
+  '</option><option value="copernican-map" data-option-i18n="mapPreset">', t('mapPreset'),
+  '</option><option value="ptolemaic-angular-map" data-option-i18n="ptolemaicAngularPreset">',
+  t('ptolemaicAngularPreset'),
+  '</option><option value="copernican-angular-map" data-option-i18n="copernicanAngularPreset">',
+  t('copernicanAngularPreset'), '</option></select></label>',
   '<button type="button" data-workspace="preset">', tr('replaceLayout'), '</button></details>',
   '<label>', tr('addDisplay'), '<select data-add-kind><option value="geometry" data-option-i18n="addGeometry">',
   t('addGeometry'), '</option><option value="time-series" data-option-i18n="addPlot">', t('addPlot'),
@@ -299,7 +303,10 @@ function onPanelAction(action: string, panel: HTMLElement, button: HTMLElement):
       commit(zoomPlotWindow(state, id, action === 'zoom-in' ? 0.5 : 2));
     }
   } else if (display.kind === 'planetary-map') {
-    if (action === 'map-fit') commit(fitMap(state, id, mapFitPositions(display, state.clock.ut1Jd)));
+    if (action.startsWith('angular-add:') || action.startsWith('angular-remove:')) {
+      updatePanel(changeMap(display, action, true), panel,
+        display.angular.frameAlignment === 'native' ? 'angularFrameRequired' : 'invalidDisplay');
+    } else if (action === 'map-fit') commit(fitMap(state, id, mapFitPositions(display, state.clock.ut1Jd)));
     else if (action === 'map-reset') commit(resetMapCamera(state, id));
     else if (action === 'map-zoom-in' || action === 'map-zoom-out') {
       commit(zoomMap(state, id, action === 'map-zoom-in' ? 0.5 : 2));
@@ -358,7 +365,9 @@ root.addEventListener('change', event => {
     const setting = input.dataset.mapVisible ? 'visible:' + input.dataset.mapVisible
       : input.dataset.mapTrail ? 'trail:' + input.dataset.mapTrail : input.dataset.setting;
     if (setting) updatePanel(changeMap(display, setting,
-      input instanceof HTMLInputElement && input.type === 'checkbox' ? input.checked : input.value), panel);
+      input instanceof HTMLInputElement && input.type === 'checkbox' ? input.checked : input.value), panel,
+      setting.includes(':model') || setting === 'angular-frame' || setting.startsWith('angular-add:')
+        ? 'angularFrameRequired' : 'invalidDisplay');
   } else if (display.kind === 'time-series' && input.dataset.traceSetting) {
     const errorKey: MessageKey = display.analysis.kind === 'model-disagreement'
       ? input.dataset.traceSetting === 'observable' &&

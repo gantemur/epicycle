@@ -4,6 +4,7 @@ import { exploratoryApsisPolicy } from './copernicus.ts';
 import { modelCapabilities, type CapabilityRegistry } from './model-registry.ts';
 import { exampleDay } from './historical-examples.ts';
 import { projectMapRadius } from './map-projection.ts';
+import { angularBodies, defaultAngularTrack } from './angular-map.ts';
 import { isValidWorkspace, validateDisplay } from './workspace-validation.ts';
 import { maxWorkspacePanels, workspaceSchemaVersion,
   type DisplayConfig, type GeometryDisplay, type PlanetaryMapDisplay, type PlotTrace, type TimeSeriesDisplay,
@@ -13,7 +14,8 @@ export type DisplayDraft = Omit<GeometryDisplay, 'id'> | Omit<TimeSeriesDisplay,
   Omit<PlanetaryMapDisplay, 'id'>;
 export type WorkspacePreset = 'explore-one' | 'compare-longitudes' | 'desktop-explore' |
   'detailed-comparison' | 'solar-comparison' | 'outer-planets' |
-  'jupiter-comparison' | 'saturn-comparison' | 'copernican-map';
+  'jupiter-comparison' | 'saturn-comparison' | 'copernican-map' |
+  'ptolemaic-angular-map' | 'copernican-angular-map';
 
 export const initialClock: WorkspaceClock = {
   ut1Jd: example1512Ut1, playing: false, speedDaysPerSecond: 12, direction: 1,
@@ -30,9 +32,11 @@ function copyDisplay(display: DisplayConfig): DisplayConfig {
   } };
   if (display.kind === 'planetary-map') return {
     ...display,
-    visibleBodies: { ...display.visibleBodies }, bodyTrails: { ...display.bodyTrails },
-    camera: { offsetX: display.camera.offsetX, offsetY: display.camera.offsetY,
-      radiusUnits: display.camera.radiusUnits },
+    spatial: { ...display.spatial,
+      visibleBodies: { ...display.spatial.visibleBodies }, bodyTrails: { ...display.spatial.bodyTrails },
+      camera: { offsetX: display.spatial.camera.offsetX, offsetY: display.spatial.camera.offsetY,
+        radiusUnits: display.spatial.camera.radiusUnits } },
+    angular: { ...display.angular, tracks: display.angular.tracks.map(track => ({ ...track })) },
   };
   const analysis = display.analysis.kind === 'overlay'
     ? { kind: 'overlay' as const }
@@ -51,12 +55,29 @@ function copyDisplay(display: DisplayConfig): DisplayConfig {
 /** Reject invalid saved data and always restore paused; storage itself belongs to Phase 4B. */
 export function restoreWorkspace(value: unknown,
   registry: CapabilityRegistry = modelCapabilities): WorkspaceState | null {
-  if (!isValidWorkspace(value, registry)) return null;
+  const candidate = migrateWorkspace(value);
+  if (!isValidWorkspace(candidate, registry)) return null;
   return {
-    ...value,
-    clock: { ...value.clock, playing: false },
-    displays: value.displays.map(copyDisplay),
+    ...candidate,
+    clock: { ...candidate.clock, playing: false },
+    displays: candidate.displays.map(copyDisplay),
   };
+}
+
+/** The only previous schema had spatial-only Maps. Preserve those exact settings. */
+export function migrateWorkspace(value: unknown): unknown {
+  if (!value || typeof value !== 'object' || Array.isArray(value) ||
+      !('schemaVersion' in value) || value.schemaVersion !== 1 ||
+      !('displays' in value) || !Array.isArray(value.displays)) return value;
+  return { ...value, schemaVersion: workspaceSchemaVersion,
+    displays: value.displays.map(raw => {
+      if (!raw || typeof raw !== 'object' || Array.isArray(raw) ||
+          !('kind' in raw) || raw.kind !== 'planetary-map') return raw;
+      const spatial = { ...raw } as Record<string, unknown>;
+      for (const key of ['id', 'kind', 'collapsed']) delete spatial[key];
+      return { kind: 'planetary-map', id: raw.id, collapsed: raw.collapsed,
+        representation: 'spatial', spatial, angular: defaultAngularSettings('ptolemy') };
+    }) };
 }
 
 function withinNumericalDomain(ut1Jd: number): boolean {
@@ -188,23 +209,27 @@ export function zoomPlotWindow(state: WorkspaceState, id: string, factor: number
 export function zoomMap(state: WorkspaceState, id: string, factor: number): WorkspaceState {
   const display = state.displays.find(panel => panel.id === id);
   if (display?.kind !== 'planetary-map' || !Number.isFinite(factor) || factor <= 0) return state;
-  return updateDisplay(state, { ...display, camera: { ...display.camera,
-    radiusUnits: display.camera.radiusUnits * factor } });
+  if (display.representation !== 'spatial') return state;
+  return updateDisplay(state, { ...display, spatial: { ...display.spatial,
+    camera: { ...display.spatial.camera,
+      radiusUnits: display.spatial.camera.radiusUnits * factor } } });
 }
 
 export function panMap(state: WorkspaceState, id: string, xFraction: number, yFraction: number): WorkspaceState {
   const display = state.displays.find(panel => panel.id === id);
   if (display?.kind !== 'planetary-map' || !Number.isFinite(xFraction) || !Number.isFinite(yFraction)) return state;
-  return updateDisplay(state, { ...display, camera: { ...display.camera,
-    offsetX: display.camera.offsetX + xFraction * display.camera.radiusUnits,
-    offsetY: display.camera.offsetY + yFraction * display.camera.radiusUnits } });
+  if (display.representation !== 'spatial') return state;
+  return updateDisplay(state, { ...display, spatial: { ...display.spatial,
+    camera: { ...display.spatial.camera,
+      offsetX: display.spatial.camera.offsetX + xFraction * display.spatial.camera.radiusUnits,
+      offsetY: display.spatial.camera.offsetY + yFraction * display.spatial.camera.radiusUnits } } });
 }
 
 /** Fit a deliberate set of visible positions, including trails supplied by the caller. */
 export function fitMap(state: WorkspaceState, id: string,
   positions: readonly Readonly<{ x: number; y: number }>[]): WorkspaceState {
   const display = state.displays.find(panel => panel.id === id);
-  if (display?.kind !== 'planetary-map' || positions.length === 0 ||
+  if (display?.kind !== 'planetary-map' || display.representation !== 'spatial' || positions.length === 0 ||
       !positions.every(point => Number.isFinite(point.x) && Number.isFinite(point.y))) return state;
   const minX = Math.min(0, ...positions.map(point => point.x));
   const maxX = Math.max(0, ...positions.map(point => point.x));
@@ -213,14 +238,16 @@ export function fitMap(state: WorkspaceState, id: string,
   const offsetX = (minX + maxX) / 2;
   const offsetY = (minY + maxY) / 2;
   const radiusUnits = Math.max(500, Math.max(maxX - minX, maxY - minY) * 0.62);
-  return updateDisplay(state, { ...display, camera: { offsetX, offsetY, radiusUnits } });
+  return updateDisplay(state, { ...display, spatial: { ...display.spatial,
+    camera: { offsetX, offsetY, radiusUnits } } });
 }
 
 export function resetMapCamera(state: WorkspaceState, id: string): WorkspaceState {
   const display = state.displays.find(panel => panel.id === id);
-  return display?.kind === 'planetary-map'
-    ? updateDisplay(state, { ...display, camera: { offsetX: 0, offsetY: 0,
-      radiusUnits: projectMapRadius(120000, display.radialProjection) } }) : state;
+  return display?.kind === 'planetary-map' && display.representation === 'spatial'
+    ? updateDisplay(state, { ...display, spatial: { ...display.spatial,
+      camera: { offsetX: 0, offsetY: 0,
+        radiusUnits: projectMapRadius(120000, display.spatial.radialProjection) } } }) : state;
 }
 
 /** Follow only after the marker leaves the central 60% of a plot window.
@@ -326,16 +353,29 @@ const outerLongitudePlot: DisplayDraft = {
   ],
 };
 
+function defaultAngularSettings(system: 'ptolemy' | 'copernicus') {
+  return { systemSelection: system, frameAlignment: 'native' as const,
+    tracks: angularBodies.map((body, index) => defaultAngularTrack(body, system, `track-${index + 1}`)),
+    trailDays: 365, showLabels: true, showGrid: true };
+}
+
 export const copernicanMap: DisplayDraft = {
-  kind: 'planetary-map', collapsed: false, systemId: 'copernicus-1543',
+  kind: 'planetary-map', collapsed: false, representation: 'spatial',
+  spatial: { systemId: 'copernicus-1543',
   viewCenter: 'true-sun', marsPolicyId: exploratoryApsisPolicy,
   radialProjection: 'asinh',
   visibleBodies: { 'true-sun': true, earth: true, mars: true, jupiter: true, saturn: true },
   bodyTrails: { 'true-sun': false, earth: false, mars: false, jupiter: false, saturn: false },
   trailDays: 365, camera: { offsetX: 0, offsetY: 0,
     radiusUnits: projectMapRadius(120000, 'asinh') },
-  showLabels: true, showGrid: true,
+  showLabels: true, showGrid: true },
+  angular: defaultAngularSettings('ptolemy'),
 };
+
+export const ptolemaicAngularMap: DisplayDraft = { ...copernicanMap,
+  representation: 'angular', angular: defaultAngularSettings('ptolemy') };
+export const copernicanAngularMap: DisplayDraft = { ...copernicanMap,
+  representation: 'angular', angular: defaultAngularSettings('copernicus') };
 
 export const workspacePresets: Readonly<Record<WorkspacePreset, readonly DisplayDraft[]>> = {
   'explore-one': [ptolemyGeometry],
@@ -347,6 +387,8 @@ export const workspacePresets: Readonly<Record<WorkspacePreset, readonly Display
   'jupiter-comparison': [jupiterComparisonPlot, jupiterGeometry, copernicusJupiterGeometry],
   'saturn-comparison': [saturnComparisonPlot, saturnGeometry, copernicusSaturnGeometry],
   'copernican-map': [copernicanMap],
+  'ptolemaic-angular-map': [ptolemaicAngularMap],
+  'copernican-angular-map': [copernicanAngularMap],
 };
 
 /** Applying a layout is deliberate; a viewport change never calls this function. */

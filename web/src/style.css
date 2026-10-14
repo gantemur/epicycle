@@ -1511,6 +1511,34 @@ footer span {
   stroke-dasharray: 6 5;
   opacity: .68;
 }
+.angular-rings .angular-ring {
+  fill: none;
+  stroke: #63808a;
+  stroke-width: 1.5;
+  opacity: .55;
+}
+.angular-rings .angular-axes {
+  fill: none;
+  stroke: #63808a;
+  stroke-width: 1;
+  opacity: .28;
+}
+.angular-ring-label {
+  font-size: 20px;
+  paint-order: stroke;
+  stroke: #10232d;
+  stroke-width: 3px;
+}
+.angular-track-settings {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #38535e;
+  border-radius: 7px;
+}
+.angular-track-settings select { max-width: 100%; }
+.angular-track-settings button { justify-self: start; }
 .map-body circle:first-child {
   stroke: #10232d;
   stroke-width: 2;

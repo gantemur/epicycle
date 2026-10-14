@@ -2,39 +2,96 @@ import { correspondingModelForBody, defaultPolicyForModel, firstModelForBody, hi
   modelCapabilities, type HistoricalBody, type ModelId } from './model-registry.ts';
 import { validateDisplay } from './workspace-validation.ts';
 import { mapBodies } from './copernicus-map.ts';
+import { angularBodies, angularModelFor, defaultAngularTrack, maxAngularTracks } from './angular-map.ts';
 import { projectMapPoint, projectMapRadius, unprojectMapPoint, unprojectMapRadius } from './map-projection.ts';
 import type { DisplayConfig, GeometryDisplay, PlanetaryMapDisplay, PlotTrace, TimeSeriesDisplay } from './workspace-types.ts';
 
 export function changeMap(display: PlanetaryMapDisplay, setting: string,
   value: string | boolean): PlanetaryMapDisplay | null {
   let next: PlanetaryMapDisplay = display;
-  if (setting === 'map-centre' && typeof value === 'string' && mapBodies.includes(value as typeof mapBodies[number])) {
-    next = { ...display, viewCenter: value as typeof mapBodies[number] };
+  if (setting === 'map-representation' && (value === 'spatial' || value === 'angular')) {
+    next = { ...display, representation: value };
+  } else if (setting === 'angular-system' && value === 'custom') {
+    next = { ...display, angular: { ...display.angular, systemSelection: 'custom' } };
+  } else if (setting === 'angular-system' &&
+      (value === 'ptolemy' || value === 'copernicus')) {
+    const tracks = angularBodies.map((body, index) => defaultAngularTrack(body, value,
+      display.angular.tracks.find(track => track.body === body)?.id ?? `track-${index + 1}`));
+    next = { ...display, angular: { ...display.angular, systemSelection: value,
+      frameAlignment: 'native', tracks } };
+  } else if (setting === 'angular-frame' &&
+      (value === 'native' || value === 'nominal-historical-tropical')) {
+    next = { ...display, angular: { ...display.angular, frameAlignment: value } };
+  } else if (setting === 'angular-duration' && typeof value === 'string') {
+    next = { ...display, angular: { ...display.angular, trailDays: Number(value) } };
+  } else if (setting === 'angular-grid' || setting === 'angular-labels') {
+    next = { ...display, angular: { ...display.angular,
+      [setting === 'angular-grid' ? 'showGrid' : 'showLabels']: Boolean(value) } };
+  } else if (setting.startsWith('angular:')) {
+    const [, id, field] = setting.split(':');
+    const track = display.angular.tracks.find(item => item.id === id);
+    if (!track) return null;
+    let replacement = track;
+    if (field === 'visible') replacement = { ...track, visible: Boolean(value) };
+    else if (field === 'trail') replacement = { ...track, trail: Boolean(value) };
+    else if (field === 'model' && typeof value === 'string' &&
+        (value === angularModelFor(track.body, 'ptolemy') ||
+          value === angularModelFor(track.body, 'copernicus'))) {
+      replacement = { ...track, modelId: value as string,
+        policyId: value === 'copernicus' ? 'sn-local-uniform-1473-1523'
+          : 'mathematical-continuation' };
+    } else if (field === 'policy' && typeof value === 'string') {
+      replacement = { ...track, policyId: value };
+    } else return null;
+    next = { ...display, angular: { ...display.angular, systemSelection: 'custom',
+      tracks: display.angular.tracks.map(item => item.id === id ? replacement : item) } };
+  } else if (setting.startsWith('angular-add:')) {
+    const body = setting.slice('angular-add:'.length) as typeof angularBodies[number];
+    if (!angularBodies.includes(body) || display.angular.tracks.length >= maxAngularTracks ||
+        display.angular.tracks.filter(track => track.body === body).length >= 2) return null;
+    const existing = new Set(display.angular.tracks.map(track => track.id));
+    let number = 1;
+    while (existing.has(`track-${number}`)) number += 1;
+    const tradition = display.angular.tracks.find(track => track.body === body)?.modelId
+      .startsWith('ptolemy') ? 'copernicus' : 'ptolemy';
+    const added = defaultAngularTrack(body, tradition, `track-${number}`);
+    next = { ...display, angular: { ...display.angular, systemSelection: 'custom',
+      tracks: [...display.angular.tracks, added] } };
+  } else if (setting.startsWith('angular-remove:')) {
+    const id = setting.slice('angular-remove:'.length);
+    if (display.angular.tracks.length <= 1 || !display.angular.tracks.some(track => track.id === id)) return null;
+    next = { ...display, angular: { ...display.angular, systemSelection: 'custom',
+      tracks: display.angular.tracks.filter(track => track.id !== id) } };
+  } else if (setting === 'map-centre' && typeof value === 'string' && mapBodies.includes(value as typeof mapBodies[number])) {
+    next = { ...display, spatial: { ...display.spatial, viewCenter: value as typeof mapBodies[number] } };
   } else if (setting === 'map-policy' && typeof value === 'string') {
-    next = { ...display, marsPolicyId: value as PlanetaryMapDisplay['marsPolicyId'] };
+    next = { ...display, spatial: { ...display.spatial,
+      marsPolicyId: value as PlanetaryMapDisplay['spatial']['marsPolicyId'] } };
   } else if (setting === 'map-projection' && (value === 'linear' || value === 'asinh')) {
     // Camera offsets and radius are in display coordinates. Preserve their
     // corresponding historical targets when the display projection changes.
-    const physicalTarget = unprojectMapPoint({ x: display.camera.offsetX,
-      y: display.camera.offsetY }, display.radialProjection);
+    const physicalTarget = unprojectMapPoint({ x: display.spatial.camera.offsetX,
+      y: display.spatial.camera.offsetY }, display.spatial.radialProjection);
     const target = projectMapPoint(physicalTarget, value);
-    next = { ...display, radialProjection: value, camera: {
+    next = { ...display, spatial: { ...display.spatial, radialProjection: value, camera: {
       offsetX: target.x, offsetY: target.y,
-      radiusUnits: projectMapRadius(unprojectMapRadius(display.camera.radiusUnits,
-        display.radialProjection), value),
-    } };
+      radiusUnits: projectMapRadius(unprojectMapRadius(display.spatial.camera.radiusUnits,
+        display.spatial.radialProjection), value),
+    } } };
   } else if (setting === 'map-duration' && typeof value === 'string') {
-    next = { ...display, trailDays: Number(value) };
-  } else if (setting === 'map-grid') next = { ...display, showGrid: Boolean(value) };
-  else if (setting === 'map-labels') next = { ...display, showLabels: Boolean(value) };
+    next = { ...display, spatial: { ...display.spatial, trailDays: Number(value) } };
+  } else if (setting === 'map-grid') next = { ...display, spatial: { ...display.spatial, showGrid: Boolean(value) } };
+  else if (setting === 'map-labels') next = { ...display, spatial: { ...display.spatial, showLabels: Boolean(value) } };
   else if (setting.startsWith('visible:')) {
     const body = setting.slice(8) as typeof mapBodies[number];
     if (!mapBodies.includes(body)) return null;
-    next = { ...display, visibleBodies: { ...display.visibleBodies, [body]: Boolean(value) } };
+    next = { ...display, spatial: { ...display.spatial,
+      visibleBodies: { ...display.spatial.visibleBodies, [body]: Boolean(value) } } };
   } else if (setting.startsWith('trail:')) {
     const body = setting.slice(6) as typeof mapBodies[number];
     if (!mapBodies.includes(body)) return null;
-    next = { ...display, bodyTrails: { ...display.bodyTrails, [body]: Boolean(value) } };
+    next = { ...display, spatial: { ...display.spatial,
+      bodyTrails: { ...display.spatial.bodyTrails, [body]: Boolean(value) } } };
   } else return null;
   return validateDisplay(next).length ? null : next;
 }

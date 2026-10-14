@@ -238,7 +238,7 @@ test('workspace JSON has a version, round-trips, and rejects malformed saved sta
   const parsed: unknown = JSON.parse(JSON.stringify(state));
   assert.equal(isValidWorkspace(parsed), true);
   assert.deepEqual(parsed, state);
-  assert.ok(validateWorkspace({ ...state, schemaVersion: 2 }).some(item => item.code === 'invalid-schema'));
+  assert.ok(validateWorkspace({ ...state, schemaVersion: 3 }).some(item => item.code === 'invalid-schema'));
   assert.ok(validateWorkspace({ ...state, displays: [state.displays[0], state.displays[0]] })
     .some(item => item.code === 'duplicate-id'));
   assert.ok(validateWorkspace({ ...state, clock: { ...state.clock, speedDaysPerSecond: 0 } })
@@ -256,7 +256,7 @@ test('restoration validates IDs and counter, copies panels, and never resumes pl
   assert.notStrictEqual((restored.displays[0] as TimeSeriesDisplay).window,
     ((saved as typeof running).displays[0] as TimeSeriesDisplay).window);
   assert.equal(addDisplay(restored, geometry).displays[3].id, 'panel-4');
-  assert.equal(restoreWorkspace({ ...running, schemaVersion: 2 }), null);
+  assert.equal(restoreWorkspace({ ...running, schemaVersion: 3 }), null);
   assert.equal(restoreWorkspace({ ...running, displays: [
     { ...running.displays[0], id: 'unsafe-id' }, ...running.displays.slice(1),
   ] }), null);

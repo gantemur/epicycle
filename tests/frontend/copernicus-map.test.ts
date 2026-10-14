@@ -139,7 +139,8 @@ test('guard boundaries split Mars trails; outer planets remain available', () =>
   const continued = sampleMapTrails(['mars'], 'earth', exploratoryApsisPolicy, start, end, 3);
   assert.ok(continued.mars!.some(sample => sample?.provenance === 'exploratory-continuation'));
   const map = applyWorkspacePreset(emptyWorkspace(), 'copernican-map').displays[0] as PlanetaryMapDisplay;
-  const withTrail = { ...map, bodyTrails: { ...map.bodyTrails, mars: true } };
+  const withTrail = { ...map, spatial: { ...map.spatial,
+    bodyTrails: { ...map.spatial.bodyTrails, mars: true } } };
   const svg = renderMapTrails(withTrail, continued);
   assert.match(svg, /data-provenance="solid"/);
   assert.match(svg, /data-provenance="dashed"/);
@@ -163,43 +164,46 @@ test('30-year Saturn trail retains a finite, resolved relative trajectory', () =
 });
 
 test('map panels validate, restore paused, copy settings, and retain one global clock', () => {
-  const linearMap = { ...copernicanMap, radialProjection: 'linear' as const,
-    camera: { offsetX: 0, offsetY: 0, radiusUnits: 120000 } };
+  const linearMap = { ...copernicanMap, spatial: { ...copernicanMap.spatial,
+    radialProjection: 'linear' as const,
+    camera: { offsetX: 0, offsetY: 0, radiusUnits: 120000 } } };
   let state = addDisplay(addDisplay(emptyWorkspace(), linearMap), linearMap);
   const first = state.displays[0] as PlanetaryMapDisplay;
   const second = state.displays[1] as PlanetaryMapDisplay;
-  assert.notStrictEqual(first.camera, second.camera);
-  assert.notStrictEqual(first.visibleBodies, second.visibleBodies);
-  assert.notStrictEqual(first.bodyTrails, second.bodyTrails);
-  assert.equal(first.marsPolicyId, exploratoryApsisPolicy);
+  assert.notStrictEqual(first.spatial.camera, second.spatial.camera);
+  assert.notStrictEqual(first.spatial.visibleBodies, second.spatial.visibleBodies);
+  assert.notStrictEqual(first.spatial.bodyTrails, second.spatial.bodyTrails);
+  assert.equal(first.spatial.marsPolicyId, exploratoryApsisPolicy);
   assert.equal(changeMap(first, 'map-centre', 'unrecognized'), null);
   state = updateDisplay(state, changeMap(first, 'map-centre', 'mars')!);
-  assert.equal((state.displays[1] as PlanetaryMapDisplay).viewCenter, 'true-sun');
+  assert.equal((state.displays[1] as PlanetaryMapDisplay).spatial.viewCenter, 'true-sun');
   const zoomed = zoomMap(state, first.id, 0.5);
-  assert.equal((zoomed.displays[0] as PlanetaryMapDisplay).camera.radiusUnits, 60000);
-  assert.equal((zoomed.displays[1] as PlanetaryMapDisplay).camera.radiusUnits, 120000);
+  assert.equal((zoomed.displays[0] as PlanetaryMapDisplay).spatial.camera.radiusUnits, 60000);
+  assert.equal((zoomed.displays[1] as PlanetaryMapDisplay).spatial.camera.radiusUnits, 120000);
   const panned = panMap(zoomed, first.id, 0.25, -0.25);
-  assert.notEqual((panned.displays[0] as PlanetaryMapDisplay).camera.offsetX, 0);
+  assert.notEqual((panned.displays[0] as PlanetaryMapDisplay).spatial.camera.offsetX, 0);
   const fitted = fitMap(panned, first.id, [{ x: -20000, y: 0 }, { x: 40000, y: 10000 }]);
-  assert.equal((fitted.displays[0] as PlanetaryMapDisplay).camera.offsetX, 10000);
-  assert.equal((resetMapCamera(fitted, first.id).displays[0] as PlanetaryMapDisplay).camera.radiusUnits, 120000);
+  assert.equal((fitted.displays[0] as PlanetaryMapDisplay).spatial.camera.offsetX, 10000);
+  assert.equal((resetMapCamera(fitted, first.id).displays[0] as PlanetaryMapDisplay).spatial.camera.radiusUnits, 120000);
   const later = tickClock(setClockPlaying(setClockInstant(state, example1512Ut1), true), 0.1);
   assert.ok(later.clock.ut1Jd > example1512Ut1);
   assert.equal(later.displays[0], state.displays[0]);
   assert.equal(restoreWorkspace(JSON.parse(JSON.stringify(later)))?.clock.playing, false);
-  assert.equal(validateWorkspace({ ...later, displays: [{ ...first, camera: { ...first.camera,
-    radiusUnits: Infinity } }] }).some(issue => issue.code === 'invalid-settings'), true);
-  assert.equal(validateDisplay({ ...first, systemId: 'unknown' as 'copernicus-1543' }).length > 0, true);
-  assert.equal(displayAvailabilityAt({ ...first, viewCenter: 'mars',
-    marsPolicyId: apsisPolicy }, frauenburgCivilToUt1(2026, 10, 13)).status, 'unavailable');
+  assert.equal(validateWorkspace({ ...later, displays: [{ ...first, spatial: { ...first.spatial,
+    camera: { ...first.spatial.camera, radiusUnits: Infinity } } }] }).some(issue => issue.code === 'invalid-settings'), true);
+  assert.equal(validateDisplay({ ...first, spatial: { ...first.spatial,
+    systemId: 'unknown' as 'copernicus-1543' } }).length > 0, true);
+  assert.equal(displayAvailabilityAt({ ...first, spatial: { ...first.spatial,
+    viewCenter: 'mars', marsPolicyId: apsisPolicy } }, frauenburgCivilToUt1(2026, 10, 13)).status, 'unavailable');
   assert.equal(mapTrailCadence(365 * 30), 6);
   assert.equal(mapTrailCadence(365), 3);
   const key = mapTrailCacheKey(first, example1512Ut1);
   assert.equal(mapTrailCacheKey(first, example1512Ut1 + 0.01), key);
-  assert.notEqual(mapTrailCacheKey({ ...first, marsPolicyId: apsisPolicy }, example1512Ut1), key);
-  assert.notEqual(mapTrailCacheKey({ ...first, viewCenter: 'earth' }, example1512Ut1), key);
-  assert.notEqual(mapTrailCacheKey({ ...first, trailDays: 730 }, example1512Ut1), key);
-  assert.notEqual(mapTrailCacheKey({ ...first, bodyTrails: { ...first.bodyTrails, saturn: true } },
+  assert.notEqual(mapTrailCacheKey({ ...first, spatial: { ...first.spatial, marsPolicyId: apsisPolicy } }, example1512Ut1), key);
+  assert.notEqual(mapTrailCacheKey({ ...first, spatial: { ...first.spatial, viewCenter: 'earth' } }, example1512Ut1), key);
+  assert.notEqual(mapTrailCacheKey({ ...first, spatial: { ...first.spatial, trailDays: 730 } }, example1512Ut1), key);
+  assert.notEqual(mapTrailCacheKey({ ...first, spatial: { ...first.spatial,
+    bodyTrails: { ...first.spatial.bodyTrails, saturn: true } } },
     example1512Ut1), key);
 });
 
@@ -213,8 +217,8 @@ test('two Maps coexist with geometry and longitude panels under the four-panel l
   assert.deepEqual(state.displays.map(display => display.kind),
     ['planetary-map', 'planetary-map', 'geometry', 'time-series']);
   assert.equal(addDisplay(state, copernicanMap), state);
-  assert.equal((state.displays[0] as PlanetaryMapDisplay).viewCenter, 'true-sun');
-  assert.equal((state.displays[1] as PlanetaryMapDisplay).viewCenter, 'jupiter');
+  assert.equal((state.displays[0] as PlanetaryMapDisplay).spatial.viewCenter, 'true-sun');
+  assert.equal((state.displays[1] as PlanetaryMapDisplay).spatial.viewCenter, 'jupiter');
   const moved = moveDisplay(state, second.id, 'up');
   assert.equal(moved.displays[0].id, second.id);
   const collapsed = setDisplayCollapsed(moved, first.id, true);
@@ -224,9 +228,11 @@ test('two Maps coexist with geometry and longitude panels under the four-panel l
   assert.equal(reduced.displays.length, 3);
   assert.equal(reduced.displays[0].id, second.id);
   assert.equal(validateWorkspace(JSON.parse(JSON.stringify(reduced))).length, 0);
-  const malformed = { ...reduced, displays: [{ ...second, visibleBodies: null }] };
+  const malformed = { ...reduced, displays: [{ ...second, spatial: { ...second.spatial,
+    visibleBodies: null } }] };
   assert.equal(restoreWorkspace(malformed), null);
-  assert.equal(validateDisplay({ ...second, viewCenter: 'moon' as MapBody }).length > 0, true);
+  assert.equal(validateDisplay({ ...second, spatial: { ...second.spatial,
+    viewCenter: 'moon' as MapBody } }).length > 0, true);
 });
 
 test('body labels and revised deferent tooltip are bilingual and markers have text alternatives', () => {

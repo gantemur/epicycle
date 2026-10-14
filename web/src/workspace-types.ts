@@ -3,7 +3,7 @@ import type { ApsisPolicy } from './copernicus.ts';
 import type { MapBody } from './copernicus-map.ts';
 import type { MapRadialProjection } from './map-projection.ts';
 
-export const workspaceSchemaVersion = 1;
+export const workspaceSchemaVersion = 2;
 export const maxWorkspacePanels = 4;
 export const initialPlotTraceLimit = 4;
 export const maxPlotWindowDays = 365.25 * 100;
@@ -42,8 +42,8 @@ export type TimeSeriesDisplay = DisplayBase & Readonly<{
   analysis: PlotAnalysis;
 }>;
 
-export type PlanetaryMapDisplay = DisplayBase & Readonly<{
-  kind: 'planetary-map'; systemId: 'copernicus-1543';
+export type SpatialMapSettings = Readonly<{
+  systemId: 'copernicus-1543';
   viewCenter: MapBody; marsPolicyId: ApsisPolicy;
   radialProjection: MapRadialProjection;
   visibleBodies: Readonly<Record<MapBody, boolean>>;
@@ -51,6 +51,24 @@ export type PlanetaryMapDisplay = DisplayBase & Readonly<{
   trailDays: number;
   camera: Readonly<{ offsetX: number; offsetY: number; radiusUnits: number }>;
   showLabels: boolean; showGrid: boolean;
+}>;
+
+export type AngularBody = 'Sun' | 'Mars' | 'Jupiter' | 'Saturn';
+export const angularBodies: readonly AngularBody[] = ['Sun', 'Mars', 'Jupiter', 'Saturn'];
+export const maxAngularTracks = 8;
+export type AngularTrack = Readonly<{
+  id: string; body: AngularBody; modelId: string; policyId: string;
+  visible: boolean; trail: boolean;
+}>;
+export type AngularMapSettings = Readonly<{
+  systemSelection: 'ptolemy' | 'copernicus' | 'custom';
+  frameAlignment: 'native' | 'nominal-historical-tropical';
+  tracks: readonly AngularTrack[];
+  trailDays: number; showLabels: boolean; showGrid: boolean;
+}>;
+export type PlanetaryMapDisplay = DisplayBase & Readonly<{
+  kind: 'planetary-map'; representation: 'spatial' | 'angular';
+  spatial: SpatialMapSettings; angular: AngularMapSettings;
 }>;
 
 export type DisplayConfig = GeometryDisplay | TimeSeriesDisplay | PlanetaryMapDisplay;

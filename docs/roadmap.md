@@ -11,4 +11,4 @@ Gate each stage on source fidelity, time/frame documentation, and numerical vali
 
 ## Current workspace sequence
 
-Phases 4A–6A delivered the deployed clock-synchronized workspace, source-checked Sun, Mars, Jupiter and Saturn longitude constructions, and a common-scale Copernican [Planetary Map](planetary-map.md) as a display of existing models. A later angular-only display could include traditions without historically compatible distances; it must remain distinct from this spatial Map. Further catalogue expansion still requires sourced models and validation. See [workspace architecture](workspace-architecture.md).
+Phases 4A–6A delivered the deployed clock-synchronized workspace, source-checked Sun, Mars, Jupiter and Saturn longitude constructions, and a common-scale Copernican [Spatial Map](planetary-map.md). Phase 6B develops an Angular representation of the same Map display for longitude-only comparisons; its rings have illustrative radii and are not physical distances. Further catalogue expansion still requires sourced models and validation. See [workspace architecture](workspace-architecture.md).

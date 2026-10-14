@@ -1,4 +1,5 @@
 import { comparisonUt1Domain, computationalUt1Domain } from './comparison-time.ts';
+import { clearAngularTrailCache, renderAngularDynamic, renderAngularStatic } from './angular-map-view.ts';
 import { apsisPolicy, exploratoryApsisPolicy } from './copernicus.ts';
 import { evaluateCopernicusMap, mapBodies, mapView, sampleMapTrails,
   type MapBody, type MapSnapshot, type MapTrailSample } from './copernicus-map.ts';
@@ -32,36 +33,39 @@ type CacheEntry = { key: string; trails: Trails };
 const trailCache = new Map<string, CacheEntry>();
 
 export function mapTrailCacheKey(display: PlanetaryMapDisplay, ut1Jd: number): string {
-  const step = mapTrailCadence(display.trailDays);
-  const gridStart = Math.ceil((ut1Jd - display.trailDays) / step) * step;
+  const step = mapTrailCadence(display.spatial.trailDays);
+  const gridStart = Math.ceil((ut1Jd - display.spatial.trailDays) / step) * step;
   const gridEnd = Math.floor(ut1Jd / step) * step;
-  const bodies = mapBodies.filter(body => display.visibleBodies[body] && display.bodyTrails[body]);
-  return ['copernicus-1543', display.marsPolicyId, display.viewCenter,
-    display.trailDays, step, gridStart, gridEnd, bodies.join(',')].join('|');
+  const bodies = mapBodies.filter(body => display.spatial.visibleBodies[body] && display.spatial.bodyTrails[body]);
+  return ['copernicus-1543', display.spatial.marsPolicyId, display.spatial.viewCenter,
+    display.spatial.trailDays, step, gridStart, gridEnd, bodies.join(',')].join('|');
 }
 
 function cachedTrails(display: PlanetaryMapDisplay, ut1Jd: number): CacheEntry {
   const key = mapTrailCacheKey(display, ut1Jd);
   const cached = trailCache.get(display.id);
   if (cached?.key === key) return cached;
-  const step = mapTrailCadence(display.trailDays);
-  const start = Math.ceil((ut1Jd - display.trailDays) / step) * step;
+  const step = mapTrailCadence(display.spatial.trailDays);
+  const start = Math.ceil((ut1Jd - display.spatial.trailDays) / step) * step;
   const end = Math.floor(ut1Jd / step) * step;
-  const bodies = mapBodies.filter(body => display.visibleBodies[body] && display.bodyTrails[body]);
-  const trails = bodies.length ? sampleMapTrails(bodies, display.viewCenter, display.marsPolicyId,
+  const bodies = mapBodies.filter(body => display.spatial.visibleBodies[body] && display.spatial.bodyTrails[body]);
+  const trails = bodies.length ? sampleMapTrails(bodies, display.spatial.viewCenter, display.spatial.marsPolicyId,
     start, end, step) : {};
   const result = { key, trails };
   trailCache.set(display.id, result);
   return result;
 }
 
-export function clearMapTrailCache(id: string): void { trailCache.delete(id); }
+export function clearMapTrailCache(id: string): void {
+  trailCache.delete(id);
+  clearAngularTrailCache(id);
+}
 
 function screen(point: Point, display: PlanetaryMapDisplay): Point {
-  const projected = projectMapPoint(point, display.radialProjection);
-  const pixelsPerUnit = 270 / display.camera.radiusUnits;
-  return { x: 340 + (projected.x - display.camera.offsetX) * pixelsPerUnit,
-    y: 340 - (projected.y - display.camera.offsetY) * pixelsPerUnit };
+  const projected = projectMapPoint(point, display.spatial.radialProjection);
+  const pixelsPerUnit = 270 / display.spatial.camera.radiusUnits;
+  return { x: 340 + (projected.x - display.spatial.camera.offsetX) * pixelsPerUnit,
+    y: 340 - (projected.y - display.spatial.camera.offsetY) * pixelsPerUnit };
 }
 const coordinate = (value: number): string => value.toFixed(2);
 
@@ -69,7 +73,7 @@ const coordinate = (value: number): string => value.toFixed(2);
 export function renderMapTrails(display: PlanetaryMapDisplay, trails: Trails): string {
   const paths: string[] = [];
   for (const body of mapBodies) {
-    if (!display.visibleBodies[body] || !display.bodyTrails[body] || body === display.viewCenter) continue;
+    if (!display.spatial.visibleBodies[body] || !display.spatial.bodyTrails[body] || body === display.spatial.viewCenter) continue;
     const samples = trails[body] ?? [];
     let points: Point[] = [];
     let exploratory = false;
@@ -101,7 +105,7 @@ export function renderMapTrails(display: PlanetaryMapDisplay, trails: Trails): s
 
 function renderTrailEndpoints(display: PlanetaryMapDisplay, trails: Trails,
   current: MapSnapshot): string {
-  const view = mapView(current, display.viewCenter);
+  const view = mapView(current, display.spatial.viewCenter);
   if (!view.available) return '';
   const lines: string[] = [];
   const line = (body: MapBody, from: Point, to: Point, provenance: MapTrailSample['provenance']): void => {
@@ -115,22 +119,22 @@ function renderTrailEndpoints(display: PlanetaryMapDisplay, trails: Trails,
     if (fromTime >= toTime) return;
     const boundary = [comparisonUt1Domain.start, comparisonUt1Domain.end]
       .find(candidate => candidate > fromTime && candidate < toTime);
-    const boundaryRelative = boundary === undefined || (body !== 'mars' && display.viewCenter !== 'mars')
-      ? undefined : mapView(evaluateCopernicusMap(boundary, display.marsPolicyId),
-        display.viewCenter).bodies[body];
+    const boundaryRelative = boundary === undefined || (body !== 'mars' && display.spatial.viewCenter !== 'mars')
+      ? undefined : mapView(evaluateCopernicusMap(boundary, display.spatial.marsPolicyId),
+        display.spatial.viewCenter).bodies[body];
     if (boundaryRelative) {
       if (from) line(body, from.point, boundaryRelative.point, from.provenance);
       if (to) line(body, boundaryRelative.point, to.point, to.provenance);
     } else if (from && to) line(body, from.point, to.point, to.provenance);
   };
-  const exactStart = current.ut1Jd - display.trailDays;
+  const exactStart = current.ut1Jd - display.spatial.trailDays;
   const startView = exactStart >= computationalUt1Domain.start
-    ? mapView(evaluateCopernicusMap(exactStart, display.marsPolicyId), display.viewCenter) : null;
-  const cadence = mapTrailCadence(display.trailDays);
+    ? mapView(evaluateCopernicusMap(exactStart, display.spatial.marsPolicyId), display.spatial.viewCenter) : null;
+  const cadence = mapTrailCadence(display.spatial.trailDays);
   const gridStart = Math.ceil(exactStart / cadence) * cadence;
   const gridEnd = Math.floor(current.ut1Jd / cadence) * cadence;
   for (const body of mapBodies) {
-    if (!display.visibleBodies[body] || !display.bodyTrails[body] || body === display.viewCenter) continue;
+    if (!display.spatial.visibleBodies[body] || !display.spatial.bodyTrails[body] || body === display.spatial.viewCenter) continue;
     const samples = trails[body];
     const first = samples?.[0] ?? null;
     const last = samples?.at(-1) ?? null;
@@ -145,11 +149,11 @@ function renderTrailEndpoints(display: PlanetaryMapDisplay, trails: Trails,
 }
 
 export function renderMapGrid(display: PlanetaryMapDisplay, language: Language): string {
-  if (!display.showGrid) return '';
+  if (!display.spatial.showGrid) return '';
   const origin = screen({ x: 0, y: 0 }, display);
   const rings = [10000, 30000, 60000, 100000].map(physicalRadius => {
-    const pixels = projectMapRadius(physicalRadius, display.radialProjection) *
-      270 / display.camera.radiusUnits;
+    const pixels = projectMapRadius(physicalRadius, display.spatial.radialProjection) *
+      270 / display.spatial.camera.radiusUnits;
     return `<circle cx="${coordinate(origin.x)}" cy="${coordinate(origin.y)}" r="${coordinate(pixels)}"/>`;
   }).join('');
   return `<g class="map-grid"><path d="M0 ${coordinate(origin.y)}H680 M${coordinate(origin.x)} 0V680"/>${rings}</g>
@@ -158,17 +162,17 @@ export function renderMapGrid(display: PlanetaryMapDisplay, language: Language):
 
 export function renderMapMarkers(display: PlanetaryMapDisplay,
   snapshot: MapSnapshot, language: Language): string {
-  const view = mapView(snapshot, display.viewCenter);
+  const view = mapView(snapshot, display.spatial.viewCenter);
   if (!view.available) return '';
   const markers: string[] = [];
   const labelled: Point[] = [];
   for (const body of mapBodies) {
-    if (!display.visibleBodies[body] && body !== display.viewCenter) continue;
+    if (!display.spatial.visibleBodies[body] && body !== display.spatial.viewCenter) continue;
     const relative = view.bodies[body];
     if (!relative) continue;
     const p = screen(relative.point, display);
     const name = t(language, labelKeys[body]);
-    const center = body === display.viewCenter;
+    const center = body === display.spatial.viewCenter;
     markers.push(`<g class="map-body ${center ? 'map-centre' : ''}" data-body="${body}" role="img" aria-label="${escapeHtml(name)}: ${center ? escapeHtml(t(language, 'mapZero')) : relative.distance.toFixed(1) + ', ' + relative.siderealAngle.toFixed(2) + '°'}">
       <circle cx="${coordinate(p.x)}" cy="${coordinate(p.y)}" r="${center ? 9 : 7}" fill="${colors[body]}"/>
       ${center ? `<circle class="map-centre-ring" cx="${coordinate(p.x)}" cy="${coordinate(p.y)}" r="15"/>` : ''}
@@ -176,7 +180,7 @@ export function renderMapMarkers(display: PlanetaryMapDisplay,
     // Compact labels yield to the legend when inner points are too close.
     const centrePixel = screen({ x: 0, y: 0 }, display);
     const farEnoughFromCentre = center || Math.hypot(p.x - centrePixel.x, p.y - centrePixel.y) > 55;
-    if (display.showLabels && farEnoughFromCentre &&
+    if (display.spatial.showLabels && farEnoughFromCentre &&
         labelled.every(previous => Math.hypot(previous.x - p.x, previous.y - p.y) > 55)) {
       markers.push(`<text class="map-body-label" x="${coordinate(p.x + 12)}" y="${coordinate(p.y - 12)}" fill="${colors[body]}">${escapeHtml(name)}</text>`);
       labelled.push(p);
@@ -186,58 +190,70 @@ export function renderMapMarkers(display: PlanetaryMapDisplay,
 }
 
 export function mapFitPositions(display: PlanetaryMapDisplay, ut1Jd: number): readonly Point[] {
-  const snapshot = evaluateCopernicusMap(ut1Jd, display.marsPolicyId);
-  const view = mapView(snapshot, display.viewCenter);
+  if (display.representation !== 'spatial') return [];
+  const snapshot = evaluateCopernicusMap(ut1Jd, display.spatial.marsPolicyId);
+  const view = mapView(snapshot, display.spatial.viewCenter);
   if (!view.available) return [];
-  const points = mapBodies.filter(body => display.visibleBodies[body] || body === display.viewCenter)
+  const points = mapBodies.filter(body => display.spatial.visibleBodies[body] || body === display.spatial.viewCenter)
     .flatMap(body => view.bodies[body] ? [view.bodies[body]!.point] : []);
   const trails = cachedTrails(display, ut1Jd).trails;
   for (const body of mapBodies) for (const sample of trails[body] ?? []) {
     if (sample) points.push(sample.point);
   }
-  const exactStart = ut1Jd - display.trailDays;
+  const exactStart = ut1Jd - display.spatial.trailDays;
   if (exactStart >= computationalUt1Domain.start) {
-    const startView = mapView(evaluateCopernicusMap(exactStart, display.marsPolicyId), display.viewCenter);
+    const startView = mapView(evaluateCopernicusMap(exactStart, display.spatial.marsPolicyId), display.spatial.viewCenter);
     for (const body of mapBodies) {
-      if (display.visibleBodies[body] && display.bodyTrails[body] && startView.bodies[body]) {
+      if (display.spatial.visibleBodies[body] && display.spatial.bodyTrails[body] && startView.bodies[body]) {
         points.push(startView.bodies[body]!.point);
       }
     }
   }
-  return points.map(point => projectMapPoint(point, display.radialProjection));
+  return points.map(point => projectMapPoint(point, display.spatial.radialProjection));
 }
 
 export function renderMapStatic(panel: HTMLElement, display: PlanetaryMapDisplay, language: Language): void {
-  setText(panel, '[data-panel-title]', `${t(language, 'mapTitle')} · ${t(language, 'mapCentre')}: ${t(language, labelKeys[display.viewCenter])}`);
+  const trailGroup = panel.querySelector<HTMLElement>('[data-map-trails]')!;
+  trailGroup.innerHTML = '';
+  delete trailGroup.dataset.cacheKey;
+  panel.querySelector<HTMLElement>('[data-map-endpoints]')!.innerHTML = '';
+  if (display.representation === 'angular') {
+    renderAngularStatic(panel, display, language);
+    return;
+  }
+  setText(panel, '[data-panel-title]', `${t(language, 'mapTitle')} · ${t(language, 'mapCentre')}: ${t(language, labelKeys[display.spatial.viewCenter])}`);
   panel.querySelector('svg')!.setAttribute('aria-label', t(language, 'mapTitle'));
   setText(panel, '[data-map-readout-heading]',
     `${t(language, 'mapDistance')} · ${t(language, 'mapAngle')} (°)`);
   const settings = panel.querySelector<HTMLDetailsElement>('[data-panel-settings]')!;
   const open = settings.open;
   settings.innerHTML = `<summary>${t(language, 'panelSettings')}</summary><div class="panel-settings-grid">
+    <label>${t(language, 'mapRepresentation')}<select data-setting="map-representation">
+      <option value="spatial" selected>${t(language, 'mapSpatial')}</option>
+      <option value="angular">${t(language, 'mapAngular')}</option></select></label>
     <label>${t(language, 'mapCentre')}<select data-setting="map-centre">${mapBodies.map(body =>
-      `<option value="${body}" ${body === display.viewCenter ? 'selected' : ''}>${t(language, labelKeys[body])}</option>`).join('')}</select></label>
+      `<option value="${body}" ${body === display.spatial.viewCenter ? 'selected' : ''}>${t(language, labelKeys[body])}</option>`).join('')}</select></label>
     <label>${t(language, 'mapRadialScale')}<select data-setting="map-projection">
-      <option value="linear" ${display.radialProjection === 'linear' ? 'selected' : ''}>${t(language, 'mapLinear')}</option>
-      <option value="asinh" ${display.radialProjection === 'asinh' ? 'selected' : ''}>${t(language, 'mapCompressed')}</option></select></label>
+      <option value="linear" ${display.spatial.radialProjection === 'linear' ? 'selected' : ''}>${t(language, 'mapLinear')}</option>
+      <option value="asinh" ${display.spatial.radialProjection === 'asinh' ? 'selected' : ''}>${t(language, 'mapCompressed')}</option></select></label>
     <label>${t(language, 'apsisPolicyLabel')}<select data-setting="map-policy">
-      <option value="${apsisPolicy}" ${display.marsPolicyId === apsisPolicy ? 'selected' : ''}>${t(language, 'mapSourceLimited')}</option>
-      <option value="${exploratoryApsisPolicy}" ${display.marsPolicyId === exploratoryApsisPolicy ? 'selected' : ''}>${t(language, 'mapExploratory')}</option></select></label>
+      <option value="${apsisPolicy}" ${display.spatial.marsPolicyId === apsisPolicy ? 'selected' : ''}>${t(language, 'mapSourceLimited')}</option>
+      <option value="${exploratoryApsisPolicy}" ${display.spatial.marsPolicyId === exploratoryApsisPolicy ? 'selected' : ''}>${t(language, 'mapExploratory')}</option></select></label>
     <label>${t(language, 'mapTrailDuration')}<select data-setting="map-duration">${durations.map((days, index) =>
-      `<option value="${days}" ${display.trailDays === days ? 'selected' : ''}>${t(language, durationKeys[index])}</option>`).join('')}</select></label>
+      `<option value="${days}" ${display.spatial.trailDays === days ? 'selected' : ''}>${t(language, durationKeys[index])}</option>`).join('')}</select></label>
     ${mapBodies.map(body => `<div class="map-body-settings"><strong>${t(language, labelKeys[body])}</strong>
-      <label class="panel-check"><input type="checkbox" data-map-visible="${body}" ${checked(display.visibleBodies[body])}> ${t(language, 'mapVisible')}</label>
-      <label class="panel-check"><input type="checkbox" data-map-trail="${body}" ${checked(display.bodyTrails[body])}> ${t(language, 'mapTrailBody')}</label></div>`).join('')}
-    <label class="panel-check"><input type="checkbox" data-setting="map-grid" ${checked(display.showGrid)}> ${t(language, 'mapGrid')}</label>
-    <label class="panel-check"><input type="checkbox" data-setting="map-labels" ${checked(display.showLabels)}> ${t(language, 'mapLabels')}</label>
+      <label class="panel-check"><input type="checkbox" data-map-visible="${body}" ${checked(display.spatial.visibleBodies[body])}> ${t(language, 'mapVisible')}</label>
+      <label class="panel-check"><input type="checkbox" data-map-trail="${body}" ${checked(display.spatial.bodyTrails[body])}> ${t(language, 'mapTrailBody')}</label></div>`).join('')}
+    <label class="panel-check"><input type="checkbox" data-setting="map-grid" ${checked(display.spatial.showGrid)}> ${t(language, 'mapGrid')}</label>
+    <label class="panel-check"><input type="checkbox" data-setting="map-labels" ${checked(display.spatial.showLabels)}> ${t(language, 'mapLabels')}</label>
   </div>`;
   settings.open = open;
   setText(panel, '[data-map-policy-note]', t(language,
-    display.marsPolicyId === apsisPolicy ? 'mapSourceLimited' : 'mapExploratory'));
+    display.spatial.marsPolicyId === apsisPolicy ? 'mapSourceLimited' : 'mapExploratory'));
   setText(panel, '[data-map-projection-note]', t(language,
-    display.radialProjection === 'asinh' ? 'mapCompressedNotice' : 'mapLinearNotice'));
+    display.spatial.radialProjection === 'asinh' ? 'mapCompressedNotice' : 'mapLinearNotice'));
   const ringNote = panel.querySelector<HTMLElement>('[data-map-ring-note]')!;
-  ringNote.hidden = !display.showGrid;
+  ringNote.hidden = !display.spatial.showGrid;
   setText(panel, '[data-map-ring-note]', t(language, 'mapRingDistances'));
   setText(panel, '[data-map-science]', t(language, 'mapScientificNote'));
   const controls = panel.querySelector<HTMLElement>('[data-map-controls]')!;
@@ -253,8 +269,12 @@ export function renderMapStatic(panel: HTMLElement, display: PlanetaryMapDisplay
 
 export function renderMapDynamic(panel: HTMLElement, display: PlanetaryMapDisplay,
   ut1Jd: number, language: Language): void {
-  const snapshot = evaluateCopernicusMap(ut1Jd, display.marsPolicyId);
-  const view = mapView(snapshot, display.viewCenter);
+  if (display.representation === 'angular') {
+    renderAngularDynamic(panel, display, ut1Jd, language);
+    return;
+  }
+  const snapshot = evaluateCopernicusMap(ut1Jd, display.spatial.marsPolicyId);
+  const view = mapView(snapshot, display.spatial.viewCenter);
   const unavailable = panel.querySelector<HTMLElement>('[data-map-unavailable]')!;
   unavailable.hidden = view.available;
   if (!view.available) unavailable.textContent = t(language, 'mapUnavailableCenter');
@@ -262,8 +282,8 @@ export function renderMapDynamic(panel: HTMLElement, display: PlanetaryMapDispla
   const trailGroup = panel.querySelector<HTMLElement>('[data-map-trails]')!;
   // Only the small endpoint group changes every frame. Long cached SVG paths
   // are rebuilt when their historical grid window or scientific choices change.
-  const drawingKey = [entry.key, display.camera.offsetX, display.camera.offsetY,
-    display.camera.radiusUnits, display.radialProjection].join('|');
+  const drawingKey = [entry.key, display.spatial.camera.offsetX, display.spatial.camera.offsetY,
+    display.spatial.camera.radiusUnits, display.spatial.radialProjection].join('|');
   if (trailGroup.dataset.cacheKey !== drawingKey) {
     trailGroup.innerHTML = renderMapTrails(display, entry.trails);
     trailGroup.dataset.cacheKey = drawingKey;
@@ -275,10 +295,10 @@ export function renderMapDynamic(panel: HTMLElement, display: PlanetaryMapDispla
   const markerHtml = renderMapMarkers(display, snapshot, language);
   if (markers.innerHTML !== markerHtml) markers.innerHTML = markerHtml;
   const readouts = panel.querySelector<HTMLElement>('[data-map-readouts]')!;
-  const rows = mapBodies.filter(body => display.visibleBodies[body] || body === display.viewCenter).map(body => {
+  const rows = mapBodies.filter(body => display.spatial.visibleBodies[body] || body === display.spatial.viewCenter).map(body => {
     const relative = view.bodies[body];
     const name = t(language, labelKeys[body]);
-    const value = relative ? body === display.viewCenter ? t(language, 'mapZero')
+    const value = relative ? body === display.spatial.viewCenter ? t(language, 'mapZero')
       : `${relative.distance.toFixed(1)} · ${relative.siderealAngle.toFixed(3)}°`
       : t(language, body === 'mars' ? 'mapUnavailableBody' : 'mapUnavailable');
     return `<div><dt><span class="map-key" style="--map-color:${colors[body]}"></span>${name}</dt><dd>${value}</dd></div>`;

@@ -2,8 +2,9 @@ import { computationalUt1Domain } from './comparison-time.ts';
 import { apsisPolicy, exploratoryApsisPolicy } from './copernicus.ts';
 import { mapBodies } from './copernicus-map.ts';
 import { modelCapabilities, type CapabilityRegistry, type ModelCapability } from './model-registry.ts';
-import { initialPlotTraceLimit, maxPlotWindowDays, maxWorkspacePanels, workspaceSchemaVersion,
-  type DisplayConfig, type PlotTrace, type TimeSeriesDisplay, type WorkspaceState } from './workspace-types.ts';
+import { angularBodies, initialPlotTraceLimit, maxAngularTracks, maxPlotWindowDays, maxWorkspacePanels, workspaceSchemaVersion,
+  type DisplayConfig, type PlotTrace,
+  type TimeSeriesDisplay, type WorkspaceState } from './workspace-types.ts';
 
 export type IssueCode = 'invalid-schema' | 'invalid-clock' | 'invalid-display' | 'duplicate-id' |
   'invalid-panel-id' | 'invalid-counter' | 'renderer-unavailable' |
@@ -72,20 +73,62 @@ function disagreementIssues(plot: TimeSeriesDisplay, registry: CapabilityRegistr
 export function validateDisplay(display: DisplayConfig,
   registry: CapabilityRegistry = modelCapabilities): ValidationIssue[] {
   if (display.kind === 'planetary-map') {
+    const spatial = display.spatial;
+    const angular = display.angular;
     const validBodies = new Set<string>(mapBodies);
     const issueForMap = (): ValidationIssue[] => [issue('invalid-settings', display.id)];
-    if (display.systemId !== 'copernicus-1543' || !validBodies.has(display.viewCenter) ||
-        (display.radialProjection !== 'linear' && display.radialProjection !== 'asinh') ||
-        (display.marsPolicyId !== apsisPolicy && display.marsPolicyId !== exploratoryApsisPolicy) ||
-        !Number.isFinite(display.trailDays) || display.trailDays < 1 || display.trailDays > 365 * 30 ||
-        !Number.isFinite(display.camera.radiusUnits) || display.camera.radiusUnits < 500 ||
-        display.camera.radiusUnits > 1_000_000 ||
-        !Number.isFinite(display.camera.offsetX) || Math.abs(display.camera.offsetX) > 1_000_000 ||
-        !Number.isFinite(display.camera.offsetY) || Math.abs(display.camera.offsetY) > 1_000_000 ||
-        typeof display.showLabels !== 'boolean' || typeof display.showGrid !== 'boolean' ||
-        mapBodies.some(body => typeof display.visibleBodies[body] !== 'boolean' ||
-          typeof display.bodyTrails[body] !== 'boolean')) return issueForMap();
-    return [];
+    if ((display.representation !== 'spatial' && display.representation !== 'angular') ||
+        !spatial || spatial.systemId !== 'copernicus-1543' || !validBodies.has(spatial.viewCenter) ||
+        (spatial.radialProjection !== 'linear' && spatial.radialProjection !== 'asinh') ||
+        (spatial.marsPolicyId !== apsisPolicy && spatial.marsPolicyId !== exploratoryApsisPolicy) ||
+        !Number.isFinite(spatial.trailDays) || spatial.trailDays < 1 || spatial.trailDays > 365 * 30 ||
+        !Number.isFinite(spatial.camera?.radiusUnits) || spatial.camera.radiusUnits < 500 ||
+        spatial.camera.radiusUnits > 1_000_000 ||
+        !Number.isFinite(spatial.camera.offsetX) || Math.abs(spatial.camera.offsetX) > 1_000_000 ||
+        !Number.isFinite(spatial.camera.offsetY) || Math.abs(spatial.camera.offsetY) > 1_000_000 ||
+        typeof spatial.showLabels !== 'boolean' || typeof spatial.showGrid !== 'boolean' ||
+        mapBodies.some(body => typeof spatial.visibleBodies?.[body] !== 'boolean' ||
+          typeof spatial.bodyTrails?.[body] !== 'boolean') ||
+        !angular || !['ptolemy', 'copernicus', 'custom'].includes(angular.systemSelection) ||
+        !['native', 'nominal-historical-tropical'].includes(angular.frameAlignment) ||
+        !Array.isArray(angular.tracks) || angular.tracks.length < 1 ||
+        angular.tracks.length > maxAngularTracks ||
+        !Number.isFinite(angular.trailDays) || angular.trailDays < 1 ||
+        angular.trailDays > 365 * 30 || typeof angular.showLabels !== 'boolean' ||
+        typeof angular.showGrid !== 'boolean') return issueForMap();
+    const issues: ValidationIssue[] = [];
+    if (angular.tracks.some(track => !track || typeof track !== 'object' ||
+        typeof track.id !== 'string' || !/^track-[1-9]\d*$/.test(track.id) ||
+        !angularBodies.includes(track.body) || typeof track.modelId !== 'string' ||
+        typeof track.policyId !== 'string' || typeof track.visible !== 'boolean' ||
+        typeof track.trail !== 'boolean')) return issueForMap();
+    const ids = new Set<string>();
+    for (const track of angular.tracks) {
+      if (ids.has(track.id)) issues.push(issue('duplicate-id', display.id, track.id));
+      ids.add(track.id);
+      const result = modelFor(track.body, track.modelId, registry, display.id, track.id);
+      issues.push(...result.issues);
+      if (result.model) {
+        issues.push(...policyIssue(result.model, track.policyId, display.id, track.id));
+        if (!result.model.observables.some(observable => observable.id ===
+          'geocentric-tropical-longitude')) issues.push(issue('unsupported-observable', display.id, track.id));
+      }
+      if (angular.tracks.filter(other => other.body === track.body).length > 2) {
+        issues.push(issue('trace-limit', display.id, track.id));
+      }
+      if (angular.tracks.filter(other => other.body === track.body &&
+          other.modelId === track.modelId).length > 1) {
+        issues.push(issue('duplicate-id', display.id, track.id));
+      }
+    }
+    const visibleFrames = angular.tracks.filter(track => track.visible).map(track =>
+      registry[track.modelId]?.observables.find(observable => observable.id ===
+        'geocentric-tropical-longitude')?.frame).filter(frame => frame !== undefined);
+    if (display.representation === 'angular' && new Set(visibleFrames).size > 1 &&
+        angular.frameAlignment !== 'nominal-historical-tropical') {
+      issues.push(issue('incompatible-frame', display.id));
+    }
+    return issues;
   }
   if (display.kind === 'geometry') {
     const result = modelFor(display.body, display.modelId, registry, display.id);
@@ -133,14 +176,25 @@ export function displayAvailabilityAt(display: DisplayConfig, ut1Jd: number,
   if (display.kind === 'planetary-map') {
     if (!Number.isFinite(ut1Jd) || ut1Jd < computationalUt1Domain.start ||
         ut1Jd > computationalUt1Domain.end) issues.push(issue('outside-computational-domain', display.id));
+    if (display.representation === 'angular') {
+      let available = 0;
+      for (const track of display.angular.tracks.filter(item => item.visible)) {
+        const model = registry[track.modelId];
+        if (!model) continue;
+        const found = dateIssues(model, track.policyId, ut1Jd, display.id, track.id);
+        issues.push(...found);
+        if (!found.length) available += 1;
+      }
+      return { status: issues.length === 0 ? 'available' : available > 0 ? 'partial' : 'unavailable', issues };
+    }
     const marsDomain = registry.copernicus.policies[apsisPolicy];
-    if (display.viewCenter === 'mars' && display.marsPolicyId === apsisPolicy) {
+    if (display.spatial.viewCenter === 'mars' && display.spatial.marsPolicyId === apsisPolicy) {
       if (marsDomain && (ut1Jd < marsDomain.start || ut1Jd > marsDomain.end)) {
         issues.push(issue('outside-policy-domain', display.id));
       }
     }
     return { status: issues.length ? 'unavailable'
-      : display.marsPolicyId === apsisPolicy && marsDomain &&
+      : display.spatial.marsPolicyId === apsisPolicy && marsDomain &&
         (ut1Jd < marsDomain.start || ut1Jd > marsDomain.end) ? 'partial' : 'available', issues };
   }
   if (display.kind === 'geometry') {
@@ -224,14 +278,10 @@ export function validateWorkspace(value: unknown,
     const panelNumber = panelId ? Number(panelId[1]) : NaN;
     if (!Number.isSafeInteger(panelNumber)) issues.push(issue('invalid-panel-id', raw.id));
     else largestPanelNumber = Math.max(largestPanelNumber, panelNumber);
-    if (raw.kind === 'planetary-map' && raw.systemId === 'copernicus-1543' &&
-        typeof raw.viewCenter === 'string' && typeof raw.marsPolicyId === 'string' &&
-        typeof raw.radialProjection === 'string' &&
-        isRecord(raw.visibleBodies) && isRecord(raw.bodyTrails) &&
-        typeof raw.trailDays === 'number' && isRecord(raw.camera) &&
-        typeof raw.camera.offsetX === 'number' && typeof raw.camera.offsetY === 'number' &&
-        typeof raw.camera.radiusUnits === 'number' && typeof raw.showLabels === 'boolean' &&
-        typeof raw.showGrid === 'boolean') {
+    if (raw.kind === 'planetary-map' && isRecord(raw.spatial) && isRecord(raw.angular) &&
+        typeof raw.representation === 'string' &&
+        isRecord(raw.spatial.visibleBodies) && isRecord(raw.spatial.bodyTrails) &&
+        isRecord(raw.spatial.camera) && Array.isArray(raw.angular.tracks)) {
       issues.push(...validateDisplay(raw as unknown as DisplayConfig, registry));
     } else if (typeof raw.body === 'string' && typeof raw.modelId === 'string' &&
         typeof raw.policyId === 'string' && raw.kind === 'geometry' &&

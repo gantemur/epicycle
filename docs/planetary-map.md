@@ -1,4 +1,8 @@
-# Copernican Planetary Map — Phase 6A coordinate contract
+# Planetary Map — spatial and angular contracts
+
+The Phase 6A **Spatial Map** below remains the Copernican common-scale construction. Phase 6B adds an **Angular Map** representation to the same workspace display. Switching modes retains their separate settings; their circles and distances have different meanings.
+
+## Spatial Map (Phase 6A)
 
 The Map is a display of the existing 1543 Copernican Earth, Mars, Jupiter, and Saturn constructions, not a fifth historical model. It shows the true Sun, Earth, Mars, Jupiter, and Saturn in the native `copernicus-1543-sidereal` ecliptic plane. It shows no latitude or construction circles. Its Sun marker is S, the true Sun; G, the historical mean Sun, is an evaluator intermediate and not a map body.
 
@@ -20,4 +24,14 @@ On an Apple M3 Pro MacBook Pro (12 cores, 36 GB), Node 26.4.0, five-run medians 
 
 For the radial-projection refinement, a nine-run median on the same macOS/Node 26.4.0 environment with four 30-year trails was 12.17 ms for historical sampling, 1.60 ms for linear SVG generation, and 1.98 ms for compressed SVG generation. The measured presentation cost was about 0.38 ms for those four paths. Switching projection retains the historical sample cache; these timings exclude browser layout and painting.
 
-Future extensions require compatible historical distance records for every included body. Angular-only comparisons of systems without such distances belong in a different display. This Map supplies neither latitude nor a physical observing location.
+## Angular Map (Phase 6B development branch)
+
+Earth is fixed at the centre. Each track selects an implemented geocentric **tropical** longitude evaluator independently through `traceLongitudeAt()`. For body b, model m and shared UT1 instant t, the display point is `ρ_b(cos λ_m,b(t), sin λ_m,b(t))`. The longitude never depends on `ρ_b`. The four fixed illustrative ring radii are 25%, 45%, 65% and 85% of the drawing radius, outward in the Sun–Mars–Jupiter–Saturn order Ptolemy adopts in *Almagest* IX.1. *Planetary Hypotheses* I.16–17 supplies conditional physical-sphere bounds, recorded separately in [the source audit](historical-planetary-distances.md); those bounds are **not** used as ring radii or instantaneous positions. Copernican points use the same illustrative Ptolemaic-order layout and do not inherit Ptolemaic physical distances.
+
+The historical-system selector fills the four currently supported bodies with Ptolemaic or Copernican models; Custom allows individual selection and at most two models per body, eight tracks total. Two predictions for one body share the exact same ring. A filled and an outlined marker distinguish them without displacing their angles. Readouts give each longitude and the signed second-minus-first principal difference for a same-body pair. This is model disagreement, not observational error. The Map offers no angular Sun-centred observer or physical distance scale.
+
+Native frame mode accepts only mutually compatible visible historical tropical frames. Mixed Ptolemy–Copernicus tracks require the explicitly chosen **nominal historical tropical alignment**, a zero-offset identification of intended directions, not calibration to a modern frame. Cross-body angles are not labelled model disagreement. The original model ID, per-track date policy and source availability are retained. Source-limited Copernican Mars disappears outside the selected 1473–1523 software guard while other tracks remain; exploratory continuation requires an explicit policy selection and is dashed outside that interval.
+
+Past trails sample each existing longitude at historical times on an aligned three-day grid, or six-day grid for 30 years. Each path stays on its assigned circular track, following direct and retrograde motion; null samples break gaps. The exact live marker and trail endpoint use the actual clock instant. Sampled historical longitudes are cached by body, model, policy, frame convention, duration, cadence and window; illustrative styling does not resample them. No new evaluator or historical parameters are introduced. The version 2 workspace schema keeps separate spatial and angular subconfigurations and explicitly migrates valid version 1 Map states, restoring playback paused. No browser storage is added.
+
+Future spatial extensions require compatible historical distance records for every included body. The Angular representation can also host source-backed longitude-only models, after their time coverage and continuity are established. Neither representation supplies latitude or a physical observing location.
