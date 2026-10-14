@@ -1,0 +1,25 @@
+{
+  "id": "ptolemy-planetary-hypotheses-nested-spheres-v1",
+  "kind": "historical-cosmological-distance-bounds",
+  "unit": "Earth radius",
+  "source": "Ptolemy, Planetary Hypotheses I.16–17, in Hullmeine, Ptolemy's Cosmology in Greek and Arabic, pp. 271–275",
+  "interpretation": "Conditional minimum and maximum geocentric bounds of contiguous physical spheres; not instantaneous positions or constant orbit radii",
+  "orderFromEarth": ["Moon", "Mercury", "Venus", "Sun", "Mars", "Jupiter", "Saturn"],
+  "textualBounds": [
+    { "body": "Moon", "minimum": 33, "maximum": 64 },
+    { "body": "Mercury", "minimum": 64, "maximum": 166 },
+    { "body": "Venus", "minimum": 166, "maximum": 1079 },
+    { "body": "Sun", "minimum": 1160, "maximum": 1260 },
+    { "body": "Mars", "minimum": 1260, "maximum": 8820 },
+    { "body": "Jupiter", "minimum": 8820, "maximum": 14187 },
+    { "body": "Saturn", "minimum": 14187, "maximum": 19865 }
+  ],
+  "scholarlyCorrection": {
+    "JupiterMaximum": 14189,
+    "SaturnMinimum": 14189,
+    "source": "Hullmeine commentary p. 364 note 49, following Goldstein and Swerdlow",
+    "status": "correction; original manuscript reading retained above"
+  },
+  "venusSunTextualGap": 81,
+  "angularMapUse": "order only; screen ring radii are independent illustrative values"
+}
