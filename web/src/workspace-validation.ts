@@ -72,6 +72,9 @@ function disagreementIssues(plot: TimeSeriesDisplay, registry: CapabilityRegistr
 /** Static support checks; historical date availability is assessed separately. */
 export function validateDisplay(display: DisplayConfig,
   registry: CapabilityRegistry = modelCapabilities): ValidationIssue[] {
+  if (display.columnSpan !== 1 && display.columnSpan !== 2) {
+    return [issue('invalid-settings', display.id)];
+  }
   if (display.kind === 'planetary-map') {
     const spatial = display.spatial;
     const angular = display.angular;

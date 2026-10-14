@@ -8,10 +8,11 @@ import { changeGeometry, changeMap, changePlot, changeTrace, addTrace, removeTra
 import { clearMapTrailCache, mapFitPositions, renderMapDynamic, renderMapStatic } from './workspace-map-view.ts';
 import { renderPlotDynamic, renderPlotStatic } from './workspace-plot-view.ts';
 import { applyPlotWindowInputs, type PlotWindowInputIssue } from './workspace-plot-window.ts';
+import { samePanelContent } from './workspace-panel-layout.ts';
 import { renderWorkspaceSources } from './workspace-sources.ts';
 import { addDisplay, applyWorkspacePreset, followWorkspaceClock, jumpToExample,
   jumpToToday, moveDisplay, panMap, panPlotWindow, removeDisplay, resetMapCamera, setClockDirection,
-  setClockInstant, setClockPlaying, setClockSpeed, setDisplayCollapsed,
+  setClockInstant, setClockPlaying, setClockSpeed, setDisplayCollapsed, setDisplayColumnSpan,
   stepClock, suggestedWorkspace, tickClock, updateDisplay, workspacePresets,
   zoomMap, zoomPlotWindow, fitMap, type WorkspacePreset } from './workspace-state.ts';
 import type { DisplayConfig, WorkspaceState } from './workspace-types.ts';
@@ -119,7 +120,8 @@ function mountPanel(display: DisplayConfig): HTMLElement {
   panel.innerHTML = [
     '<div class="managed-panel-header"><h3 data-panel-title></h3><div class="panel-actions">',
     '<button type="button" data-action="move-up"></button><button type="button" data-action="move-down"></button>',
-    '<button type="button" data-action="collapse"></button><button type="button" data-action="remove"></button>',
+    '<button type="button" data-action="width"></button><button type="button" data-action="collapse"></button>',
+    '<button type="button" data-action="remove"></button>',
     '</div></div><div data-panel-body><details data-panel-settings></details>',
     '<p data-panel-error class="error" role="alert" hidden></p>',
     display.kind === 'planetary-map'
@@ -152,16 +154,18 @@ function syncPanels(force = false): void {
   state.displays.forEach((display, index) => {
     let panel = panelNodes.get(display.id);
     if (!panel) { panel = mountPanel(display); panelNodes.set(display.id, panel); }
-    if (force || renderedConfigs.get(display.id) !== display) {
+    if (force || !samePanelContent(renderedConfigs.get(display.id), display)) {
       if (display.kind === 'geometry') renderGeometryStatic(panel, display, language);
       else if (display.kind === 'time-series') renderPlotStatic(panel, display, language);
       else renderMapStatic(panel, display, language);
-      renderedConfigs.set(display.id, display);
     }
+    renderedConfigs.set(display.id, display);
+    panel.dataset.columnSpan = String(display.columnSpan);
     const body = panel.querySelector<HTMLElement>('[data-panel-body]')!;
     if (body.hidden !== display.collapsed) body.hidden = display.collapsed;
     const actionLabels: Record<string, MessageKey> = {
       'move-up': 'moveUp', 'move-down': 'moveDown',
+      width: display.columnSpan === 1 ? 'fullWidth' : 'halfWidth',
       collapse: display.collapsed ? 'expandPanel' : 'collapsePanel', remove: 'removePanel',
     };
     for (const [action, key] of Object.entries(actionLabels)) {
@@ -278,6 +282,8 @@ function onPanelAction(action: string, panel: HTMLElement, button: HTMLElement):
   const display = state.displays.find(item => item.id === id)!;
   if (action === 'remove') commit(removeDisplay(state, id));
   else if (action === 'collapse') commit(setDisplayCollapsed(state, id, !display.collapsed));
+  else if (action === 'width') commit(setDisplayColumnSpan(state, id,
+    display.columnSpan === 1 ? 2 : 1));
   else if (action === 'move-up' || action === 'move-down') {
     commit(moveDisplay(state, id, action === 'move-up' ? 'up' : 'down'));
   } else if (display.kind === 'time-series') {

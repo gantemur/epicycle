@@ -3,7 +3,7 @@ import type { ApsisPolicy } from './copernicus.ts';
 import type { MapBody } from './copernicus-map.ts';
 import type { MapRadialProjection } from './map-projection.ts';
 
-export const workspaceSchemaVersion = 2;
+export const workspaceSchemaVersion = 3;
 export const maxWorkspacePanels = 4;
 export const initialPlotTraceLimit = 4;
 export const maxPlotWindowDays = 365.25 * 100;
@@ -16,7 +16,7 @@ export type WorkspaceClock = Readonly<{
   direction: 1 | -1;
 }>;
 
-export type DisplayBase = Readonly<{ id: string; collapsed: boolean }>;
+export type DisplayBase = Readonly<{ id: string; collapsed: boolean; columnSpan: 1 | 2 }>;
 export type GeometryDisplay = DisplayBase & Readonly<{
   kind: 'geometry'; body: string; modelId: string; policyId: string;
   viewCenter: ViewCenter;

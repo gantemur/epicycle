@@ -10,8 +10,10 @@ import { maxWorkspacePanels, workspaceSchemaVersion,
   type DisplayConfig, type GeometryDisplay, type PlanetaryMapDisplay, type PlotTrace, type TimeSeriesDisplay,
   type WorkspaceClock, type WorkspaceState } from './workspace-types.ts';
 
-export type DisplayDraft = Omit<GeometryDisplay, 'id'> | Omit<TimeSeriesDisplay, 'id'> |
-  Omit<PlanetaryMapDisplay, 'id'>;
+type Draft<T extends DisplayConfig> = Omit<T, 'id' | 'columnSpan'> &
+  Partial<Pick<T, 'columnSpan'>>;
+export type DisplayDraft = Draft<GeometryDisplay> | Draft<TimeSeriesDisplay> |
+  Draft<PlanetaryMapDisplay>;
 export type WorkspacePreset = 'explore-one' | 'compare-longitudes' | 'desktop-explore' |
   'detailed-comparison' | 'solar-comparison' | 'outer-planets' |
   'jupiter-comparison' | 'saturn-comparison' | 'copernican-map' |
@@ -64,19 +66,38 @@ export function restoreWorkspace(value: unknown,
   };
 }
 
-/** The only previous schema had spatial-only Maps. Preserve those exact settings. */
-export function migrateWorkspace(value: unknown): unknown {
+/** Version 1 stored spatial-only Maps; version 2 added the Angular representation. */
+function migrateVersionOne(value: unknown): unknown {
   if (!value || typeof value !== 'object' || Array.isArray(value) ||
       !('schemaVersion' in value) || value.schemaVersion !== 1 ||
       !('displays' in value) || !Array.isArray(value.displays)) return value;
-  return { ...value, schemaVersion: workspaceSchemaVersion,
+  return { ...value, schemaVersion: 2,
     displays: value.displays.map(raw => {
       if (!raw || typeof raw !== 'object' || Array.isArray(raw) ||
           !('kind' in raw) || raw.kind !== 'planetary-map') return raw;
       const spatial = { ...raw } as Record<string, unknown>;
-      for (const key of ['id', 'kind', 'collapsed']) delete spatial[key];
+      for (const key of ['id', 'kind', 'collapsed', 'columnSpan']) delete spatial[key];
       return { kind: 'planetary-map', id: raw.id, collapsed: raw.collapsed,
+        ...('columnSpan' in raw ? { columnSpan: raw.columnSpan } : {}),
         representation: 'spatial', spatial, angular: defaultAngularSettings('ptolemy') };
+    }) };
+}
+
+function defaultColumnSpan(kind: string): 1 | 2 {
+  return kind === 'time-series' ? 2 : 1;
+}
+
+/** Only absent legacy widths receive a default; malformed supplied values survive for validation. */
+export function migrateWorkspace(value: unknown): unknown {
+  const previous = migrateVersionOne(value);
+  if (!previous || typeof previous !== 'object' || Array.isArray(previous) ||
+      !('schemaVersion' in previous) || previous.schemaVersion !== 2 ||
+      !('displays' in previous) || !Array.isArray(previous.displays)) return previous;
+  return { ...previous, schemaVersion: workspaceSchemaVersion,
+    displays: previous.displays.map(raw => {
+      if (!raw || typeof raw !== 'object' || Array.isArray(raw) ||
+          !('kind' in raw) || 'columnSpan' in raw) return raw;
+      return { ...raw, columnSpan: defaultColumnSpan(String(raw.kind)) };
     }) };
 }
 
@@ -149,7 +170,8 @@ export function addDisplay(state: WorkspaceState, draft: DisplayDraft,
   registry: CapabilityRegistry = modelCapabilities): WorkspaceState {
   if (state.displays.length >= maxWorkspacePanels) return state;
   const { id, next } = nextPanelId(state);
-  const display = copyDisplay({ ...draft, id } as DisplayConfig);
+  const display = copyDisplay({ ...draft, id,
+    columnSpan: draft.columnSpan ?? defaultColumnSpan(draft.kind) } as DisplayConfig);
   if (validateDisplay(display, registry).length) return state;
   return { ...state, displays: [...state.displays, display], nextPanelNumber: next };
 }
@@ -162,6 +184,14 @@ export function removeDisplay(state: WorkspaceState, id: string): WorkspaceState
 export function setDisplayCollapsed(state: WorkspaceState, id: string, collapsed: boolean): WorkspaceState {
   return { ...state, displays: state.displays.map(display =>
     display.id === id ? { ...display, collapsed } : display) };
+}
+
+export function setDisplayColumnSpan(state: WorkspaceState, id: string,
+  columnSpan: 1 | 2): WorkspaceState {
+  if (columnSpan !== 1 && columnSpan !== 2) return state;
+  if (!state.displays.some(display => display.id === id && display.columnSpan !== columnSpan)) return state;
+  return { ...state, displays: state.displays.map(display =>
+    display.id === id ? { ...display, columnSpan } : display) };
 }
 
 export function moveDisplay(state: WorkspaceState, id: string, direction: 'up' | 'down'): WorkspaceState {
@@ -271,7 +301,7 @@ export function followWorkspaceClock(state: WorkspaceState): WorkspaceState {
 }
 
 const ptolemyGeometry: DisplayDraft = {
-  kind: 'geometry', collapsed: false, body: 'Mars', modelId: 'ptolemy',
+  kind: 'geometry', collapsed: false, columnSpan: 1, body: 'Mars', modelId: 'ptolemy',
   policyId: 'mathematical-continuation', viewCenter: 'earth',
   trail: { enabled: true, days: 180 }, showCircles: true,
   showConstructionLines: true, showAnnotations: true,
@@ -287,7 +317,7 @@ const comparisonTraces: readonly PlotTrace[] = [
     observableId: 'geocentric-tropical-longitude', policyId: exploratoryApsisPolicy },
 ];
 const longitudePlot: DisplayDraft = {
-  kind: 'time-series', collapsed: false, traces: comparisonTraces,
+  kind: 'time-series', collapsed: false, columnSpan: 2, traces: comparisonTraces,
   window: { startUt1: example1512Ut1 - 182.5, endUt1: example1512Ut1 + 182.5,
     followsClock: false },
   longitudeMode: 'unwrapped', horizontalAxis: 'assumed-ut1-jd',
@@ -360,7 +390,7 @@ function defaultAngularSettings(system: 'ptolemy' | 'copernicus') {
 }
 
 export const copernicanMap: DisplayDraft = {
-  kind: 'planetary-map', collapsed: false, representation: 'spatial',
+  kind: 'planetary-map', collapsed: false, columnSpan: 1, representation: 'spatial',
   spatial: { systemId: 'copernicus-1543',
   viewCenter: 'true-sun', marsPolicyId: exploratoryApsisPolicy,
   radialProjection: 'asinh',

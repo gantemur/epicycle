@@ -1,6 +1,6 @@
 # Status — Phase 6A deployed
 
-Phase 6B is under development on `codex/phase-6b-angular-map`, not on the public site. It adds Ptolemaic and Copernican Angular Map presets with per-body historical model selection, same-body dual markers, explicitly declared frame alignment, and illustrative rather than physical ring radii. The Phase 6A Spatial Map remains available. See the [Map contracts](planetary-map.md) and [historical-distance audit](historical-planetary-distances.md).
+Phase 6B is under final review on `codex/phase-6b-angular-map`, not on the public site. It adds Ptolemaic and Copernican Angular Map presets with per-body historical model selection, same-body dual markers, explicitly declared frame alignment, and illustrative rather than physical ring radii. Every managed display now has an independent one- or two-column desktop width preference; narrow screens remain single-column. The Phase 6A Spatial Map remains available. See the [Map contracts](planetary-map.md), [workspace architecture](workspace-architecture.md), and [historical-distance audit](historical-planetary-distances.md).
 
 ## Current public release — Phase 6A
 
