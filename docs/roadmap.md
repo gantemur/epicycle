@@ -11,4 +11,6 @@ Gate each stage on source fidelity, time/frame documentation, and numerical vali
 
 ## Current workspace sequence
 
-Phases 4A–6A delivered the deployed clock-synchronized workspace, source-checked Sun, Mars, Jupiter and Saturn longitude constructions, and a common-scale Copernican [Spatial Map](planetary-map.md). Phase 6B develops an Angular representation of the same Map display for longitude-only comparisons; its rings have illustrative radii and are not physical distances. Further catalogue expansion still requires sourced models and validation. See [workspace architecture](workspace-architecture.md).
+Phases 4A–6B delivered the deployed clock-synchronized workspace, source-checked Sun, Mars, Jupiter and Saturn longitude constructions, a common-scale Copernican [Spatial Map](planetary-map.md), and an Angular Map for historical geocentric-longitude comparisons. Angular rings have illustrative radii, not physical distances. All managed displays have independent desktop width preferences and a single-column phone layout. Further catalogue expansion still requires sourced models and validation. See [workspace architecture](workspace-architecture.md).
+
+Accepted presentation refinements for later work: avoid crowded Angular Map ring labels near the right edge, shorten expanded mobile settings, and make Angular Map model selectors fully registry-driven before adding more historical traditions.

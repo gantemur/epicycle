@@ -1,6 +1,6 @@
 # Scientific workspace architecture
 
-Phase 4A established pure TypeScript state and capability contracts. Phase 4B mounted those contracts in the public managed browser workspace. `app.ts` is now only an entry point; `workspace-app.ts` owns one live controller and one animation loop. The former Single/Compare `state.ts` controller has been retired. Phase 4C deployed a true-Sun-centred Copernican geometry renderer. Phases 5A–5C deployed Sun, Jupiter and Saturn models. Phase 6A deployed the Copernican Spatial Map. Phase 6B adds an Angular representation on a development branch awaiting review.
+Phase 4A established pure TypeScript state and capability contracts. Phase 4B mounted those contracts in the public managed browser workspace. `app.ts` is now only an entry point; `workspace-app.ts` owns one live controller and one animation loop. The former Single/Compare `state.ts` controller has been retired. Phase 4C deployed a true-Sun-centred Copernican geometry renderer. Phases 5A–5C deployed Sun, Jupiter and Saturn models. Phase 6A deployed the Copernican Spatial Map; Phase 6B deployed the Angular representation and independent panel widths.
 
 ## Three boundaries
 
